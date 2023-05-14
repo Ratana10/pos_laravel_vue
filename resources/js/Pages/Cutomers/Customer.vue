@@ -18,12 +18,24 @@
    <div class="content">
       <div class="container-fluid">
          <div class="d-flex justify-content-between">
-            <button @click="handleAdd" type="button" class="btn btn-primary mb-2">
-               <i class="fa fa-plus"></i>
-               Add New Customer
-            </button>
+            <div>
+               <button @click="handleAdd" type="button" class="btn btn-primary mb-2">
+                  <i class="fa fa-plus"></i>
+                  Add New Customer
+               </button>
+            </div>
+            <div>
+               <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Search Customer" aria-label="Search Customer">
+                  <div class="input-group-prepend">
+                     <select name="" id="" class="btn btn-default">
+                        <option value="">Name</option>
+                        <option value="">Phone Number</option>
+                     </select>
+                  </div>
+               </div>
+            </div>
          </div>
-
          <div class="card">
             <div class="card-body">
                <customer-table />
@@ -32,34 +44,18 @@
       </div>
    </div>
 
-   <div class="modal fade" id="modal-add-customer">
-      <div class="modal-dialog">
-         <div class="modal-content">
-            <div class="modal-header">
-               <h4 class="modal-title">Default Modal</h4>
-               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-               </button>
-            </div>
-            <div class="modal-body">
-               <p>One fine body&hellip;</p>
-            </div>
-            <div class="modal-footer justify-content-between">
-               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-               <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-         </div>
-      </div>
-   </div>
-
-   </div>
+   <modal-customer />
+</div>
 </template>
 
 <script>
-import CustomerTable from './CustomerTable.vue'
+import CustomerTable from './CustomerTable.vue';
+import ModalCustomer from './ModalCustomer.vue';
+
 export default {
    components: {
       CustomerTable,
+      ModalCustomer,
    },
    data() {
       return {
@@ -67,7 +63,7 @@ export default {
       }
    },
    methods: {
-      handleAdd(){
+      handleAdd() {
          $('#modal-add-customer').modal('show');
       }
    },
