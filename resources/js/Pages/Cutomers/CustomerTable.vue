@@ -10,20 +10,18 @@
                <th>Phone</th>
                <th>Address</th>
                <th style="width: 100px;">Actions</th>
-               <th style="width: 120px;">Status</th>
             </tr>
          </thead>
          <tbody>
             <tr v-for="(customer, index) in customers" :key="index">
                <td>{{ index+1 }}</td>
                <td>{{ customer.name }}</td>
-               <td>{{ customer.gender }}</td>
+               <td>{{ customer.gender == 1 ? 'Male' : 'Female' }}</td>
                <td>{{ customer.phone }}</td>
                <td>{{ customer.address }}</td>
-               <td>{{ customer.status }}</td>
                <td>
-                  <button class="btn btn-primary btn-sm" @click="$emit('editCustomer', customer)" ><i class="fa fa-edit"></i></button>
-                  <button class="btn btn-danger btn-sm ml-1" @click="$emit('deleteCustomer', customer)"><i class="fa fa-trash"></i></button>
+                  <button class="btn btn-primary btn-sm" @click="$emit('edit', customer)" ><i class="fa fa-edit"></i></button>
+                  <button class="btn btn-danger btn-sm ml-1" @click="$emit('delete', customer.id)"><i class="fa fa-trash"></i></button>
                </td>
             </tr>
          </tbody>
@@ -44,17 +42,10 @@
 </template>
 <script>
 export default {
-   data() {
-      return {
-         customers: [
-            {
-               name: 'test',
-               gender: 'male',
-               phone: '123',
-               address: 'Phnom Penh',
-               status: 'active',
-            }
-         ]
+   props:{
+      customers:{
+         data: Array,
+         default: null,
       }
    },
 }

@@ -29,6 +29,10 @@
                      <label for="Address">Address</label>
                      <textarea v-model="form.address" name="" id="" rows="3" class="form-control"></textarea>
                   </div>
+                  <div class="form-group">
+                     <label for="Description">Description</label>
+                     <textarea v-model="form.description" name="" id="" rows="2" class="form-control"></textarea>
+                  </div>
                </div>
                <div class="modal-footer justify-content-between">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -41,23 +45,61 @@
 </template>
 <script>
 export default {
+   props:{
+      editing: {
+         data: Object,
+         default: null,
+      }
+   },
    data() {
       return {
          form:{
+            id: null,
             name: null,
             gender: 1,
             phone: null,
             address: null,
+            description: null,
          }
       }
    },
    methods: {
       handleSubmit(){
-         this.handleAdd();
+         if(this.editing){
+            this.handleUpdate();
+         }else{
+
+            this.handleAdd();
+         }
+      },
+      handleUpdate(){
+         axios
+            .put(`/api/v1/customers/${this.form.id}`, this.form)
+            .then(res =>{
+               this.$emit('submit');
+
+            })
+            .catch(err =>{
+               console.log('error:', err);
+            })
       },
       handleAdd(){
-         console.log('test', this.form);
+         axios
+            .post('/api/v1/customers', this.form)
+            .then(res =>{
+               this.$emit('submit');
+            })
+            .catch(err =>{
+               console.log('error:', err);
+            })
       }
    },
+   watch:{
+      editing: function(value){
+         if(value){
+            this.form = value;
+         }
+      }
+   }
 }
 </script>

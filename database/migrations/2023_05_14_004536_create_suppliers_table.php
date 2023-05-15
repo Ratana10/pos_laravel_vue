@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('suppliers', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->boolean('gender')->comment("1=male, 0=female");
             $table->string('phone')->unique();
             $table->longText('address')->nullable();
             $table->longText('description')->nullable();

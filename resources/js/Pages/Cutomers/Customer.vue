@@ -38,34 +38,60 @@
          </div>
          <div class="card">
             <div class="card-body">
-               <customer-table />
+               <customer-table :customers="customers" @edit="handleEdit" @delete="handleDelete" />
             </div>
          </div>
       </div>
    </div>
 
-   <modal-customer />
+   <modal-add-customer :editing="editing" @submit="handleSubmit" />
 </div>
 </template>
 
 <script>
 import CustomerTable from './CustomerTable.vue';
-import ModalCustomer from './ModalCustomer.vue';
+import ModalAddCustomer from './ModalAddCustomer.vue';
 
 export default {
    components: {
       CustomerTable,
-      ModalCustomer,
+      ModalAddCustomer,
    },
    data() {
       return {
-
+         customers: [],
+         editing: null,
       }
    },
    methods: {
+      handleSubmit(){
+         $('#modal-add-customer').modal('hide');
+         this.getCustomers();
+      },
+      handleDelete(customer_id){
+         axios
+            .delete(`/api/v1/customers/${customer_id}`)
+            .then(res =>{
+               this.getCustomers();
+            })
+      },
+      handleEdit(customer){
+         this.editing = customer;
+         $('#modal-add-customer').modal('show');
+      },
       handleAdd() {
          $('#modal-add-customer').modal('show');
+      },
+      getCustomers(){
+         axios.get('/api/v1/customers')
+         .then(res =>{
+            this.customers = res.data;
+         })
       }
+
+   },
+   mounted() {
+      this.getCustomers();
    },
 }
 </script>
