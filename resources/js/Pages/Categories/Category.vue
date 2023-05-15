@@ -61,7 +61,7 @@ export default {
    },
    methods: {
       handleSubmit(){
-         $('#modal-add-supplier').modal('hide');
+         $('#modal-add-category').modal('hide');
          this.getCategories();
       },
       handleDelete(category_id){

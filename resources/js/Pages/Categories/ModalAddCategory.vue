@@ -18,25 +18,6 @@
                      <input v-model="form.name" type="text" class="form-control" placeholder="Enter Name" autofocus>
                   </div>
                   <div class="form-group">
-                     <label for="gender">Gender</label>
-                     <select v-model="form.gender" name="" class="form-control" id="">
-                        <option value="1">Male</option>
-                        <option value="0">Female</option>
-                     </select>
-                  </div>
-                  <div class="form-group">
-                     <label for="phone">Phone</label>
-                     <input v-model="form.phone" type="text" class="form-control" placeholder="Enter Phonenumber">
-                  </div>
-                  <div class="form-group">
-                     <label for="Address">Address</label>
-                     <textarea v-model="form.address" name="" id="" rows="3" class="form-control"></textarea>
-                  </div>
-                  <div class="form-group">
-                     <label for="Description">Description</label>
-                     <textarea v-model="form.description" name="" id="" rows="2" class="form-control"></textarea>
-                  </div>
-                  <div class="form-group">
                      <label for="Status">Status</label>
                      <select v-model="form.status" name="" class="form-control" id="">
                         <option value="1">Active</option>
@@ -83,7 +64,7 @@ export default {
       },
       handleUpdate(){
          axios
-            .put(`/api/v1/categorys/${this.form.id}`, this.form)
+            .put(`/api/v1/categories/${this.form.id}`, this.form)
             .then(res =>{
                this.$emit('submit');
                this.toastr.success('Category Updated Successfully')
@@ -95,7 +76,7 @@ export default {
       },
       handleAdd(){
          axios
-            .post('/api/v1/categorys', this.form)
+            .post('/api/v1/categories', this.form)
             .then(res =>{
                this.$emit('submit');
                this.toastr.success('Category Added Successfully')

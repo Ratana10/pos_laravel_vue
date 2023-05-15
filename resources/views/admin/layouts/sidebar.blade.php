@@ -32,7 +32,7 @@
                <router-link to="/admin/customers" class="nav-link" active-class="active">
                   <i class="nav-icon fas fa-th"></i>
                   <p>
-                     Customer
+                     Customers
                   </p>
                </router-link>
             </li>
@@ -40,7 +40,15 @@
                <router-link to="/admin/suppliers" class="nav-link" active-class="active">
                   <i class="nav-icon fas fa-th"></i>
                   <p>
-                     Supplier
+                     Suppliers
+                  </p>
+               </router-link>
+            </li>
+            <li class="nav-item">
+               <router-link to="/admin/categories" class="nav-link" active-class="active">
+                  <i class="nav-icon fas fa-th"></i>
+                  <p>
+                     Categories
                   </p>
                </router-link>
             </li>
