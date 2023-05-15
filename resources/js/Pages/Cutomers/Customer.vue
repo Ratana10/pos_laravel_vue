@@ -51,6 +51,7 @@
 <script>
 import CustomerTable from './CustomerTable.vue';
 import ModalAddCustomer from './ModalAddCustomer.vue';
+import { useToastr } from '../../toastr';
 
 export default {
    components: {
@@ -61,6 +62,7 @@ export default {
       return {
          customers: [],
          editing: null,
+         toastr: useToastr(),
       }
    },
    methods: {
@@ -73,6 +75,7 @@ export default {
             .delete(`/api/v1/customers/${customer_id}`)
             .then(res =>{
                this.getCustomers();
+               this.toastr.success('Customer Deleted Successfully');
             })
       },
       handleEdit(customer){

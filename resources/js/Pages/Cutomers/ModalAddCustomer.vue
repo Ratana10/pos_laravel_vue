@@ -44,6 +44,7 @@
    </div>
 </template>
 <script>
+import { useToastr } from '../../toastr';
 export default {
    props:{
       editing: {
@@ -60,7 +61,8 @@ export default {
             phone: null,
             address: null,
             description: null,
-         }
+         },
+         toastr: useToastr(),
       }
    },
    methods: {
@@ -77,6 +79,7 @@ export default {
             .put(`/api/v1/customers/${this.form.id}`, this.form)
             .then(res =>{
                this.$emit('submit');
+               this.toastr.success('Customer Updated Successfully')
 
             })
             .catch(err =>{
@@ -88,6 +91,7 @@ export default {
             .post('/api/v1/customers', this.form)
             .then(res =>{
                this.$emit('submit');
+               this.toastr.success('Customer Added Successfully')
             })
             .catch(err =>{
                console.log('error:', err);
