@@ -19,6 +19,7 @@ class SupplierController extends Controller
     {
         Supplier::create([
             'name' => $request->name,
+            'gender' => $request->gender,
             'phone' => $request->phone,
             'address' => $request->address,
             'description' => $request->description,
@@ -31,6 +32,7 @@ class SupplierController extends Controller
     {
         $supplier->update([
             'name' => $request->name,
+            'gender' => $request->gender,
             'phone' => $request->phone,
             'address' => $request->address,
             'description' => $request->description,

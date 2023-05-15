@@ -37,12 +37,12 @@
                </router-link>
             </li>
             <li class="nav-item">
-               <a href="#" class="nav-link">
+               <router-link to="/admin/suppliers" class="nav-link" active-class="active">
                   <i class="nav-icon fas fa-th"></i>
                   <p>
                      Supplier
                   </p>
-               </a>
+               </router-link>
             </li>
          </ul>
       </nav>

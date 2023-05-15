@@ -1,11 +1,11 @@
 <template>
-<div class="modal fade" id="modal-add-customer" tabindex="-1">
+<div class="modal fade" id="modal-add-supplier" tabindex="-1">
       <div class="modal-dialog">
          <div class="modal-content">
             <div class="modal-header ">
                <h4 class="modal-title">
-                  <span v-if="editing">Edit Customer</span>
-                  <span v-else>Add New Customer</span>
+                  <span v-if="editing">Edit Supplier</span>
+                  <span v-else>Add New Supplier</span>
                </h4>
                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
@@ -36,6 +36,13 @@
                      <label for="Description">Description</label>
                      <textarea v-model="form.description" name="" id="" rows="2" class="form-control"></textarea>
                   </div>
+                  <div class="form-group">
+                     <label for="Status">Status</label>
+                     <select v-model="form.status" name="" class="form-control" id="">
+                        <option value="1">Active</option>
+                        <option value="0">Inactive</option>
+                     </select>
+                  </div>
                </div>
                <div class="modal-footer justify-content-between">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -64,6 +71,7 @@ export default {
             phone: null,
             address: null,
             description: null,
+            status: 1,
          },
          toastr: useToastr(),
       }
@@ -79,10 +87,10 @@ export default {
       },
       handleUpdate(){
          axios
-            .put(`/api/v1/customers/${this.form.id}`, this.form)
+            .put(`/api/v1/suppliers/${this.form.id}`, this.form)
             .then(res =>{
                this.$emit('submit');
-               this.toastr.success('Customer Updated Successfully')
+               this.toastr.success('Supplier Updated Successfully')
 
             })
             .catch(err =>{
@@ -91,10 +99,10 @@ export default {
       },
       handleAdd(){
          axios
-            .post('/api/v1/customers', this.form)
+            .post('/api/v1/suppliers', this.form)
             .then(res =>{
                this.$emit('submit');
-               this.toastr.success('Customer Added Successfully')
+               this.toastr.success('Supplier Added Successfully')
             })
             .catch(err =>{
                console.log('error:', err);

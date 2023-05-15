@@ -1,5 +1,7 @@
 import Dashboard from './Components/Dashboard.vue';
 import Customer from './Pages/Cutomers/Customer.vue';
+import Supplier from './Pages/Suppliers/Supplier.vue'
+
 export default
 [
    {
@@ -11,5 +13,10 @@ export default
       path: '/admin/customers',
       name: 'admin.customers',
       component: Customer,
+   }, 
+   {
+      path: '/admin/suppliers',
+      name: 'admin.suppliers',
+      component: Supplier,
    },
 ]
