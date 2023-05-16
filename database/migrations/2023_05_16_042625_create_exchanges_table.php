@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('dollar');
             $table->float('khmer');
+            $table->boolean('status');
             $table->timestamp('created_at');
         });
     }

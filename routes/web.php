@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\ExchangeController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\UnitController;
@@ -41,6 +42,13 @@ Route::prefix('/api/v1')->group(function (){
         Route::post('/categories', 'store')->name('categories.store');
         Route::put('/categories/{category}', 'update')->name('categories.update');
         Route::delete('/categories/{category}', 'destory')->name('categories.destory');
+    });
+
+    Route::controller(ExchangeController::class)->group(function () {
+        Route::get('/exchanges', 'index')->name('exchanges.index');
+        Route::post('/exchanges', 'store')->name('exchanges.store');
+        Route::put('/exchanges/{exchange}', 'update')->name('exchanges.update');
+        Route::delete('/exchanges/{exchange}', 'destory')->name('exchanges.destory');
     });
 
     Route::controller(UnitController::class)->group(function () {

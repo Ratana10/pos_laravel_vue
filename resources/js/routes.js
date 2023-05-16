@@ -3,6 +3,7 @@ import Customer from './Pages/Cutomers/Customer.vue';
 import Supplier from './Pages/Suppliers/Supplier.vue'
 import Category from './Pages/Categories/Category.vue'
 import Unit from './Pages/Units/Unit.vue'
+import Exchange from './Pages/Exchanges/Exchange.vue'
 import Product from './Pages/Products/Product.vue'
 import ProductForm from './Pages/Products/ProductForm.vue'
 
@@ -28,6 +29,11 @@ export default
       path: '/admin/categories',
       name: 'admin.categories',
       component: Category,
+   },
+   {
+      path: '/admin/exchanges',
+      name: 'admin.exchanges',
+      component: Exchange,
    },
    {
       path: '/admin/units',
