@@ -6,10 +6,11 @@
             <tr>
                <th style="width: 10px;">#</th>
                <th>Code</th>
-               <th>Name</th>
-               <th>UnitPrice</th>
+               <th>Product</th>
+               <th>cost</th>
                <th>Price</th>
                <th>Qty</th>
+               <th>Unit</th>
                <th>Category</th>
                <th>Image</th>
                <th>Barcode</th>
@@ -21,12 +22,15 @@
             <tr v-for="(product, index) in products" :key="index">
                <td>{{ index+1 }}</td>
                <td>{{ product.code }}</td>
-               <td>{{ product.code }}</td>
-               <td>{{ product.unit_pirce }}</td>
+               <td>{{ product.name }}</td>
+               <td>{{ product.cost }}</td>
                <td>{{ product.price }}</td>
                <td>{{ product.quantity }}</td>
-               <td>{{ product.category_id }}</td>
-               <td>{{ product.image }}</td>
+               <td>{{ product.unit.name }}</td>
+               <td>{{ product.category.name }}</td>
+               <td style="width: 100px">
+               <img :src="'/uploads/products/' + product.image" alt="photo" style="width: 100px; height: 75px;" class="mx-auto d-block">
+            </td>
                <td>{{ product.barcode }}</td>
                <td>{{ product.status == 1 ? 'Active' : 'Inactive' }}</td>
                <td>

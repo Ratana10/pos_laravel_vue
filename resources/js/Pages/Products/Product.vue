@@ -17,12 +17,12 @@
    </div>
    <div class="content">
       <div class="container-fluid">
-         <div class="d-flex justify-content-between">
+         <div class="d-flex justify-content-between mb-3">
             <div>
-               <button @click="handleAdd" type="button" class="btn btn-primary mb-2">
+               <router-link to="/admin/products/create" class="btn btn-primary">
                   <i class="fa fa-plus"></i>
                   Add New Product
-               </button>
+               </router-link>
             </div>
             <div>
                <div class="input-group">

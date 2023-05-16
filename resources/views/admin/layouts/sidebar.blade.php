@@ -77,7 +77,7 @@
                </router-link>
             </li>
             <li class="nav-item">
-               <router-link to="/admin/products" class="nav-link" active-class="active">
+               <router-link to="/admin/" class="nav-link" active-class="active">
                   <i class="nav-icon fas fa-th"></i>
                   <p>
                      Stock
@@ -85,7 +85,7 @@
                </router-link>
             </li>
             <li class="nav-item">
-               <router-link to="/admin/products" class="nav-link" active-class="active">
+               <router-link to="/admin/" class="nav-link" active-class="active">
                   <i class="nav-icon fas fa-th"></i>
                   <p>
                      Payment
@@ -93,7 +93,7 @@
                </router-link>
             </li>
             <li class="nav-item">
-               <router-link to="/admin/products" class="nav-link" active-class="active">
+               <router-link to="/admin/" class="nav-link" active-class="active">
                   <i class="nav-icon fas fa-th"></i>
                   <p>
                      Invoice

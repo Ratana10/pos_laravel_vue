@@ -28,7 +28,7 @@ class CustomerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|max:15',
+            'name' => 'required|max:100',
             'gender' => 'required',
             'phone' => 'nullable|unique:customers,phone,'.$this->id,
             'address' => 'nullable|max:255',
