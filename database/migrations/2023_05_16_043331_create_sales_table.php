@@ -13,7 +13,16 @@ return new class extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->string('code')->nullable();
+            $table->unsignedBigInteger('customer_id');
+            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade')->onUpdate('cascade');
+            $table->decimal('total', 10, 2)->default(0.00);
+            $table->decimal('due_amount', 10, 2)->default(0.00);
+            $table->decimal('paid_amount', 10, 2)->default(0.00);
+            $table->decimal('exchange', 10, 2)->default(0.00);
+            $table->date('date');
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->timestamp('created_at');
         });
     }
 
