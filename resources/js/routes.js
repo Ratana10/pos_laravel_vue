@@ -50,4 +50,9 @@ export default
       name: 'admin.products.create',
       component: ProductForm,
    },
+   {
+      path: '/admin/products/:id/edit',
+      name: 'admin.products.edit',
+      component: ProductForm,
+   },
 ]

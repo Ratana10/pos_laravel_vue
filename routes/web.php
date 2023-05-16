@@ -60,9 +60,12 @@ Route::prefix('/api/v1')->group(function (){
 
     Route::controller(ProductController::class)->group(function () {
         Route::get('/products', 'index')->name('products.index');
+        Route::get('/products/{product}/edit', 'edit')->name('products.edit');
         Route::post('/products', 'store')->name('products.store');
         Route::put('/products/{product}', 'update')->name('products.update');
         Route::delete('/products/{product}', 'destory')->name('products.destory');
+
+        Route::get('/products-code', 'generateCode')->name('products.code');
     });
 
     

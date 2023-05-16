@@ -29,12 +29,12 @@
                <td>{{ product.unit.name }}</td>
                <td>{{ product.category.name }}</td>
                <td style="width: 100px">
-               <img :src="'/uploads/products/' + product.image" alt="photo" style="width: 100px; height: 75px;" class="mx-auto d-block">
+               <img :src="'/uploads/products/' + product.image" alt="photo"  class="mx-auto d-block">
             </td>
                <td>{{ product.barcode }}</td>
                <td>{{ product.status == 1 ? 'Active' : 'Inactive' }}</td>
                <td>
-                  <button class="btn btn-primary btn-sm" @click="$emit('edit', product)" ><i class="fa fa-edit"></i></button>
+                  <router-link :to="`/admin/products/${product.id}/edit`" class="btn btn-primary btn-sm" @click="$emit('edit', product)" ><i class="fa fa-edit"></i></router-link>
                   <button class="btn btn-danger btn-sm ml-1" @click="$emit('delete', product.id)"><i class="fa fa-trash"></i></button>
                </td>
             </tr>
@@ -64,6 +64,9 @@ export default {
    },
 }
 </script>
-<style lang="">
-   
+<style scoped>
+   img {
+      width: 100px;
+      height: 75px;
+   }
 </style>

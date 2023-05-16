@@ -5,7 +5,8 @@
          <div class="row mb-2">
             <div class="col-sm-6">
                <h1 class="m-0">
-                  <span>Create Product</span>
+                  <span v-if="form.id">Edit Product</span>
+                  <span v-else>Create Product</span>
                </h1>
             </div>
             <div class="col-sm-6">
@@ -32,7 +33,7 @@
                <div class="card">
                   <form method="post" @submit.prevent="handleSubmit" enctype="multipart/form-data">
                      <div class="card-body">
-
+                        <input type="hidden" v-model="form.id">
                         <div class="row">
                            <div class="col-md-6">
                               <div class="form-group">
@@ -56,13 +57,17 @@
                            </div>
                            <div class="col-md-6">
                               <div class="form-group">
-                                 <label for="">Category</label>
-                              <select v-model="form.category_id" name="" id="" class="form-control">
-                                 <option>Select Category ...</option>
-                                 <option v-for="(category, index) in categories" :key="index" :value="category.id">
-                                    {{ category.name }}
-                                 </option>
-                              </select>
+                              <label for="">Category</label>
+                              <div class="input-group-prepend">
+                                 <select v-model="form.category_id" name="" id="" class="form-control custom-select">
+                                    <option disabled selected>Select Category ...</option>
+                                    <option v-for="(category, index) in categories" :key="index" :value="category.id">
+                                       {{ category.name }}
+                                    </option>
+                                 </select>
+                                 <button class="btn btn-default" @click.prevent="handleShowCategoryModal">+</button>
+                              </div>
+
                               </div>
                            </div>
                         </div>
@@ -70,19 +75,20 @@
                            <div class="col-md-6">
                               <div class="form-group">
                                  <label for="">Price</label>
-                                 <input v-model="form.price" type="number" name="" id="" class="form-control">
+                                 <input v-model="form.price" type="number" step="0.01" name="" id="" class="form-control">
                               </div>
                            </div>
                            <div class="col-md-6">
                               <div class="form-group">
                                  <label for="">Quantity</label>
                                  <div class="input-group-prepend">
-                                    <input v-model="form.quantity" type="number" class="form-control rounded-0">
+                                    <input v-model="form.quantity" type="number"  step="0.01"  class="form-control rounded-0">
                                     <select v-model="form.unit_id" class="form-control custom-select rounded-0" style="width: 200px;">
                                        <option v-for="(unit, index) in units" :key="index" :value="unit.id">
                                           {{ unit.name }}
                                        </option>
                                     </select>
+                                    
                                  </div>
                               </div>
                            </div>
@@ -91,7 +97,7 @@
                            <div class="col-md-6">
                               <div class="form-group">
                                  <label for="">Cost</label>
-                              <input v-model="form.cost" type="number" name="" id="" class="form-control">
+                              <input v-model="form.cost" type="number"  step="0.01"  name="" id="" class="form-control">
                               </div>
                            </div>
                            <div class="col-md-6">
@@ -115,7 +121,7 @@
                                  </div>
                                  <div class="card-body text-center ">
                                     <input type="file" id="image" class="d-none" @change="onImageChange">
-                                    <img class="img-fluid" style="height: 200px;" :src="form.image" alt="photo">
+                                    <img class="img-fluid" style="height: 200px;" :src="editing_image ? '/uploads/products/' + form.image : form.image" alt="photo">
                                  </div>
                               </div>
                            </div>
@@ -133,7 +139,7 @@
 
                         </div>
                         <div class="mt-4">
-                           <input type="submit" value="Save" class="btn btn-primary" >
+                           <input type="submit" :value="form.id ? 'Update' : 'Save' " class="btn" :class="form.id ? 'btn-success' : 'btn-primary'" >
                         </div>
                      </div>
 
@@ -143,16 +149,21 @@
          </div>
       </div>
    </div>
+   <modal-add-category @submit="handleCloseCategoryModal" />
 </div>
 </template>
 
 <script>
+import {useRouter, useRoute} from 'vue-router';
+import ModalAddCategory from '../Categories/ModalAddCategory.vue';
 export default {
+   components:{
+      ModalAddCategory
+   },
    data() {
       return {
-         categories: [],
-         units: [],
          form:{
+            id:null,
             code: null,
             name: null,
             category_id: null,
@@ -164,23 +175,42 @@ export default {
             image:null,
             barcode: null,
             status: 1,
-         }
+         },
+         categories: [],
+         units: [],
+         editing_image: false,
+         router: useRouter(),
+         route: useRoute(),
       }
    },
    methods: {
+      handleCloseCategoryModal(){
+         $('#modal-add-category').modal('hide');
+         this.getCategories();
+      },
+      handleShowCategoryModal(){
+         $('#modal-add-category').modal('show');
+      },
       handleSubmit(){
-         console.log('form', this.form)
+         let url = this.form.id ? `/api/v1/products/${this.form.id}` : '/api/v1/products';
+         let method = this.form.id ? 'put' : 'post';
+
          axios
-            .post('/api/v1/products', this.form)
+            .request({
+               url: url,
+               method: method,
+               data: this.form
+            })
             .then(res =>{
-               
+               this.router.push("/admin/products");
             })
             .catch(err =>{
                console.log('erros: ', err);
             })
+
       },
       onImageChange(event){
-         // this.form.image = event.target.files[0];
+         this.editing_image = false;
          let file = event.target.files;
          let reader = new FileReader();
          reader.onloadend = (file)=>{
@@ -197,6 +227,9 @@ export default {
             .then(res =>{
                this.units = res.data;
             })
+            .catch(err =>{
+               console.log('errors: ', err)
+            })
       },
       getCategories(){
          axios
@@ -204,9 +237,40 @@ export default {
             .then(res =>{
                this.categories = res.data;
             })
+            .catch(err =>{
+               console.log('errors: ', err)
+            })
+      },
+      getProductCode(){
+         axios
+            .get('/api/v1/products-code')
+            .then(res =>{
+               this.form.code = res.data.generatedCode;
+            })
+            .catch(err =>{
+               console.log('errors: ', err)
+            })
+      },
+      getProduct(product_id){
+         axios
+            .get(`/api/v1/products/${product_id}/edit`)
+            .then(res =>{
+               this.form = res.data.product;
+               this.editing_image = true;
+            })
+            .catch(err =>{
+               console.log('errors: ', err)
+            })
       }
    },
    mounted() {
+      if(this.route.name == 'admin.products.edit'){
+         let product_id = this.route.params.id;
+         this.getProduct(product_id);
+      }else{
+         this.getProductCode();
+         
+      }
       this.getUnits();
       this.getCategories();
    },
