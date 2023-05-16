@@ -26,7 +26,8 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->string('barcode')->nullable();
             $table->boolean('status')->default(1);
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrentOnUpdate()->nullable();
         });
     }
 
