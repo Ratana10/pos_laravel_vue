@@ -1,0 +1,65 @@
+<template>
+   <div class="row">
+      <div class="col-sm-12">
+         <table class="table table-bordered">
+         <thead>
+            <tr>
+               <th style="width: 10px;">#</th>
+               <th>Code</th>
+               <th>Name</th>
+               <th>UnitPrice</th>
+               <th>Price</th>
+               <th>Qty</th>
+               <th>Category</th>
+               <th>Image</th>
+               <th>Barcode</th>
+               <th>Status</th>
+               <th style="width: 100px;">Actions</th>
+            </tr>
+         </thead>
+         <tbody>
+            <tr v-for="(product, index) in products" :key="index">
+               <td>{{ index+1 }}</td>
+               <td>{{ product.code }}</td>
+               <td>{{ product.code }}</td>
+               <td>{{ product.unit_pirce }}</td>
+               <td>{{ product.price }}</td>
+               <td>{{ product.quantity }}</td>
+               <td>{{ product.category_id }}</td>
+               <td>{{ product.image }}</td>
+               <td>{{ product.barcode }}</td>
+               <td>{{ product.status == 1 ? 'Active' : 'Inactive' }}</td>
+               <td>
+                  <button class="btn btn-primary btn-sm" @click="$emit('edit', product)" ><i class="fa fa-edit"></i></button>
+                  <button class="btn btn-danger btn-sm ml-1" @click="$emit('delete', product.id)"><i class="fa fa-trash"></i></button>
+               </td>
+            </tr>
+         </tbody>
+      </table>
+      </div>
+      <div class="row">
+         <!-- <div class="col-sm-12 col-md-5">
+            <div>Showing 1 to 10 of 57</div>
+         </div>
+         <div class="col-sm-12 col-md-7">
+            <div>
+               pageinate
+            </div>
+         </div> -->
+      </div>
+   </div>
+     
+</template>
+<script>
+export default {
+   props:{
+      products:{
+         data: Array,
+         default: null,
+      }
+   },
+}
+</script>
+<style lang="">
+   
+</style>

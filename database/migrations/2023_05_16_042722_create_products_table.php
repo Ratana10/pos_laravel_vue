@@ -16,10 +16,13 @@ return new class extends Migration
             $table->string('code')->nullable();
             $table->string('name');
             $table->unsignedBigInteger('category_id');
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
-            $table->decimal('unit_price',5,2)->default(0)->nullable();
-            $table->decimal('price',5,2)->default(0)->nullable();
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade')->onUpdate('cascade');
+            $table->unsignedBigInteger('unit_id');
+            $table->foreign('unit_id')->references('id')->on('units')->onDelete('cascade')->onUpdate('cascade');
+            $table->decimal('cost',10,2)->default(0)->nullable();
+            $table->decimal('price',10,2)->default(0)->nullable();
             $table->bigInteger('quantity')->default(0);
+            $table->bigInteger('alert')->default(0);
             $table->string('image')->nullable();
             $table->string('barcode')->nullable();
             $table->boolean('status')->default(1);

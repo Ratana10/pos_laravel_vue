@@ -19,7 +19,7 @@ return new class extends Migration
             $table->longText('address')->nullable();
             $table->longText('description')->nullable();
             $table->boolean('status')->default(1);
-            $table->timestamps();
+            $table->timestamp('created_at');
         });
     }
 

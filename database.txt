@@ -1,0 +1,65 @@
+Schema::create('customers', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->boolean('gender')->comment("1=male, 0=female");
+            $table->string('phone')->unique();
+            $table->longText('address')->nullable();
+            $table->longText('description')->nullable();
+            $table->timestamp('create_at');
+        });
+
+
+
+Schema::create('suppliers', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->boolean('gender')->comment("1=male, 0=female");
+            $table->string('phone')->unique();
+            $table->longText('address')->nullable();
+            $table->longText('description')->nullable();
+            $table->boolean('status')->default(1);
+            $table->timestamp('created_at');
+        });
+
+
+Schema::create('categories', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->boolean('status')->default(1)->comment('1=active, 0=inactive');
+            $table->timestamp('created_at');
+        });
+
+
+Schema::create('units', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->boolean('status');
+            $table->timestamp('created_at');
+        });
+
+
+Schema::create('exchanges', function (Blueprint $table) {
+            $table->id();
+            $table->integer('dollar');
+            $table->float('khmer');
+            $table->timestamp('created_at');
+        });
+
+
+Schema::create('products', function (Blueprint $table) {
+            $table->id();
+            $table->string('code')->nullable();
+            $table->string('name');
+            $table->unsignedBigInteger('category_id');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade')->onUpdate('cascade');
+            $table->unsignedBigInteger('unit_id');
+            $table->foreign('unit_id')->references('id')->on('units')->onDelete('cascade')->onUpdate('cascade');
+            $table->decimal('cost',10,2)->default(0)->nullable();
+            $table->decimal('price',10,2)->default(0)->nullable();
+            $table->bigInteger('quantity')->default(0);
+            $table->bigInteger('alert')->default(0);
+            $table->string('image')->nullable();
+            $table->string('barcode')->nullable();
+            $table->boolean('status')->default(1);
+            $table->timestamps();
+        });

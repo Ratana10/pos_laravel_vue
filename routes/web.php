@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\ApplicationController;
 use Illuminate\Support\Facades\Route;
@@ -39,6 +40,13 @@ Route::prefix('/api/v1')->group(function (){
         Route::post('/categories', 'store')->name('categories.store');
         Route::put('/categories/{category}', 'update')->name('categories.update');
         Route::delete('/categories/{category}', 'destory')->name('categories.destory');
+    });
+
+    Route::controller(ProductController::class)->group(function () {
+        Route::get('/products', 'index')->name('products.index');
+        Route::post('/products', 'store')->name('products.store');
+        Route::put('/products/{product}', 'update')->name('products.update');
+        Route::delete('/products/{product}', 'destory')->name('products.destory');
     });
 
     
