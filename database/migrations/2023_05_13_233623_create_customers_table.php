@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->boolean('gender')->comment("1=male, 0=female");
-            $table->string('phone')->unique();
+            $table->string('phone')->unique()->nullable();
             $table->longText('address')->nullable();
             $table->longText('description')->nullable();
             $table->timestamp('create_at');
