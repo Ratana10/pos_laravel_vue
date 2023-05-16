@@ -45,6 +45,14 @@
                </router-link>
             </li>
             <li class="nav-item">
+               <router-link to="/admin/units" class="nav-link" active-class="active">
+                  <i class="nav-icon fas fa-th"></i>
+                  <p>
+                     Units
+                  </p>
+               </router-link>
+            </li>
+            <li class="nav-item">
                <router-link to="/admin/categories" class="nav-link" active-class="active">
                   <i class="nav-icon fas fa-th"></i>
                   <p>

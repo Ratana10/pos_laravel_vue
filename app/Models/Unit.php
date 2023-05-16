@@ -10,7 +10,5 @@ class Unit extends Model
     use HasFactory;
     public $timestamps = false;
     protected $table = 'units';
-    protected $fillable = [
-        'name', 'status' 
-    ];
+    protected $fillable = ['name', 'status'];
 }

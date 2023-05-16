@@ -5,25 +5,19 @@
          <thead>
             <tr>
                <th style="width: 10px;">#</th>
-               <th>Name</th>
-               <th style="width: 100px;">Gender</th>
-               <th>Phone</th>
-               <th>Address</th>
-               <th>Description</th>
+               <th>Unit</th>
+               <th>Status</th>
                <th style="width: 100px;">Actions</th>
             </tr>
          </thead>
          <tbody>
-            <tr v-for="(customer, index) in customers" :key="index">
+            <tr v-for="(unit, index) in units" :key="index">
                <td>{{ index+1 }}</td>
-               <td>{{ customer.name }}</td>
-               <td>{{ customer.gender == 1 ? 'Male' : 'Female' }}</td>
-               <td>{{ customer.phone }}</td>
-               <td>{{ customer.address }}</td>
-               <td>{{ customer.description }}</td>
+               <td>{{ unit.name }}</td>
+               <td>{{ unit.status == 1 ? 'Active' : 'Inactive' }}</td>
                <td>
-                  <button class="btn btn-primary btn-sm" @click="$emit('edit', customer)" ><i class="fa fa-edit"></i></button>
-                  <button class="btn btn-danger btn-sm ml-1" @click="$emit('delete', customer.id)"><i class="fa fa-trash"></i></button>
+                  <button class="btn btn-primary btn-sm" @click="$emit('edit', unit)" ><i class="fa fa-edit"></i></button>
+                  <button class="btn btn-danger btn-sm ml-1" @click="$emit('delete', unit.id)"><i class="fa fa-trash"></i></button>
                </td>
             </tr>
          </tbody>
@@ -45,7 +39,7 @@
 <script>
 export default {
    props:{
-      customers:{
+      units:{
          data: Array,
          default: null,
       }
