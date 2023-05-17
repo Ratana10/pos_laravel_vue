@@ -16,8 +16,15 @@ class CustomerController extends Controller
                 
     }
     
-    public function store(CustomerRequest $request)
+    public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required|max:100',
+            'gender' => 'required',
+            'phone' => 'nullable|unique:customers,phone,',
+            'address' => 'nullable|max:255',
+        ]);
+        
         Customer::create([
             'name' => $request->name,
             'gender' => $request->gender,
@@ -29,8 +36,15 @@ class CustomerController extends Controller
 
     }
 
-    public function update(CustomerRequest $request, Customer $customer)
+    public function update(Request $request, Customer $customer)
     {
+        $request->validate([
+            'name' => 'required|max:100',
+            'gender' => 'required',
+            'phone' => 'nullable|unique:customers,phone,' .$customer->id,
+            'address' => 'nullable|max:255',
+        ]);
+        
         $customer->update([
             'name' => $request->name,
             'gender' => $request->gender,

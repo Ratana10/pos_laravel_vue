@@ -74,17 +74,10 @@ export default {
       }
    },
    methods: {
-      handleSubmit(value){
-         let url, method;
+      handleSubmit(value, action){
+         let url = this.editing ? `/api/v1/customers/${this.editing.id}` : '/api/v1/customers';
+         let method = this.editing ? 'put' : 'post';
 
-         if(this.editing){
-            method = 'put';
-            url = `/api/v1/customers/${this.editing.id}`
-         }
-         else{
-            method = 'post';
-            url ='/api/v1/customers';
-         }
          axios
             .request({
                method: method,
@@ -94,9 +87,12 @@ export default {
             .then(res =>{
                this.$refs.form.resetForm();
                this.$emit('submit');
-               this.toastr.success('Customer Updated Successfully')
+               this.toastr.success(`Customer ${this.editing ? 'Update' : 'Add'} Successfully`);
             })
             .catch(err =>{
+               if(err.response.data.errors){
+                  action.setErrors(err.response.data.errors);
+               }
                console.log('error:', err);
             })
       },
