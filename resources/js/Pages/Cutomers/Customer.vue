@@ -83,6 +83,7 @@ export default {
          $('#modal-add-customer').modal('show');
       },
       handleAdd() {
+         this.editing = null;
          $('#modal-add-customer').modal('show');
       },
       getCustomers(){

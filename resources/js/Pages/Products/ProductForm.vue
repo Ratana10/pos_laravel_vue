@@ -88,7 +88,7 @@
                                           {{ unit.name }}
                                        </option>
                                     </select>
-                                    
+                                    <button class="btn btn-default" @click.prevent="handleShowUnitModal">+</button>
                                  </div>
                               </div>
                            </div>
@@ -150,15 +150,17 @@
       </div>
    </div>
    <modal-add-category @submit="handleCloseCategoryModal" />
+   <modal-add-unit @submit="handleCloseUnitModal" />
 </div>
 </template>
 
 <script>
 import {useRouter, useRoute} from 'vue-router';
 import ModalAddCategory from '../Categories/ModalAddCategory.vue';
+import ModalAddUnit from '../Units/ModalAddUnit.vue';
 export default {
    components:{
-      ModalAddCategory
+      ModalAddCategory, ModalAddUnit,
    },
    data() {
       return {
@@ -184,6 +186,13 @@ export default {
       }
    },
    methods: {
+      handleCloseUnitModal(){
+         $('#modal-add-unit').modal('hide');
+         this.getUnits();
+      },
+      handleShowUnitModal(){
+         $('#modal-add-unit').modal('show');
+      },
       handleCloseCategoryModal(){
          $('#modal-add-category').modal('hide');
          this.getCategories();

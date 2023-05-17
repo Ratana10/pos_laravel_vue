@@ -7,48 +7,60 @@
                   <span v-if="editing">Edit Customer</span>
                   <span v-else>Add New Customer</span>
                </h4>
-               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <button type="button" class="close" data-dismiss="modal" >
                   <span aria-hidden="true">&times;</span>
                </button>
             </div>
-            <form @submit.prevent="handleSubmit">
+            <Form ref="form" @submit="handleSubmit" :validation-schema="schema" v-slot="{ errors }" :initial-values="editing">
                <div class="modal-body">
                   <div class="form-group">
                      <label for="name">Name</label>
-                     <input v-model="form.name" type="text" class="form-control" placeholder="Enter Name" autofocus>
+                     <Field name="name"  type="text" class="form-control" :class="{'is-invalid': errors.name}" placeholder="Enter Name" autofocus />
+                     <span class="invalid-feedback">{{ errors.name }}</span>
                   </div>
                   <div class="form-group">
                      <label for="gender">Gender</label>
-                     <select v-model="form.gender" name="" class="form-control" id="">
-                        <option value="1">Male</option>
+                     <Field name="gender" as="select"  class="form-control"  :class="{'is-invalid': errors.gender}" id="">
+                        <option value="">Select gender</option>
+                        <option value="1" selected>Male</option>
                         <option value="0">Female</option>
-                     </select>
+                     </Field>
+                     <span class="invalid-feedback">{{ errors.gender }}</span>
                   </div>
                   <div class="form-group">
                      <label for="phone">Phone</label>
-                     <input v-model="form.phone" type="text" class="form-control" placeholder="Enter Phonenumber">
+                     <Field name="phone" type="text" class="form-control"  :class="{'is-invalid': errors.phone}" placeholder="Enter Phone --number" />
+                     <span class="invalid-feedback">{{ errors.phone }}</span>
                   </div>
                   <div class="form-group">
                      <label for="Address">Address</label>
-                     <textarea v-model="form.address" name="" id="" rows="3" class="form-control"></textarea>
+                     <Field name="address" rows="3" class="form-control"  :class="{'is-invalid': errors.address}"></Field>
+                     <span class="invalid-feedback">{{ errors.address }}</span>
                   </div>
                   <div class="form-group">
                      <label for="Description">Description</label>
-                     <textarea v-model="form.description" name="" id="" rows="2" class="form-control"></textarea>
+                     <Field name="description"  rows="2" class="form-control"  :class="{'is-invalid': errors.description}"></Field>
+                     <span class="invalid-feedback">{{ errors.description }}</span>
                   </div>
                </div>
                <div class="modal-footer justify-content-between">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                  <input type="submit" class="btn" :class=" editing ? 'btn-success' : 'btn-primary' " :value="editing ? 'Update' : 'Save'" />
+                  <input type="submit" class="btn" :class=" editing ? 'btn-success' : 'btn-primary' " :value="editing ? 'Update' : 'Save'"  />
                </div>
-            </form>
+            </Form>
          </div>
       </div>
    </div>
 </template>
 <script>
 import { useToastr } from '../../toastr';
+import {Form, Field} from 'vee-validate'
+import * as yup from 'yup';
+
 export default {
+   components:{
+      Form, Field
+   },
    props:{
       editing: {
          data: Object,
@@ -57,32 +69,49 @@ export default {
    },
    data() {
       return {
-         form:{
-            id: null,
-            name: null,
-            gender: 1,
-            phone: null,
-            address: null,
-            description: null,
-         },
          toastr: useToastr(),
+         
       }
    },
    methods: {
-      handleSubmit(){
-         if(this.editing){
-            this.handleUpdate();
-         }else{
+      handleSubmit(value){
+         let url, method;
 
-            this.handleAdd();
+         if(this.editing){
+            method = 'put';
+            url = `/api/v1/customers/${this.editing.id}`
          }
+         else{
+            method = 'post';
+            url ='/api/v1/customers';
+         }
+         axios
+            .request({
+               method: method,
+               url: url,
+               data: value
+            })
+            .then(res =>{
+               this.$refs.form.resetForm();
+               this.$emit('submit');
+               this.toastr.success('Customer Updated Successfully')
+            })
+            .catch(err =>{
+               console.log('error:', err);
+            })
       },
+      // handleSubmit(){
+      //    if(this.editing){
+      //       this.handleUpdate();
+      //    }else{
+
+      //       this.handleAdd();
+      //    }
+      // },
       handleUpdate(){
          axios
             .put(`/api/v1/customers/${this.form.id}`, this.form)
             .then(res =>{
-               this.$emit('submit');
-               this.toastr.success('Customer Updated Successfully')
 
             })
             .catch(err =>{
@@ -101,11 +130,21 @@ export default {
             })
       }
    },
-   watch:{
-      editing: function(value){
-         if(value){
-            this.form = value;
-         }
+   // watch:{
+   //    editing: function(value){
+   //       if(value){
+   //          this.form = value;
+   //       }
+   //    }
+   // },
+   computed:{
+      schema(){
+         return yup.object({
+            name: yup.string().required(),
+            gender: yup.string().required('please select gender'),
+            phone: yup.number().nullable(),
+
+         })
       }
    }
 }
