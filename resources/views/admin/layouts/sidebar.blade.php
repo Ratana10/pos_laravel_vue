@@ -85,7 +85,7 @@
                </router-link>
             </li>
             <li class="nav-item">
-               <router-link to="/admin/" class="nav-link" active-class="active">
+               <router-link to="/admin/payments" class="nav-link" active-class="active">
                   <i class="nav-icon fas fa-th"></i>
                   <p>
                      Payment

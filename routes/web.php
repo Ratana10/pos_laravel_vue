@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\ApplicationController;
+use App\Models\Payment;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -66,6 +67,10 @@ Route::prefix('/api/v1')->group(function (){
         Route::delete('/products/{product}', 'destory')->name('products.destory');
 
         Route::get('/products-code', 'generateCode')->name('products.code');
+    });
+
+    Route::controller(Payment::class)->group(function () {
+        Route::get('/payments', 'index')->name('payments.index');
     });
 
     

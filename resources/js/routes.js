@@ -6,6 +6,7 @@ import Unit from './Pages/Units/Unit.vue'
 import Exchange from './Pages/Exchanges/Exchange.vue'
 import Product from './Pages/Products/Product.vue'
 import ProductForm from './Pages/Products/ProductForm.vue'
+import Payment from './Pages/Payments/Payment.vue'
 
 
 export default
@@ -54,5 +55,10 @@ export default
       path: '/admin/products/:id/edit',
       name: 'admin.products.edit',
       component: ProductForm,
+   },
+   {
+      path: '/admin/payments',
+      name: 'admin.payments',
+      component: Payment,
    },
 ]
