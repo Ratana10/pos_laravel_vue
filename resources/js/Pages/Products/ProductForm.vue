@@ -31,20 +31,22 @@
          <div class="row">
             <div class="col-lg-12">
                <div class="card">
-                  <form method="post" @submit.prevent="handleSubmit" enctype="multipart/form-data">
+                  <Form ref="formReset" @submit="handleSubmit" enctype="multipart/form-data" :validation-schema="schema" v-slot="{ errors }" :initial-values="form">
                      <div class="card-body">
-                        <input type="hidden" v-model="form.id">
+                        <Field type="hidden" name="id" />
                         <div class="row">
                            <div class="col-md-6">
                               <div class="form-group">
                                  <label for="" class="form-label">Code</label>
-                                 <input v-model="form.code" type="text" name="" id="" class="form-control" disabled>
+                                 <Field :class="{'is-invalid': errors.code}" type="text" name="code" class="form-control" disabled />
+                                 <span class="invalid-feedback">{{ errors.code }}</span>
                               </div>
                            </div>
                            <div class="col-md-6">
                               <div class="form-group">
                                  <label for="">Barcode</label>
-                                 <input v-model="form.barcode" type="text" name="" id="" class="form-control" disabled>
+                                 <Field :class="{'is-invalid': errors.barcode}" type="text" name="barcode" class="form-control" disabled />
+                                 <span class="invalid-feedback">{{ errors.barcode }}</span>
                               </div>
                            </div>
                         </div>
@@ -52,22 +54,27 @@
                            <div class="col-md-6">
                               <div class="form-group">
                                  <label for="">Product Name</label>
-                                 <input v-model="form.name" type="text" name="" id="" class="form-control">
+                                 <Field :class="{'is-invalid': errors.name}" type="text" name="name" class="form-control" />
+                                 <span class="invalid-feedback">{{ errors.name }}</span>
                               </div>
                            </div>
                            <div class="col-md-6">
                               <div class="form-group">
-                              <label for="">Category</label>
-                              <div class="input-group-prepend">
-                                 <select v-model="form.category_id" name="" id="" class="form-control custom-select">
-                                    <option disabled selected>Select Category ...</option>
-                                    <option v-for="(category, index) in categories" :key="index" :value="category.id">
-                                       {{ category.name }}
-                                    </option>
-                                 </select>
-                                 <button class="btn btn-default" @click.prevent="handleShowCategoryModal">+</button>
-                              </div>
-
+                                 <label for="">Category</label>
+                                 <div class="input-group-prepend">
+                                    <div class="input-group">
+                                       <Field :class="{'is-invalid': errors.category_id}" as="select" name="category_id" class="form-control custom-select">
+                                          <option disabled selected>Select Category ...</option>
+                                          <option v-for="(category, index) in categories" :key="index" :value="category.id">
+                                             {{ category.name }}
+                                          </option>
+                                       </Field>
+                                       <button class="btn btn-default" @click.prevent="handleShowCategoryModal">+</button>
+                                       <span class="invalid-feedback">{{ errors.category_id }}</span>
+                                    </div>
+                                       
+                                 </div>
+                                 
                               </div>
                            </div>
                         </div>
@@ -75,20 +82,28 @@
                            <div class="col-md-6">
                               <div class="form-group">
                                  <label for="">Price</label>
-                                 <input v-model="form.price" type="number" step="0.01" name="" id="" class="form-control">
+                                 <Field :class="{'is-invalid': errors.price}" type="number" step="0.01" name="price" class="form-control" />
+                                 <span class="invalid-feedback">{{ errors.price }}</span>
                               </div>
                            </div>
                            <div class="col-md-6">
                               <div class="form-group">
                                  <label for="">Quantity</label>
                                  <div class="input-group-prepend">
-                                    <input v-model="form.quantity" type="number"  step="0.01"  class="form-control rounded-0">
-                                    <select v-model="form.unit_id" class="form-control custom-select rounded-0" style="width: 200px;">
-                                       <option v-for="(unit, index) in units" :key="index" :value="unit.id">
-                                          {{ unit.name }}
-                                       </option>
-                                    </select>
+                                    <div class="input-group">
+                                       <Field :class="{'is-invalid': errors.quantity}" name="quantity" type="number" step="0.01" class="form-control rounded-0" />
+                                       <span class="invalid-feedback">{{ errors.quantity }}</span>
+                                    </div>
+                                    <div class="input-group">
+                                       <Field :class="{'is-invalid': errors.unit_id}" name="unit_id" as="select" class="form-control custom-select rounded-0" style="width: 200px;">
+                                          <option v-for="(unit, index) in units" :key="index" :value="unit.id">
+                                             {{ unit.name }}
+                                          </option>
+                                       </Field>
+                                       <span class="invalid-feedback">{{ errors.unit_id }}</span>
+                                    </div>
                                     <button class="btn btn-default" @click.prevent="handleShowUnitModal">+</button>
+                                       
                                  </div>
                               </div>
                            </div>
@@ -97,13 +112,15 @@
                            <div class="col-md-6">
                               <div class="form-group">
                                  <label for="">Cost</label>
-                              <input v-model="form.cost" type="number"  step="0.01"  name="" id="" class="form-control">
+                                 <Field :class="{'is-invalid': errors.cost}" type="number" step="0.01" name="cost" class="form-control" />
+                                 <span class="invalid-feedback">{{ errors.cost }}</span>
                               </div>
                            </div>
                            <div class="col-md-6">
                               <div class="form-group">
                                  <label for="">Alert</label>
-                                 <input v-model="form.alert" type="number" name="" id="" class="form-control">
+                                 <Field :class="{'is-invalid': errors.alert}" type="number" name="alert" class="form-control" />
+                                 <span class="invalid-feedback">{{ errors.alert }}</span>
                               </div>
                            </div>
                         </div>
@@ -120,7 +137,7 @@
                                     </div>
                                  </div>
                                  <div class="card-body text-center ">
-                                    <input type="file" id="image" class="d-none" @change="onImageChange">
+                                    <input type="file" id="image" class="d-none" @change="onImageChange" />
                                     <img class="img-fluid" style="height: 200px;" :src="editing_image ? '/uploads/products/' + form.image : form.image" alt="photo">
                                  </div>
                               </div>
@@ -130,16 +147,17 @@
                            <div class="col-md-6">
                               <div class="form-group">
                                  <label for="">Status</label>
-                              <select v-model="form.status" name="" id="" class="form-control">
-                                 <option value="1">Active</option>
-                                 <option value="0">Inactive</option>
-                              </select>
+                                 <Field :class="{'is-invalid': errors.status}" as="select" name="status" class="form-control">
+                                    <option value="1">Active</option>
+                                    <option value="0">Inactive</option>
+                                 </Field>
+                                 <span class="invalid-feedback">{{ errors.status }}</span>
                               </div>
                            </div>
 
                         </div>
                         <div class="mt-4">
-                           <input type="submit" :value="form.id ? 'Update' : 'Save' " class="btn" :class="form.id ? 'btn-success' : 'btn-primary'" >
+                           <input type="submit" :value="form.id ? 'Update' : 'Save' " class="btn" :class="form.id ? 'btn-success' : 'btn-primary'">
                         </div>
                      </div>
 
@@ -155,26 +173,39 @@
 </template>
 
 <script>
-import {useRouter, useRoute} from 'vue-router';
+import {
+   useRouter,
+   useRoute
+} from 'vue-router';
+import {
+   Form,
+   Field
+} from 'vee-validate'
+import * as yup from 'yup';
+
 import ModalAddCategory from '../Categories/ModalAddCategory.vue';
 import ModalAddUnit from '../Units/ModalAddUnit.vue';
+
 export default {
-   components:{
-      ModalAddCategory, ModalAddUnit,
+   components: {
+      ModalAddCategory,
+      ModalAddUnit,
+      Form,
+      Field
    },
    data() {
       return {
-         form:{
-            id:null,
+         form: {
+            id: null,
             code: null,
             name: null,
             category_id: null,
             unit_id: null,
-            cost: null,
-            price: null,
-            quantity: null,
-            alert: null,
-            image:null,
+            cost: 0,
+            price: 0,
+            quantity: 1,
+            alert: 1,
+            image: null,
             barcode: null,
             status: 1,
          },
@@ -186,111 +217,130 @@ export default {
       }
    },
    methods: {
-      handleCloseUnitModal(){
+      handleCloseUnitModal() {
          $('#modal-add-unit').modal('hide');
          this.getUnits();
       },
-      handleShowUnitModal(){
+      handleShowUnitModal() {
          $('#modal-add-unit').modal('show');
       },
-      handleCloseCategoryModal(){
+      handleCloseCategoryModal() {
          $('#modal-add-category').modal('hide');
          this.getCategories();
       },
-      handleShowCategoryModal(){
+      handleShowCategoryModal() {
          $('#modal-add-category').modal('show');
       },
-      handleSubmit(){
+      handleSubmit(value, action) {
+         value.image = this.form.image;
+         console.log(value);
          let url = this.form.id ? `/api/v1/products/${this.form.id}` : '/api/v1/products';
          let method = this.form.id ? 'put' : 'post';
-
          axios
             .request({
                url: url,
                method: method,
-               data: this.form
+               data: value
             })
-            .then(res =>{
+            .then(res => {
                this.router.push("/admin/products");
             })
-            .catch(err =>{
+            .catch(err => {
+               // if(err.respone.data.errors){
+               //    action.setErrors(err.respone.data.errors);
+               // }
                console.log('erros: ', err);
             })
 
       },
-      onImageChange(event){
+      onImageChange(event) {
          this.editing_image = false;
          let file = event.target.files;
          let reader = new FileReader();
-         reader.onloadend = (file)=>{
-            this.form.image = file.target.result;  
+         reader.onloadend = (file) => {
+            this.form.image = file.target.result;
          }
          reader.readAsDataURL(file[0]);
       },
-      handleBrowse(){
-        $('#image').trigger('click');
+      handleBrowse() {
+         $('#image').trigger('click');
       },
-      getUnits(){
+      getUnits() {
          axios
             .get('/api/v1/units')
-            .then(res =>{
+            .then(res => {
                this.units = res.data;
             })
-            .catch(err =>{
+            .catch(err => {
                console.log('errors: ', err)
             })
       },
-      getCategories(){
+      getCategories() {
          axios
             .get('/api/v1/categories')
-            .then(res =>{
+            .then(res => {
                this.categories = res.data;
             })
-            .catch(err =>{
+            .catch(err => {
                console.log('errors: ', err)
             })
       },
-      getProductCode(){
+      getProductCode() {
          axios
             .get('/api/v1/products-code')
-            .then(res =>{
+            .then(res => {
                this.form.code = res.data.generatedCode;
             })
-            .catch(err =>{
+            .catch(err => {
                console.log('errors: ', err)
             })
       },
-      getProduct(product_id){
+      getProduct(product_id) {
          axios
             .get(`/api/v1/products/${product_id}/edit`)
-            .then(res =>{
+            .then(res => {
                this.form = res.data.product;
                this.editing_image = true;
             })
-            .catch(err =>{
+            .catch(err => {
                console.log('errors: ', err)
             })
       }
    },
    mounted() {
-      if(this.route.name == 'admin.products.edit'){
+      if (this.route.name == 'admin.products.edit') {
          let product_id = this.route.params.id;
          this.getProduct(product_id);
-      }else{
+      } else {
          this.getProductCode();
-         
+
       }
       this.getUnits();
       this.getCategories();
    },
+   computed: {
+      schema() {
+         return yup.object({
+            name: yup.string().required(),
+            category_id: yup.string().required('please select category'),
+            unit_id: yup.string().required('please select unit'),
+            price: yup.number().required(),
+            cost: yup.number().required(),
+            quantity: yup.number().required(),
+            alert: yup.number().required(),
+            status: yup.number().required('please select status'),
+         })
+      }
+   }
 }
 </script>
 
 <style scoped>
-   .form-control{
-      border-radius: 0 !important;
-   }
-   .min--heigh{
-      min-height: 10px;
-   }
+.form-control {
+   border-radius: 0 !important;
+}
+
+.min--heigh {
+   min-height: 10px;
+}
 </style>

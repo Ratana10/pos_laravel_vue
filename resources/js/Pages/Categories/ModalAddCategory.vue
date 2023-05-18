@@ -73,8 +73,8 @@ export default {
                data: value
             })
             .then(res =>{
-                  this.$emit('submit');
                   action.resetForm();
+                  this.$emit('submit');
                   this.toastr.success(`Category ${this.editing ? 'Update' : 'Add'} Successfully`);
 
             })
