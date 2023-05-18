@@ -72,6 +72,7 @@ export default {
          $('#modal-add-exchange').modal('show');
       },
       handleAdd() {
+         this.editing = null;
          $('#modal-add-exchange').modal('show');
       },
       getexchanges(){

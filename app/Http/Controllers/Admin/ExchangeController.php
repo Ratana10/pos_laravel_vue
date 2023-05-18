@@ -17,6 +17,12 @@ class ExchangeController extends Controller
     
     public function store(Request $request)
     {
+        $request->validate([
+            'dollar' => 'required|numeric',
+            'khmer' => 'required|numeric',
+            'status' => 'required|',
+        ]);
+        
         Exchange::create([
             'dollar' => $request->dollar,
             'khmer' => $request->khmer,
@@ -28,6 +34,11 @@ class ExchangeController extends Controller
 
     public function update(Request $request, Exchange $exchange)
     {
+        $request->validate([
+            'dollar' => 'required|numeric',
+            'khmer' => 'required|numeric',
+            'status' => 'required|',
+        ]);
         $exchange->update([
             'dollar' => $request->dollar,
             'khmer' => $request->khmer,
