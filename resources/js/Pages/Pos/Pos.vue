@@ -70,7 +70,7 @@
                         <h3>Total: </h3>
                      </div>
                      <div class="col text-right">
-                        <h3>{{ total.toFixed(2) }} $</h3>
+                        <h3>{{ total }} $</h3>
                      </div>
                   </div>
                   <div class="row mb-1">
@@ -78,7 +78,7 @@
                         <input type="button" value="Cancle" class="btn btn-danger btn-block" @click="clearCarts">
                      </div>
                      <div class="col">
-                        <input type="button" value="Check Out" class="btn  btn-success btn-block" @click="handlePay">
+                        <input type="button" value="Check Out" class="btn  btn-success btn-block" @click="checkOut">
                      </div>
                   </div>
                   <div class="row">
@@ -92,19 +92,30 @@
       </div>
    </div>
 </div>
+<check-out-modal :total="total"  />
 </template>
 
 <script>
+import CheckOutModal from './CheckOutModal.vue';
 export default {
+   components:{
+      CheckOutModal,
+   },
    data() {
       return {
          carts: [],
          products: [],
          categories: [],
          total: 0.00,
+         
       }
    },
    methods: {
+      
+      checkOut(){
+         
+         $('#check-out-modal').modal('show');
+      },
       clearCarts(){
          this.carts = [];
       },
@@ -170,7 +181,7 @@ export default {
             carts.forEach(cart => {
                total += cart.quantity * cart.price;
             });
-            this.total = total;
+            this.total = total.toFixed(2);
          }
       }
    }
