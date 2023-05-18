@@ -72,6 +72,7 @@ export default {
          $('#modal-add-unit').modal('show');
       },
       handleAdd() {
+         this.editing = null;
          $('#modal-add-unit').modal('show');
       },
       getUnits(){

@@ -17,6 +17,11 @@ class UnitController extends Controller
     
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required|string',
+            'status' => 'required',
+        ]);
+        
         Unit::create([
             'name' => $request->name,
             'status' => $request->status,
@@ -27,6 +32,11 @@ class UnitController extends Controller
 
     public function update(Request $request, Unit $unit)
     {
+        $request->validate([
+            'name' => 'required|string',
+            'status' => 'required',
+        ]);
+        
         $unit->update([
             'name' => $request->name,
             'status' => $request->status,

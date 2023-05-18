@@ -11,18 +11,21 @@
                   <span aria-hidden="true">&times;</span>
                </button>
             </div>
-            <form @submit.prevent="handleSubmit">
+            <Form ref="formReset" @submit="handleSubmit" :validation-schema="schema" v-slot="{ errors }" :initial-values="editing ? editing : form">
                <div class="modal-body">
+                  <Field name="id" type="hidden" />
                   <div class="form-group">
                      <label for="name">Name</label>
-                     <input v-model="form.name" type="text" class="form-control" placeholder="Enter Name" autofocus>
+                     <Field  name="name" type="text" class="form-control" :class="{'is-invalid': errors.name}"  placeholder="Enter Name" autofocus />
+                     <span class="invalid-feedback">{{ errors.name }}</span>
                   </div>
                   <div class="form-group">
                      <label for="Status">Status</label>
-                     <select v-model="form.status" name="" class="form-control" id="">
+                     <Field as="select" name="status"  class="form-control" :class="{'is-invalid': errors.status}"  >
                         <option value="1">Active</option>
                         <option value="0">Inactive</option>
-                     </select>
+                     </Field>
+                     <span class="invalid-feedback">{{ errors.status }}</span>
                   </div>
                </div>
                <div class="modal-footer justify-content-between">
@@ -36,7 +39,13 @@
 </template>
 <script>
 import { useToastr } from '../../toastr';
+import {Form, Field} from 'vee-validate'
+import * as yup from 'yup';
+
 export default {
+   components:{
+      Form, Field
+   },
    props:{
       editing: {
          data: Object,
@@ -54,43 +63,37 @@ export default {
       }
    },
    methods: {
-      handleSubmit(){
-         if(this.editing){
-            this.handleUpdate();
-         }else{
+      handleSubmit(value, action){
+         let url = this.editing ? `/api/v1/units/${value.id}` : '/api/v1/units';
+         let method = this.editing ? 'put' : 'post';
 
-            this.handleAdd();
-         }
-      },
-      handleUpdate(){
          axios
-            .put(`/api/v1/units/${this.form.id}`, this.form)
+            .request({
+               url: url,
+               method: method,
+               data: value
+            })
             .then(res =>{
-               this.$emit('submit');
-               this.toastr.success('Unit Updated Successfully')
+                  this.$emit('submit');
+                  action.resetForm();
+                  this.toastr.success(`Unit ${this.editing ? 'Update' : 'Add'} Successfully`);
 
             })
             .catch(err =>{
+               if(err.response.data.errors){
+                  action.sertErrors(err.response.data.errors);
+               }
                console.log('error:', err);
             })
+
       },
-      handleAdd(){
-         axios
-            .post('/api/v1/units', this.form)
-            .then(res =>{
-               this.$emit('submit');
-               this.toastr.success('Unit Added Successfully')
-            })
-            .catch(err =>{
-               console.log('error:', err);
-            })
-      }
    },
-   watch:{
-      editing: function(value){
-         if(value){
-            this.form = value;
-         }
+   computed:{
+      schema(){
+         return yup.object({
+            name: yup.string().required(),
+            status: yup.string().required('please select status'),
+         })
       }
    }
 }
