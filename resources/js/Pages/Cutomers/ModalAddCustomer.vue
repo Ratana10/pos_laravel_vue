@@ -21,8 +21,8 @@
                   <div class="form-group">
                      <label for="gender">Gender</label>
                      <Field name="gender" as="select"  class="form-control"  :class="{'is-invalid': errors.gender}" id="">
-                        <option value="">Select gender</option>
-                        <option value="1" selected>Male</option>
+                        <option value="" disabled>Select gender</option>
+                        <option value="1">Male</option>
                         <option value="0">Female</option>
                      </Field>
                      <span class="invalid-feedback">{{ errors.gender }}</span>
@@ -96,43 +96,8 @@ export default {
                console.log('error:', err);
             })
       },
-      // handleSubmit(){
-      //    if(this.editing){
-      //       this.handleUpdate();
-      //    }else{
 
-      //       this.handleAdd();
-      //    }
-      // },
-      handleUpdate(){
-         axios
-            .put(`/api/v1/customers/${this.form.id}`, this.form)
-            .then(res =>{
-
-            })
-            .catch(err =>{
-               console.log('error:', err);
-            })
-      },
-      handleAdd(){
-         axios
-            .post('/api/v1/customers', this.form)
-            .then(res =>{
-               this.$emit('submit');
-               this.toastr.success('Customer Added Successfully')
-            })
-            .catch(err =>{
-               console.log('error:', err);
-            })
-      }
    },
-   // watch:{
-   //    editing: function(value){
-   //       if(value){
-   //          this.form = value;
-   //       }
-   //    }
-   // },
    computed:{
       schema(){
          return yup.object({

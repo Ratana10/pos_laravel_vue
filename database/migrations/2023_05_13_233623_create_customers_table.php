@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('phone')->unique()->nullable();
             $table->longText('address')->nullable();
             $table->longText('description')->nullable();
-            $table->timestamp('create_at');
+            $table->timestamp('created_at');
         });
     }
 

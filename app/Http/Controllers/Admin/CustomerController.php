@@ -12,8 +12,9 @@ class CustomerController extends Controller
     public function index()
     {
         return Customer::query()
+                ->latest()
                 ->get();
-                
+            
     }
     
     public function store(Request $request)

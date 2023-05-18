@@ -32,16 +32,9 @@ class CustomerRequest extends FormRequest
         return [
             'name' => 'required|max:100',
             'gender' => 'required',
-            'phone' => 'nullable|unique:customers,phone,' .$this->id,
+            'phone' => 'nullable|unique:customers,phone,',
             'address' => 'nullable|max:255',
         ];
     }
 
-    public function messages()
-    {
-        return [
-            'phone.unique' => 'The phone number has already been taken =>'.$this->request,
-            // Custom messages for other validation rules
-        ];
-    }
 }

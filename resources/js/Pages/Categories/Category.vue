@@ -77,6 +77,7 @@ export default {
          $('#modal-add-category').modal('show');
       },
       handleAdd() {
+         this.editing = null;
          $('#modal-add-category').modal('show');
       },
       getCategories(){
