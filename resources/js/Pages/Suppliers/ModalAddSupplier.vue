@@ -11,51 +11,65 @@
                   <span aria-hidden="true">&times;</span>
                </button>
             </div>
-            <form @submit.prevent="handleSubmit">
+            <Form ref="formReset" @submit="handleSubmit" :validation-schema="schema" v-slot="{errors}" :initial-values="editing ? editing : form">
                <div class="modal-body">
+                  <Field name="id" type="hidden" />
                   <div class="form-group">
                      <label for="name">Name</label>
-                     <input v-model="form.name" type="text" class="form-control" placeholder="Enter Name" autofocus>
+                     <Field name="name"  type="text" class="form-control" :class="{'is-invalid': errors.name}" placeholder="Enter Name" autofocus /> 
+                     <span class="invalid-feedback">{{ errors.name }}</span>
                   </div>
                   <div class="form-group">
                      <label for="gender">Gender</label>
-                     <select v-model="form.gender" name="" class="form-control" id="">
+                     <Field name="gender" as="select" class="form-control" :class="{'is-invalid': errors.gender}">
                         <option value="1">Male</option>
                         <option value="0">Female</option>
-                     </select>
+                     </Field>
+                     <span class="invalid-feedback">{{ errors.gender }}</span>
+
                   </div>
                   <div class="form-group">
                      <label for="phone">Phone</label>
-                     <input v-model="form.phone" type="text" class="form-control" placeholder="Enter Phonenumber">
+                     <Field name="phone"  type="text" class="form-control" :class="{'is-invalid': errors.phone}" placeholder="Enter Phone number" /> 
+                     <span class="invalid-feedback">{{ errors.phone }}</span>
+
                   </div>
                   <div class="form-group">
                      <label for="Address">Address</label>
-                     <textarea v-model="form.address" name="" id="" rows="3" class="form-control"></textarea>
+                     <Field name="address" rows="3" class="form-control" :class="{'is-invalid': errors.address}"></Field>
+                     <span class="invalid-feedback">{{ errors.address }}</span>
                   </div>
                   <div class="form-group">
                      <label for="Description">Description</label>
-                     <textarea v-model="form.description" name="" id="" rows="2" class="form-control"></textarea>
+                     <Field name="description" as="textarea" rows="2" class="form-control" :class="{'is-invalid': errors.description}"></Field>
+                     <span class="invalid-feedback">{{ errors.description }}</span>
                   </div>
                   <div class="form-group">
                      <label for="Status">Status</label>
-                     <select v-model="form.status" name="" class="form-control" id="">
+                     <Field name="status" as="select" class="form-control" :class="{'is-invalid': errors.status}" >
                         <option value="1">Active</option>
                         <option value="0">Inactive</option>
-                     </select>
+                     </Field>
+                     <span class="invalid-feedback">{{ errors.status }}</span>
                   </div>
                </div>
                <div class="modal-footer justify-content-between">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                   <input type="submit" class="btn" :class=" editing ? 'btn-success' : 'btn-primary' " :value="editing ? 'Update' : 'Save'" />
                </div>
-            </form>
+            </Form>
          </div>
       </div>
    </div>
 </template>
 <script>
 import { useToastr } from '../../toastr';
+import {Form, Field} from 'vee-validate';
+import * as yup from 'yup';
 export default {
+   components:{
+      Form, Field
+   },
    props:{
       editing: {
          data: Object,
@@ -77,43 +91,40 @@ export default {
       }
    },
    methods: {
-      handleSubmit(){
-         if(this.editing){
-            this.handleUpdate();
-         }else{
-
-            this.handleAdd();
-         }
-      },
-      handleUpdate(){
+      handleSubmit(value, action){
+         console.log('testing');
+         let url = this.editing ? `/api/v1/suppliers/${value.id}` : '/api/v1/suppliers';
+         let method = this.editing ? 'put' : 'post';
          axios
-            .put(`/api/v1/suppliers/${this.form.id}`, this.form)
+            .request({
+               method: method,
+               url: url,
+               data: value
+            })
             .then(res =>{
+               console.log('actiov', action)
+               action.resetForm();
                this.$emit('submit');
-               this.toastr.success('Supplier Updated Successfully')
-
+               this.toastr.success(`Supplier ${this.editing ? 'Update' : 'Add'} Successfully`);
             })
             .catch(err =>{
+               if(err.response.data.errors){
+                  action.setErrors(err.response.data.errors);
+               }
                console.log('error:', err);
             })
       },
-      handleAdd(){
-         axios
-            .post('/api/v1/suppliers', this.form)
-            .then(res =>{
-               this.$emit('submit');
-               this.toastr.success('Supplier Added Successfully')
-            })
-            .catch(err =>{
-               console.log('error:', err);
-            })
-      }
    },
-   watch:{
-      editing: function(value){
-         if(value){
-            this.form = value;
-         }
+   computed:{
+      schema(){
+         return yup.object({
+            name: yup.string().required(),
+            gender: yup.string().required('please select gender'),
+            phone: yup.number().nullable(),
+            address: yup.string().nullable(),
+            description: yup.string().nullable(),
+            status: yup.string().required('please select status'),
+         })
       }
    }
 }

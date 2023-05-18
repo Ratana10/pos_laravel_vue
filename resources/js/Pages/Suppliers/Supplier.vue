@@ -83,6 +83,7 @@ export default {
          $('#modal-add-supplier').modal('show');
       },
       handleAdd() {
+         this.editing = null;
          $('#modal-add-supplier').modal('show');
       },
       getSuppliers(){
