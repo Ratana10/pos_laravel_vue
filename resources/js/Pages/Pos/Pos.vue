@@ -19,7 +19,7 @@
                <div class="row mt-3">
                   <div class="col-md-2 mb-2" v-for="(product, index) in products" :key="index">
 
-                     <div class="card" @click="handleAddToCart"> 
+                     <div class="card" @click="handleAddToCart(product)">
                         <img class="p-2" :src="'/uploads/products/'+ product.image" alt="" style="width: auto; height: 150px;">
                         <div class="card-body">
                            <h4 class="card-title text-bold text-center">{{ product.name }}</h4>
@@ -49,16 +49,16 @@
                         <tbody>
                            <tr v-for="(cart, index) in carts" :key="index">
                               <td>{{ index+1 }}</td>
-                              <td>{{ cart.product }}</td>
+                              <td>{{ cart.name }}</td>
                               <td>
-                                 <input type='button' value='-' class='qtyminus minus' />
-                                 <input type='text' name='quantity' class='qty' disabled />
-                                 <input type='button' value='+' class='qtyplus plus' />
+                                 <input type='button' value='-' class='qtyminus minus' @click="decreaseCartQty(index)" />
+                                 <input type='text' name='quantity' class='qty' v-model="cart.quantity" disabled />
+                                 <input type='button' value='+' class='qtyplus plus' @click="increaseCartQty(index)" />
                               </td>
                               <td>{{ cart.price }}</td>
-                              <td>{{ cart.amount }}</td>
+                              <td>{{ (cart.price * cart.quantity).toFixed(2) }}$</td>
                               <td>
-                                 <button type="button" class="btn btn-danger btn-sm" @click="handleRemoveFromCart(index)"><i class="fa fa-trash"></i></button>
+                                 <button type="button" class="btn btn-danger btn-sm" @click="removeProductFromCart(index)"><i class="fa fa-trash"></i></button>
                               </td>
                            </tr>
 
@@ -70,12 +70,12 @@
                         <h3>Total: </h3>
                      </div>
                      <div class="col text-right">
-                        <h3>5.5 $</h3>
+                        <h3>{{ total.toFixed(2) }} $</h3>
                      </div>
                   </div>
                   <div class="row mb-1">
                      <div class="col">
-                        <input type="button" value="Cancle" class="btn btn-danger btn-block">
+                        <input type="button" value="Cancle" class="btn btn-danger btn-block" @click="clearCarts">
                      </div>
                      <div class="col">
                         <input type="button" value="Check Out" class="btn  btn-success btn-block" @click="handlePay">
@@ -98,29 +98,53 @@
 export default {
    data() {
       return {
-         carts: [{
-               product: 'Apple',
-               quantity: 1,
-               price: 2,
-               amount: 2,
-            },
-            {
-               product: 'Banana',
-               quantity: 1,
-               price: 2,
-               amount: 2,
-            },
-         ],
+         carts: [],
          products: [],
          categories: [],
+         total: 0.00,
       }
    },
    methods: {
+      clearCarts(){
+         this.carts = [];
+      },
+      removeProductFromCart(index) {
+         this.carts.splice(index, 1);
+      },
       findExistsCart(product_id) {
+         return this.carts.findIndex(item => item.product_id == product_id);
+      },
+      increaseCartQty(index) {
+         if (this.carts[index].quantity < this.carts[index].stock_qty) {
+            this.carts[index].quantity += 1;
+         } else {
+            //product out of stock
+
+         }
+      },
+      decreaseCartQty(index) {
+         if (this.carts[index].quantity > 1) {
+            this.carts[index].quantity -= 1;
+         } else if (this.carts[index].quantity == 1) {
+            this.removeProductFromCart(index);
+         }
       },
       handleAddToCart(product) {
+         let index = this.findExistsCart(product.id);
 
-
+         if (index != -1) {
+            // found the product that exists in cart then increase the quantity
+            this.increaseCartQty(index);
+         } else {
+            // 
+            this.carts.push({
+               product_id: product.id,
+               name: product.name,
+               quantity: 1,
+               price: product.price,
+               stock_qty: product.quantity,
+            });
+         }
       },
       getProducts() {
          axios
@@ -138,6 +162,18 @@ export default {
    mounted() {
       this.getProducts();
    },
+   watch:{
+      carts: {
+         deep: true, // Watch for changes in nested properties of "carts"
+         handler: function(carts){
+            let total = 0;
+            carts.forEach(cart => {
+               total += cart.quantity * cart.price;
+            });
+            this.total = total;
+         }
+      }
+   }
 }
 </script>
 
