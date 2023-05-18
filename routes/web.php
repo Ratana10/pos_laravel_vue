@@ -3,11 +3,12 @@
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\ExchangeController;
+use App\Http\Controllers\Admin\PaymentController;
+use App\Http\Controllers\Admin\PosController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\ApplicationController;
-use App\Models\Payment;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -69,9 +70,14 @@ Route::prefix('/api/v1')->group(function (){
         Route::get('/products-code', 'generateCode')->name('products.code');
     });
 
-    Route::controller(Payment::class)->group(function () {
+    Route::controller(PaymentController::class)->group(function () {
         Route::get('/payments', 'index')->name('payments.index');
     });
+
+    Route::controller(PosController::class)->group(function () {
+        Route::get('/pos', 'index')->name('pos.index');
+    });
+    
 
     
 });

@@ -7,6 +7,7 @@ import Exchange from './Pages/Exchanges/Exchange.vue'
 import Product from './Pages/Products/Product.vue'
 import ProductForm from './Pages/Products/ProductForm.vue'
 import Payment from './Pages/Payments/Payment.vue'
+import Pos from './Pages/Pos/Pos.vue'
 
 
 export default
@@ -60,5 +61,10 @@ export default
       path: '/admin/payments',
       name: 'admin.payments',
       component: Payment,
+   },
+   {
+      path: '/admin/pos',
+      name: 'admin.pos',
+      component: Pos,
    },
 ]
