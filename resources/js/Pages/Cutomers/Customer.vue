@@ -19,7 +19,7 @@
       <div class="container-fluid">
          <div class="d-flex justify-content-between">
             <div>
-               <button @click="handleAdd" type="button" class="btn btn-primary mb-2">
+               <button @click="showToast" type="button" class="btn btn-primary mb-2">
                   <i class="fa fa-plus"></i>
                   Add New Customer
                </button>
@@ -52,7 +52,7 @@
 import CustomerTable from './CustomerTable.vue';
 import ModalAddCustomer from './ModalAddCustomer.vue';
 import { useToastr } from '../../toastr';
-import Swal from 'sweetalert2'
+import { showToast } from '../../swalUtils';
 
 export default {
    components: {
@@ -76,7 +76,7 @@ export default {
             .delete(`/api/v1/customers/${customer_id}`)
             .then(res =>{
                this.getCustomers();
-               this.toastr.success('Customer Deleted Successfully');
+               showToast('success', 'Delete customer successfully');               
             })
       },
       handleEdit(customer){
@@ -92,8 +92,7 @@ export default {
          .then(res =>{
             this.customers = res.data.data.data;
          })
-      }
-
+      },
    },
    mounted() {
       this.getCustomers();
