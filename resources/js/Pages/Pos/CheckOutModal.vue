@@ -28,19 +28,16 @@
                </div>
                <div class="form-group">
                   <label for="">Received Amount: </label>
-                  <input type="text" class="form-control">
+                  <input type="text" class="form-control" v-model="received_amount">
                </div>
                <div class="form-group">
                   <label for="">Change: </label>
-                  <input type="text" class="form-control">
+                  <input type="text" class="form-control" v-model="change" disabled>
                </div>
             </div>
             <div class="modal-footer">
-               <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                  Close
-               </button>
-               <button type="button" class="btn btn-secondary" @click="handleSubmit">
-                  Save
+               <button type="button" class="btn-lg btn-success w-100" @click="handleSubmit">
+                  Pay
                </button>
 
             </div>
@@ -58,6 +55,8 @@ export default {
    data() {
       return {
          customers: [],
+         change: 0,
+         received_amount: null,
       }
    },
    methods: {
@@ -66,14 +65,23 @@ export default {
          axios
             .get('/api/v1/customers')
             .then(res => {
-               this.customers = res.data;
-               console.log('customers', this.customers)
+               this.customers = res.data.data.data;
             })
       },
    },
    mounted() {
       this.getCustomers();
    },
+   watch:{
+      received_amount(value){
+         if(value < this.total){
+            this.change = 0;
+         }else{
+            this.change = value- this.total;
+         }
+
+      }
+   }
 
 }
 </script>

@@ -4,40 +4,54 @@ namespace App\Repositories;
 use App\Models\Customer;
 use App\Interfaces\CrudInterface;
 use Illuminate\Contracts\Pagination\Paginator;
+use Symfony\Component\HttpFoundation\Response;
 
 class CustomerRepository implements CrudInterface
 {
    public function getAll(): Paginator
    {
-      return Customer::query()->paginate(10);
+      return Customer::query()
+                  ->latest()
+                  ->paginate(10);
    }
 
-   public function create(array $data): ?Customer
+   public function create(object $request): ?Customer
    {
       return Customer::create([
-         'name' => $data['name'],
-         'gender' =>  $data['gender'],
-         'phone' =>  $data['phone'],
-         'address' =>  $data['address'],
-         'description' =>  $data['description'],
+         'name' => $request->name,
+         'gender' =>  $request->gender,
+         'phone' =>  $request->phone,
+         'address' =>  $request->address,
+         'description' =>  $request->description,
       ]);
+      
+      // return Customer::create([
+      //    'name' => $data['name'],
+      //    'gender' =>  $data['gender'],
+      //    'phone' =>  $data['phone'],
+      //    'address' =>  $data['address'],
+      //    'description' =>  $data['description'],
+      // ]);
    }
 
-   public function update(array $data, Object $customer): ?Customer
+   public function update(object $request, Object $customer): ?Customer
    {
       $customer->update([
-         'name' => $data['name'],
-         'gender' =>  $data['gender'],
-         'phone' =>  $data['phone'],
-         'address' =>  $data['address'],
-         'description' =>  $data['description'],
+         'name' => $request->name,
+         'gender' =>  $request->gender,
+         'phone' =>  $request->phone,
+         'address' =>  $request->address,
+         'description' =>  $request->description,
        ]);
       return $customer;
    }
 
-   public function delete(object $customer): ?Customer
+   public function destory(object $customer): ?Customer
    {
-      $customer->delete();
+      $deleted = $customer->delete();
+      if(!$deleted){
+         throw new \Exception('Customer could not be deleted', Response::HTTP_INTERNAL_SERVER_ERROR);
+      }
       return $customer;
    }
 }

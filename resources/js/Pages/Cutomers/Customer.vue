@@ -52,6 +52,7 @@
 import CustomerTable from './CustomerTable.vue';
 import ModalAddCustomer from './ModalAddCustomer.vue';
 import { useToastr } from '../../toastr';
+import Swal from 'sweetalert2'
 
 export default {
    components: {

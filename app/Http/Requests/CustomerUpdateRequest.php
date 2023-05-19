@@ -26,6 +26,7 @@ class CustomerUpdateRequest extends FormRequest
             'gender' => 'required',
             'phone' => 'nullable|unique:customers,phone,'. $this->customer->id,
             'address' => 'nullable|max:255',
+            'description' => 'nullable|max:255',
         ];
     }
 }

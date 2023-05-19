@@ -26,6 +26,7 @@ class CustomerCreateRequest extends FormRequest
             'gender' => 'required',
             'phone' => 'nullable|unique:customers,phone,',
             'address' => 'nullable|max:255',
+            'description' => 'nullable|max:255',
         ];
     }
 }

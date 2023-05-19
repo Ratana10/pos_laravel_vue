@@ -14,7 +14,7 @@ class CustomerController extends Controller
 {
     use ResponseTrait;
     
-    public $customerRepository;
+    private $customerRepository;
     
     public function __construct(CustomerRepository $customerRepository){
         $this->customerRepository = $customerRepository;
@@ -32,8 +32,9 @@ class CustomerController extends Controller
     
     public function store(CustomerCreateRequest $request): JsonResponse
     {
+    
         try{
-            return $this->responseSuccess($this->customerRepository->create($request->all()), 'Customer create successfully');
+            return $this->responseSuccess($this->customerRepository->create($request), 'Customer create successfully');
         }
         catch(\Exception $exception){
             return $this->responseError([], $exception->getMessage());
@@ -44,7 +45,7 @@ class CustomerController extends Controller
     public function update(CustomerUpdateRequest $request, Customer $customer): JsonResponse
     {
         try{
-            return $this->responseSuccess($this->customerRepository->update($request->all(), $customer), 'Customer update successfully');
+            return $this->responseSuccess($this->customerRepository->update($request, $customer), 'Customer update successfully');
         }
         catch(\Exception $exception){
             return $this->responseError([], $exception->getMessage());
@@ -54,7 +55,7 @@ class CustomerController extends Controller
     public function destory(Customer $customer): JsonResponse
     {
         try{
-            return $this->responseSuccess($this->customerRepository->delete($customer), 'Customer delete successfully');
+            return $this->responseSuccess($this->customerRepository->destory($customer), 'Customer delete successfully');
         }
         catch(\Exception $exception){
             return $this->responseError([], $exception->getMessage());
