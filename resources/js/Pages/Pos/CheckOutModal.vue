@@ -12,7 +12,7 @@
             <div class="modal-body">
                <div class="form-group">
                   <label for="">Customer</label>
-                  <select name="" id="" class="form-control">
+                  <select v-model="customer_id" class="form-control">
                      <option>Select Customer ...</option>
                      <option v-for="(customer, index) in customers" :key="index" :value="customer.id">
                         {{ customer.name }}
@@ -21,14 +21,14 @@
                </div>
                <div class="form-group">
                   <option value="">Select Method</option>
-                  <select name="" id="" class="form-control">
+                  <select v-model="payment_method" class="form-control">
                      <option value="aba">ABA</option>
                      <option value="cash">Cash</option>
                   </select>
                </div>
                <div class="form-group">
                   <label for="">Received Amount: </label>
-                  <input type="text" class="form-control" v-model="received_amount">
+                  <input type="text" class="form-control" v-model.number="received_amount">
                </div>
                <div class="form-group">
                   <label for="">Change: </label>
@@ -57,9 +57,15 @@ export default {
          customers: [],
          change: 0,
          received_amount: null,
+         customer_id: null,
+         payment_method: 'aba',
       }
    },
    methods: {
+      handleSubmit(){
+         // console.log('test', this.received_amount, this.customer_id, this.payment_method)
+         this.$emit('submit', this.customer_id, this.received_amount, this.payment_method)
+      },
       getCustomers() {
          console.log('test ustomer')
          axios

@@ -19,7 +19,7 @@
       <div class="container-fluid">
          <div class="d-flex justify-content-between">
             <div>
-               <button @click="showToast" type="button" class="btn btn-primary mb-2">
+               <button @click="handleAdd" type="button" class="btn btn-primary mb-2">
                   <i class="fa fa-plus"></i>
                   Add New Customer
                </button>
@@ -67,8 +67,9 @@ export default {
       }
    },
    methods: {
-      handleSubmit(){
+      handleSubmit(icon, title){
          $('#modal-add-customer').modal('hide');
+         showToast(icon, title);               
          this.getCustomers();
       },
       handleDelete(customer_id){

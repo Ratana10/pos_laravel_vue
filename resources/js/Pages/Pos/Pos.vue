@@ -92,11 +92,13 @@
       </div>
    </div>
 </div>
-<check-out-modal :total="total"  />
+<check-out-modal :total="total" @submit="handleSubmit"  />
 </template>
 
 <script>
 import CheckOutModal from './CheckOutModal.vue';
+import moment from 'moment';
+import Swal from 'sweetalert2';
 export default {
    components:{
       CheckOutModal,
@@ -107,11 +109,57 @@ export default {
          products: [],
          categories: [],
          total: 0.00,
-         
+         date: null,
       }
    },
    methods: {
-      
+      handleSubmit(customer_id,  received_amount, payment_method){
+         let saleDetail = [];
+         this.carts.forEach(e =>{
+            saleDetail.push({
+               product_id: e.product_id,
+               price: e.price,
+               quantity: e.quantity,
+               discount: 0,
+            })
+         });
+
+         let data ={
+            // sale
+            customer_id: customer_id,
+            total: this.total,
+            due_amount: this.total,
+            paid_amount: received_amount,
+            exchange: null,
+            date:  moment(this.date).format('YYYY-MM-DD'),
+            created_by: 1,
+            // sale Detail
+            saleDetail: saleDetail,
+            // payment
+            amount: this.total,
+            payment_method: payment_method,
+
+         }
+
+         axios
+            .post('/api/v1/pos', data)
+            .then(res =>{
+               $('#check-out-modal').modal('hide');
+               this.clearCarts();
+               Swal.fire({
+                  icon: 'success',
+                  title: 'Payment Success',
+                  text: 'Thank You',
+                  showConfirmButton: false,
+                  timer: 1500
+               })
+               console.log('success')
+            })
+            .catch(err =>{
+               console.log('error');
+            })
+         
+      },
       checkOut(){
          
          $('#check-out-modal').modal('show');
@@ -184,7 +232,12 @@ export default {
             this.total = total.toFixed(2);
          }
       }
-   }
+   },
+   created() {
+      setInterval(() => {
+         this.date = moment().format('DD MMMM YYYY, h:mm:ss a');
+      })
+   },
 }
 </script>
 

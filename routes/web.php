@@ -76,6 +76,8 @@ Route::prefix('/api/v1')->group(function (){
 
     Route::controller(PosController::class)->group(function () {
         Route::get('/pos', 'index')->name('pos.index');
+        Route::post('/pos', 'store')->name('pos.store');
+
     });
     
 

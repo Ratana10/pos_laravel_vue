@@ -29,7 +29,7 @@
                   </div>
                   <div class="form-group">
                      <label for="phone">Phone</label>
-                     <Field name="phone" type="text" class="form-control"  :class="{'is-invalid': errors.phone}" placeholder="Enter Phone --number" />
+                     <Field name="phone" type="text" class="form-control"  :class="{'is-invalid': errors.phone}" placeholder="Enter Phone Number" />
                      <span class="invalid-feedback">{{ errors.phone }}</span>
                   </div>
                   <div class="form-group">
@@ -67,12 +67,6 @@ export default {
          default: null,
       }
    },
-   data() {
-      return {
-         toastr: useToastr(),
-         
-      }
-   },
    methods: {
       handleSubmit(value, action){
          let url = this.editing ? `/api/v1/customers/${this.editing.id}` : '/api/v1/customers';
@@ -86,8 +80,7 @@ export default {
             })
             .then(res =>{
                this.$refs.form.resetForm();
-               this.$emit('submit');
-               this.toastr.success(`Customer ${this.editing ? 'Update' : 'Add'} Successfully`);
+               this.$emit('submit', 'success', `${this.editing ? 'Customer update successfully' : 'Customer create successfully' }`);
             })
             .catch(err =>{
                if(err.response.data.errors){
