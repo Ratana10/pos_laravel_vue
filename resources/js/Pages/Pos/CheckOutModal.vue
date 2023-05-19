@@ -14,7 +14,9 @@
                   <label for="">Customer</label>
                   <select name="" id="" class="form-control">
                      <option>Select Customer ...</option>
-                     <option v-for="(customer, index) in customers" :key="index" :value="customer.id">{{ customer.name }}</option>
+                     <option v-for="(customer, index) in customers" :key="index" :value="customer.id">
+                        {{ customer.name }}
+                     </option>
                   </select>
                </div>
                <div class="form-group">
@@ -26,11 +28,11 @@
                </div>
                <div class="form-group">
                   <label for="">Received Amount: </label>
-                  <input type="text"  class="form-control" >
+                  <input type="text" class="form-control">
                </div>
                <div class="form-group">
                   <label for="">Change: </label>
-                  <input type="text" class="form-control" >
+                  <input type="text" class="form-control">
                </div>
             </div>
             <div class="modal-footer">
@@ -50,7 +52,7 @@
 
 <script>
 export default {
-   props:{
+   props: {
       total: Number,
    },
    data() {
@@ -58,12 +60,12 @@ export default {
          customers: [],
       }
    },
-   methods:{
-      getCustomers(){ 
+   methods: {
+      getCustomers() {
          console.log('test ustomer')
          axios
             .get('/api/v1/customers')
-            .then(res =>{
+            .then(res => {
                this.customers = res.data;
                console.log('customers', this.customers)
             })

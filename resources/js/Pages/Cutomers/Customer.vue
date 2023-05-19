@@ -86,10 +86,10 @@ export default {
          this.editing = null;
          $('#modal-add-customer').modal('show');
       },
-      getCustomers(){
-         axios.get('/api/v1/customers')
+      getCustomers(page=1){
+         axios.get(`/api/v1/customers?page=${page}`)
          .then(res =>{
-            this.customers = res.data;
+            this.customers = res.data.data.data;
          })
       }
 

@@ -2,63 +2,62 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\CustomerRequest;
 use App\Models\Customer;
-use Illuminate\Http\Request;
+use App\Traits\ResponseTrait;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\CustomerCreateRequest;
+use App\Http\Requests\CustomerUpdateRequest;
+use App\Repositories\CustomerRepository;
+use Illuminate\Http\JsonResponse;
 
 class CustomerController extends Controller
 {
-    public function index()
-    {
-        return Customer::query()
-                ->latest()
-                ->get();
-            
+    use ResponseTrait;
+    
+    public $customerRepository;
+    
+    public function __construct(CustomerRepository $customerRepository){
+        $this->customerRepository = $customerRepository;
     }
     
-    public function store(Request $request)
+    public function index(): JsonResponse
     {
-        $request->validate([
-            'name' => 'required|max:100',
-            'gender' => 'required',
-            'phone' => 'nullable|unique:customers,phone,',
-            'address' => 'nullable|max:255',
-        ]);
-        
-        Customer::create([
-            'name' => $request->name,
-            'gender' => $request->gender,
-            'phone' => $request->phone,
-            'address' => $request->address,
-            'description' => $request->description,
-        ]);
-        return response()->json(['success' => 'customer added successfully']);
+        try{
+            return $this->responseSuccess($this->customerRepository->getAll(), 'Customer fetch successfully');
+        }
+        catch(\Exception $exception){
+            return $this->responseError([], $exception->getMessage());
+        }
+    }
+    
+    public function store(CustomerCreateRequest $request): JsonResponse
+    {
+        try{
+            return $this->responseSuccess($this->customerRepository->create($request->all()), 'Customer create successfully');
+        }
+        catch(\Exception $exception){
+            return $this->responseError([], $exception->getMessage());
+        }
 
     }
 
-    public function update(Request $request, Customer $customer)
+    public function update(CustomerUpdateRequest $request, Customer $customer): JsonResponse
     {
-        $request->validate([
-            'name' => 'required|max:100',
-            'gender' => 'required',
-            'phone' => 'nullable|unique:customers,phone,' .$customer->id,
-            'address' => 'nullable|max:255',
-        ]);
-        
-        $customer->update([
-            'name' => $request->name,
-            'gender' => $request->gender,
-            'phone' => $request->phone,
-            'address' => $request->address,
-            'description' => $request->description,
-        ]);
-        return response()->json(['success' => 'customer updated successfully']);
+        try{
+            return $this->responseSuccess($this->customerRepository->update($request->all(), $customer), 'Customer update successfully');
+        }
+        catch(\Exception $exception){
+            return $this->responseError([], $exception->getMessage());
+        }
     }
 
-    public function destory(Customer $customer)
+    public function destory(Customer $customer): JsonResponse
     {
-        $customer->delete();
-        return response()->json(['success' => 'customer deleted successfully']);
+        try{
+            return $this->responseSuccess($this->customerRepository->delete($customer), 'Customer delete successfully');
+        }
+        catch(\Exception $exception){
+            return $this->responseError([], $exception->getMessage());
+        }
     }
 }
