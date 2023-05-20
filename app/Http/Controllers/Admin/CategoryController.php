@@ -11,7 +11,8 @@ class CategoryController extends Controller
     public function index()
     {
         return Category::query()
-                ->get();
+                ->paginate(request('perPage'), ['*'], 'page', request('page'));
+
                 
     }
     
