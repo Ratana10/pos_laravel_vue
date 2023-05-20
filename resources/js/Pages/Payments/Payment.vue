@@ -32,7 +32,32 @@
          </div>
          <div class="card">
             <div class="card-body">
-               <payments-table :payments="payments" @edit="handleEdit" @delete="handleDelete" />
+               <div class="row">
+                  <div class="col-sm-12">
+                     <div class="form-group">
+                        <label for="">Pages: </label>
+                        <select v-model="page" class="ml-2">
+                           <option v-for="page in pages" :key="page.name" :value="page.value">{{ page.name}}</option>
+                        </select>
+                     </div>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-sm-12">
+                     <payments-table :payments="payments" @edit="handleEdit" @delete="handleDelete" />
+                  </div>
+               </div>
+               <div class="d-flex justify-content-between">
+                     <div class="dataTables_info" role="status" aria-live="polite">
+                        Showing {{ (payments.current_page - 1) * payments.per_page + 1 }}
+                        to {{ Math.min(payments.current_page * payments.per_page, payments.total) }}
+                        of {{ payments.total }} entries
+                     </div>
+                  <div class="">
+                     <Bootstrap4Pagination :data="payments" @pagination-change-page="getPayments" />
+                  </div>
+               </div>
+
             </div>
          </div>
       </div>
@@ -43,28 +68,57 @@
 
 <script>
 import PaymentsTable from './PaymenttTable.vue';
+import {
+   Bootstrap4Pagination
+} from 'laravel-vue-pagination';
 
 export default {
    components: {
       PaymentsTable,
+      Bootstrap4Pagination,
    },
    data() {
       return {
          payments: [],
+         page: 10,
+         pages:[
+            {
+               name: '10',
+               value: 10,
+            },
+            {
+               name: '25',
+               value: 25,
+            },
+            {
+               name: '50',
+               value: 50,
+            },
+            {
+               name: '100',
+               value: 100,
+            },
+         ]
       }
    },
    methods: {
-      getpayments(){
-         axios.get('/api/v1/payments')
-         .then(res =>{
-            this.payments = res.data;
-         })
+      getPayments(page =1) {
+         axios.get(`/api/v1/payments?page=${page}&perPage=${this.page}`,)
+            .then(res => {
+               console.log(res.data.data)
+               this.payments = res.data;
+            })
       }
 
    },
    mounted() {
-      this.getpayments();
+      this.getPayments();
    },
+   watch:{
+      page: function(page){
+         this.getPayments();
+      }
+   }
 }
 </script>
 

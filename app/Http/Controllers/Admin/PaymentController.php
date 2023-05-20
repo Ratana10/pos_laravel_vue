@@ -9,7 +9,9 @@ use Illuminate\Http\Request;
 class PaymentController extends Controller
 {
     public function index(){
-        return Payment::query()->get();
+        return Payment::query()
+                ->paginate(request('perPage'), ['*'], 'page', request('page'));
+
     }
 
     
