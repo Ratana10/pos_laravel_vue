@@ -12,7 +12,8 @@ class CustomerRepository implements CrudInterface
    {
       return Customer::query()
                   ->latest()
-                  ->paginate(10);
+                  ->paginate(request('perPage'), ['*'], 'page', request('page'));
+
    }
 
    public function create(object $request): ?Customer

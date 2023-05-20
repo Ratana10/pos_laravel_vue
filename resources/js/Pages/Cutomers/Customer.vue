@@ -38,7 +38,31 @@
          </div>
          <div class="card">
             <div class="card-body">
-               <customer-table :customers="customers" @edit="handleEdit" @delete="handleDelete" />
+               <div class="row">
+                  <div class="col-sm-12">
+                     <div>
+                        <label for="">Pages: </label>
+                        <select v-model="page" class="ml-2">
+                           <option v-for="page in pages" :key="page.name" :value="page.value">{{ page.name}}</option>
+                        </select>
+                     </div>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-sm-12">
+                     <customer-table :customers="customers" @edit="handleEdit" @delete="handleDelete" />
+                  </div>
+               </div>
+               <div class="d-flex justify-content-between">
+                     <div class="dataTables_info" role="status" aria-live="polite">
+                        Showing {{ (customers.current_page - 1) * customers.per_page + 1 }}
+                        - {{ Math.min(customers.current_page * customers.per_page, customers.total) }}
+                        of {{ customers.total }}
+                     </div>
+                  <div class="">
+                     <Bootstrap4Pagination :data="customers" @pagination-change-page="getcustomers" />
+                  </div>
+               </div>
             </div>
          </div>
       </div>
@@ -53,17 +77,48 @@ import CustomerTable from './CustomerTable.vue';
 import ModalAddCustomer from './ModalAddCustomer.vue';
 import { useToastr } from '../../toastr';
 import { showToast } from '../../swalUtils';
+import {
+   Bootstrap4Pagination
+} from 'laravel-vue-pagination';
 
 export default {
    components: {
       CustomerTable,
       ModalAddCustomer,
+      Bootstrap4Pagination
+   },
+   mounted() {
+      this.getCustomers();
+   },
+   watch:{
+      page: function(page){
+         this.getCustomers();
+      }
    },
    data() {
       return {
          customers: [],
          editing: null,
          toastr: useToastr(),
+         page: 10,
+         pages:[
+            {
+               name: '10',
+               value: 10,
+            },
+            {
+               name: '25',
+               value: 25,
+            },
+            {
+               name: '50',
+               value: 50,
+            },
+            {
+               name: '100',
+               value: 100,
+            },
+         ]
       }
    },
    methods: {
@@ -89,15 +144,14 @@ export default {
          $('#modal-add-customer').modal('show');
       },
       getCustomers(page=1){
-         axios.get(`/api/v1/customers?page=${page}`)
+         axios
+         .get(`/api/v1/customers?page=${page}&perPage=${this.page}`)
          .then(res =>{
-            this.customers = res.data.data.data;
+            this.customers = res.data;
          })
       },
    },
-   mounted() {
-      this.getCustomers();
-   },
+  
 }
 </script>
 

@@ -19,16 +19,21 @@ class CustomerController extends Controller
     public function __construct(CustomerRepository $customerRepository){
         $this->customerRepository = $customerRepository;
     }
-    
-    public function index(): JsonResponse
-    {
-        try{
-            return $this->responseSuccess($this->customerRepository->getAll(), 'Customer fetch successfully');
-        }
-        catch(\Exception $exception){
-            return $this->responseError([], $exception->getMessage());
-        }
+    public function index(){
+        return Customer::query()
+        ->latest()
+        ->paginate(request('perPage'), ['*'], 'page', request('page'));
+
     }
+    // public function index(): JsonResponse
+    // {
+    //     try{
+    //         return $this->responseSuccess($this->customerRepository->getAll(), 'Customer fetch successfully');
+    //     }
+    //     catch(\Exception $exception){
+    //         return $this->responseError([], $exception->getMessage());
+    //     }
+    // }
     
     public function store(CustomerCreateRequest $request): JsonResponse
     {
