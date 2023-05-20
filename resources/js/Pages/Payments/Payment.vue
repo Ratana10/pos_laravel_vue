@@ -80,11 +80,7 @@ export default {
    mounted() {
       this.getPayments();
    },
-   watch:{
-      page: function(page){
-         this.getPayments();
-      }
-   },
+
    data() {
       return {
          payments: [],

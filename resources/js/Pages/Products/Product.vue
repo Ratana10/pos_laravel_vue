@@ -38,7 +38,32 @@
          </div>
          <div class="card">
             <div class="card-body">
-               <product-table :products="products" @edit="handleEdit" @delete="handleDelete" />
+               <div class="row">
+                  <div class="col-sm-12">
+                     <div>
+                        <label for="">Pages: </label>
+                        <select v-model="page" class="ml-2">
+                           <option v-for="page in pages" :key="page.name" :value="page.value">{{ page.name}}</option>
+                        </select>
+                     </div>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-sm-12">
+                     <product-table :products="products" @edit="handleEdit" @delete="handleDelete" />
+                  </div>
+               </div>
+               <div class="d-flex justify-content-between">
+                     <div class="dataTables_info" role="status" aria-live="polite">
+                        Showing {{ (products.current_page - 1) * products.per_page + 1 }}
+                        - {{ Math.min(products.current_page * products.per_page, products.total) }}
+                        of {{ products.total }}
+                     </div>
+                  <div class="">
+                     <Bootstrap4Pagination :data="products" @pagination-change-page="getProducts" />
+                  </div>
+               </div>
+
             </div>
          </div>
       </div>
@@ -50,16 +75,47 @@
 <script>
 import ProductTable from './ProductTable.vue';
 import { useToastr } from '../../toastr';
+import {
+   Bootstrap4Pagination
+} from 'laravel-vue-pagination';
 
 export default {
    components: {
       ProductTable,
+      Bootstrap4Pagination
+   },
+   mounted() {
+      this.getProducts();
+   },
+   watch:{
+      page: function(page){
+         this.getProducts();
+      }
    },
    data() {
       return {
          products: [],
          editing: null,
          toastr: useToastr(),
+         page: 10,
+         pages:[
+            {
+               name: '10',
+               value: 10,
+            },
+            {
+               name: '25',
+               value: 25,
+            },
+            {
+               name: '50',
+               value: 50,
+            },
+            {
+               name: '100',
+               value: 100,
+            },
+         ]
       }
    },
    methods: {
@@ -80,18 +136,16 @@ export default {
       },
       handleAdd() {
       },
-      getProducts(){
+      getProducts(page=1){
          axios
-            .get('/api/v1/products')
+            .get(`/api/v1/products?page=${page}&perPage=${this.page}`)
             .then(res =>{
                this.products = res.data;
             })
       }
 
    },
-   mounted() {
-      this.getProducts();
-   },
+ 
 }
 </script>
 

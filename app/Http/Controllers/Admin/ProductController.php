@@ -15,7 +15,8 @@ class ProductController extends Controller
         return Product::query()
                 ->with('category:id,name')
                 ->with('unit:id,name')
-                ->get();
+                ->paginate(request('perPage'), ['*'], 'page', request('page'));
+
                 
     }
     
