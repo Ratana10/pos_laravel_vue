@@ -24,10 +24,44 @@
                   Add New Unit
                </button>
             </div>
+            <div>
+               <div class="input-group">
+                  <input v-model="search" type="text" class="form-control" placeholder="Search Unit">
+                  <div class="input-group-prepend">
+                     <span class="input-group-text">
+                        <i class="fa fa-search"></i>
+                     </span>
+                  </div>
+               </div>
+            </div>
          </div>
          <div class="card">
             <div class="card-body">
-               <unit-table :units="units" @edit="handleEdit" @delete="handleDelete" />
+               <div class="row">
+                  <div class="col-sm-12">
+                     <div>
+                        <label for="">Pages: </label>
+                        <select v-model="perPage" class="ml-2">
+                           <option v-for="page in pages" :key="page.name" :value="page.value">{{ page.name}}</option>
+                        </select>
+                     </div>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-sm-12">
+                     <unit-table :units="units" @edit="handleEdit" @delete="handleDelete" />
+                  </div>
+               </div>
+               <div class="d-flex justify-content-between">
+                     <div class="dataTables_info" role="status" aria-live="polite">
+                        Showing {{ (units.current_page - 1) * units.per_page + 1 }}
+                        - {{ Math.min(units.current_page * units.per_page, units.total) }}
+                        of {{ units.total }}
+                     </div>
+                  <div class="">
+                     <Bootstrap4Pagination :data="units" @pagination-change-page="getUnits" />
+                  </div>
+               </div>
             </div>
          </div>
       </div>
@@ -40,23 +74,66 @@
 <script>
 import UnitTable from './UnitTable.vue';
 import ModalAddUnit from './ModalAddUnit.vue';
-import { useToastr } from '../../toastr';
+import { showToast } from '../../swalUtils';
+import { debounce } from 'lodash';
+import {
+   Bootstrap4Pagination
+} from 'laravel-vue-pagination';
 
 export default {
    components: {
       UnitTable,
       ModalAddUnit,
+      Bootstrap4Pagination,
+   },
+   mounted() {
+      this.getUnits();
+   },
+   watch:{
+      perPage: function(){
+         this.getUnits();
+      },
+      search: debounce(function(){
+         this.searchUnits();
+      }, 200),
    },
    data() {
       return {
          units: [],
          editing: null,
-         toastr: useToastr(),
+         search: null,
+         perPage: 10,
+         pages:[
+            {
+               name: '10',
+               value: 10,
+            },
+            {
+               name: '25',
+               value: 25,
+            },
+            {
+               name: '50',
+               value: 50,
+            },
+            {
+               name: '100',
+               value: 100,
+            },
+         ],
       }
    },
    methods: {
-      handleSubmit(){
+      searchUnits(){
+         axios
+            .get(`/api/v1/units-search?search=${this.search}`)
+            .then(res =>{
+               this.units = res.data.data;
+            })
+      },
+      handleSubmit(icon, title){
          $('#modal-add-unit').modal('hide');
+         showToast(icon, title);               
          this.getUnits();
       },
       handleDelete(unit_id){
@@ -64,7 +141,6 @@ export default {
             .delete(`/api/v1/units/${unit_id}`)
             .then(res =>{
                this.getUnits();
-               this.toastr.success('Unit Deleted Successfully');
             })
       },
       handleEdit(unit){
@@ -75,17 +151,19 @@ export default {
          this.editing = null;
          $('#modal-add-unit').modal('show');
       },
-      getUnits(){
-         axios.get('/api/v1/units')
+      getUnits(page=1){
+         axios
+         .get(`/api/v1/units?page=${page}&perPage=${this.perPage}`)
          .then(res =>{
-            this.units = res.data;
+            this.units = res.data.data;
+         })
+         .catch(err =>{
+            console.log('error: ', err);
          })
       }
 
    },
-   mounted() {
-      this.getUnits();
-   },
+
 }
 </script>
 

@@ -62,6 +62,8 @@ Route::prefix('/api/v1')->group(function (){
         Route::post('/units', 'store')->name('units.store');
         Route::put('/units/{unit}', 'update')->name('units.update');
         Route::delete('/units/{unit}', 'destory')->name('units.destory');
+        Route::get('/units-search', 'search')->name('units.search');
+
     });
 
     Route::controller(ProductController::class)->group(function () {

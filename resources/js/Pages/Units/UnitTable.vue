@@ -1,51 +1,62 @@
 <template>
-   <div class="row">
-      <div class="col-sm-12">
-         <table class="table table-bordered">
-         <thead>
-            <tr>
-               <th style="width: 10px;">#</th>
-               <th>Unit</th>
-               <th>Status</th>
-               <th style="width: 100px;">Actions</th>
-            </tr>
-         </thead>
-         <tbody>
-            <tr v-for="(unit, index) in units" :key="index">
-               <td>{{ index+1 }}</td>
-               <td>{{ unit.name }}</td>
-               <td>{{ unit.status == 1 ? 'Active' : 'Inactive' }}</td>
-               <td>
-                  <button class="btn btn-primary btn-sm" @click="$emit('edit', unit)" ><i class="fa fa-edit"></i></button>
-                  <button class="btn btn-danger btn-sm ml-1" @click="$emit('delete', unit.id)"><i class="fa fa-trash"></i></button>
-               </td>
-            </tr>
-         </tbody>
-      </table>
-      </div>
-      <div class="row">
-         <!-- <div class="col-sm-12 col-md-5">
-            <div>Showing 1 to 10 of 57</div>
-         </div>
-         <div class="col-sm-12 col-md-7">
-            <div>
-               pageinate
-            </div>
-         </div> -->
-      </div>
-   </div>
-     
+<table class="table table-bordered">
+   <thead>
+      <tr>
+         <th style="width: 10px;">#</th>
+         <th>Unit</th>
+         <th>Status</th>
+         <th style="width: 100px;">Actions</th>
+      </tr>
+   </thead>
+   <tbody  v-if="units.data && units.data.length > 0">
+      <tr v-for="(unit, index) in units.data" :key="index">
+         <td>{{ index+1 }}</td>
+         <td>{{ unit.name }}</td>
+         <td>{{ unit.status == 1 ? 'Active' : 'Inactive' }}</td>
+         <td>
+            <button class="btn btn-primary btn-sm" @click="$emit('edit', unit)"><i class="fa fa-edit"></i></button>
+            <button class="btn btn-danger btn-sm ml-1" @click="confirm(unit)"><i class="fa fa-trash"></i></button>
+         </td>
+      </tr>
+   </tbody>
+   <tbody v-else>
+      <tr>
+         <td colspan="4" class="text-center">No Record</td>
+      </tr>
+   </tbody>
+</table>
 </template>
+
 <script>
+import Swal from 'sweetalert2';
+
 export default {
-   props:{
-      units:{
+   props: {
+      units: {
          data: Array,
          default: null,
       }
    },
+   methods: {
+      confirm(unit) {
+         Swal.fire({
+            title: `Are you sure delete \n'${unit.name}' ?`,
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+         }).then((result) => {
+            if (result.isConfirmed) {
+               this.$emit('delete',unit.id);
+            }
+         })
+      }
+   },
 }
 </script>
+
 <style lang="">
    
 </style>

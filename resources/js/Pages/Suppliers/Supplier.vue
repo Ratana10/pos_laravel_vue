@@ -26,7 +26,7 @@
             </div>
             <div>
                <div class="input-group">
-                  <input v-model="search" type="text" class="form-control" placeholder="Search Customer">
+                  <input v-model="search" type="text" class="form-control" placeholder="Search Supplier">
                   <div class="input-group-prepend">
                      <span class="input-group-text">
                         <i class="fa fa-search"></i>
