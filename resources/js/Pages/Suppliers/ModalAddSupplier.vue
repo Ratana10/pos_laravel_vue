@@ -11,7 +11,7 @@
                   <span aria-hidden="true">&times;</span>
                </button>
             </div>
-            <Form ref="formReset" @submit="handleSubmit" :validation-schema="schema" v-slot="{errors}" :initial-values="editing ? editing : form">
+            <Form ref="form" @submit="handleSubmit" :validation-schema="schema" v-slot="{errors}" :initial-values="editing ? editing : form">
                <div class="modal-body">
                   <Field name="id" type="hidden" />
                   <div class="form-group">
@@ -36,7 +36,7 @@
                   </div>
                   <div class="form-group">
                      <label for="Address">Address</label>
-                     <Field name="address" rows="3" class="form-control" :class="{'is-invalid': errors.address}"></Field>
+                     <Field name="address" as="textarea" rows="2" class="form-control" :class="{'is-invalid': errors.address}"></Field>
                      <span class="invalid-feedback">{{ errors.address }}</span>
                   </div>
                   <div class="form-group">
@@ -63,7 +63,6 @@
    </div>
 </template>
 <script>
-import { useToastr } from '../../toastr';
 import {Form, Field} from 'vee-validate';
 import * as yup from 'yup';
 export default {
@@ -76,45 +75,6 @@ export default {
          default: null,
       }
    },
-   data() {
-      return {
-         form:{
-            id: null,
-            name: null,
-            gender: 1,
-            phone: null,
-            address: null,
-            description: null,
-            status: 1,
-         },
-         toastr: useToastr(),
-      }
-   },
-   methods: {
-      handleSubmit(value, action){
-         console.log('testing');
-         let url = this.editing ? `/api/v1/suppliers/${value.id}` : '/api/v1/suppliers';
-         let method = this.editing ? 'put' : 'post';
-         axios
-            .request({
-               method: method,
-               url: url,
-               data: value
-            })
-            .then(res =>{
-               console.log('actiov', action)
-               action.resetForm();
-               this.$emit('submit');
-               this.toastr.success(`Supplier ${this.editing ? 'Update' : 'Add'} Successfully`);
-            })
-            .catch(err =>{
-               if(err.response.data.errors){
-                  action.setErrors(err.response.data.errors);
-               }
-               console.log('error:', err);
-            })
-      },
-   },
    computed:{
       schema(){
          return yup.object({
@@ -126,6 +86,39 @@ export default {
             status: yup.string().required('please select status'),
          })
       }
-   }
+   },
+   data() {
+      return {
+         form:{
+            gender: 1,
+            status: 1,
+         },
+      }
+   },
+   methods: {
+      handleSubmit(value, action){
+         let url = this.editing 
+                  ? `/api/v1/suppliers/${value.id}` 
+                  : '/api/v1/suppliers';
+         let method = this.editing ? 'put' : 'post';
+         
+         axios
+            .request({
+               method: method,
+               url: url,
+               data: value
+            })
+            .then(res =>{
+               action.resetForm();
+               this.$emit('submit', 'success', `${this.editing ? 'Supplier update successfully' : 'Supplier create successfully' }`);
+            })
+            .catch(err =>{
+               if(err.response.data.errors){
+                  action.setErrors(err.response.data.errors);
+               }
+            })
+      },
+   },
+   
 }
 </script>

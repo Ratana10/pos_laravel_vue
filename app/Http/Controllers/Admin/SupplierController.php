@@ -2,65 +2,93 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
+use App\Traits\ResponseTrait;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\SearchRequest;
+use App\Http\Requests\SupplierCreateRequest;
+use App\Http\Requests\SupplierUpdateRequest;
 
 class SupplierController extends Controller
 {
+    use ResponseTrait;
+
     public function index()
     {
-        return Supplier::query()
-                ->get();
-                
+        try {
+            $suppliers = Supplier::latest()
+                    ->paginate(request('perPage'), ['*'], 'page', request('page'));
+                    
+            return $this->responseSuccess($suppliers, 'success');
+        } catch (\Exception $ex) {
+            return $this->responseError([], $ex->getMessage());
+        }       
     }
     
-    public function store(Request $request)
+    public function store(SupplierCreateRequest $request)
     {
-        $request->validate([
-            'name' => 'required|max:100',
-            'gender' => 'required',
-            'phone' => 'nullable|unique:suppliers,phone,',
-            'address' => 'nullable|max:255',
-            'description' => 'nullable|max:255',
-            'status' => 'required',
-        ]);
-        
-        Supplier::create([
-            'name' => $request->name,
-            'gender' => $request->gender,
-            'phone' => $request->phone,
-            'address' => $request->address,
-            'description' => $request->description,
-        ]);
-        return response()->json(['success' => 'Supplier added successfully']);
+        $validated = $request->validated();
+        try {
+            $supplier = Supplier::create([
+                'name' => $validated['name'],
+                'gender' =>  $validated['gender'],
+                'phone' =>  $validated['phone'] ?? null,
+                'address' =>  $validated['address'] ?? null,
+                'description' =>  $validated['description'] ?? null,
+                'status' =>  $validated['status'],
+            ]);
+            return $this->responseSuccess($supplier, 'Supplier create successfully');
 
+        } catch (\Exception $ex) {
+            return $this->responseError([], $ex->getMessage());
+        }        
     }
 
-    public function update(Request $request, Supplier $supplier)
+    public function update(SupplierUpdateRequest $request, Supplier $supplier)
     {
-        $request->validate([
-            'name' => 'required|max:100',
-            'gender' => 'required',
-            'phone' => 'nullable|unique:suppliers,phone,' .$supplier->id,
-            'address' => 'nullable|max:255',
-            'description' => 'nullable|max:255',
-            'status' => 'required',
-        ]);
-        $supplier->update([
-            'name' => $request->name,
-            'gender' => $request->gender,
-            'phone' => $request->phone,
-            'address' => $request->address,
-            'description' => $request->description,
-            'status' => $request->status,
-        ]);
-        return response()->json(['success' => 'Supplier updated successfully']);
+        $validated = $request->validated();
+        try {
+            $supplier->update([
+                'name' => $validated['name'],
+                'gender' =>  $validated['gender'],
+                'phone' =>  $validated['phone'] ?? null,
+                'address' =>  $validated['address'] ?? null,
+                'description' =>  $validated['description'] ?? null,
+                'status' =>  $validated['status'],
+            ]);
+            return $this->responseSuccess($supplier, 'Supplier Update successfully');
+
+        } catch (\Exception $ex) {
+            return $this->responseError([], $ex->getMessage());
+        }              
     }
 
     public function destory(Supplier $supplier)
     {
-        $supplier->delete();
-        return response()->json(['success' => 'Supplier deleted successfully']);
+        try {
+            $supplier->delete();
+            return $this->responseSuccess($supplier, 'Suppliers delete successfully');
+
+        } catch (\Exception $ex) {
+            return $this->responseError([], $ex->getMessage());
+        }
+    }
+    
+    public function search(SearchRequest $request){
+        $validated = $request->validated();
+        
+        try {
+            $suppliers = Supplier::where(function ($query) use ($validated) {
+                            $query->where('name', 'like', "%{$validated['search']}%")
+                                ->orWhere('phone', 'like', "%{$validated['search']}%")
+                                ->orWhere('description', 'like', "%{$validated['search']}%");
+                        })
+                        ->paginate($validated['perPage'] ?? 10, ['*'], 'page', $validated['page'] ?? 1);
+                        
+            return $this->responseSuccess($suppliers, 'Suppliers found');
+        } catch (\Exception $ex) {
+            return $this->responseError([], $ex->getMessage());
+        }                  
     }
 }

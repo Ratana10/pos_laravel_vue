@@ -141,7 +141,6 @@ export default {
          axios
             .delete(`/api/v1/customers/${customer_id}`)
             .then(res =>{
-               console.log('delted');
                this.getCustomers();
             })
       },

@@ -38,6 +38,9 @@ Route::prefix('/api/v1')->group(function (){
         Route::post('/suppliers', 'store')->name('suppliers.store');
         Route::put('/suppliers/{supplier}', 'update')->name('suppliers.update');
         Route::delete('/suppliers/{supplier}', 'destory')->name('suppliers.destory');
+        
+        Route::get('/suppliers/search', 'search')->name('suppliers.search');
+
     });
     
     Route::controller(CategoryController::class)->group(function () {

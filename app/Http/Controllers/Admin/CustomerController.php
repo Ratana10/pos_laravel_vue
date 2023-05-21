@@ -21,9 +21,8 @@ class CustomerController extends Controller
         $this->customerRepository = $customerRepository;
     }
     public function index(){
-        return Customer::query()
-        ->latest()
-        ->paginate(request('perPage'), ['*'], 'page', request('page'));
+        return Customer::latest()
+                        ->paginate(request('perPage'), ['*'], 'page', request('page'));
 
     }
 
