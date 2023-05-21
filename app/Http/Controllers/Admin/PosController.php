@@ -18,7 +18,8 @@ class PosController extends Controller
         $products = Product::query()->where('status', 1)->get();
         $categories = Category::query()->where('status', 1)->get();
 
-        return response()->json(array('products' => $products, 'categories' => $categories));
+        return response()->json(['products' => $products, 
+                                'categories' => $categories]);
     }
 
     public function store(Request $request)

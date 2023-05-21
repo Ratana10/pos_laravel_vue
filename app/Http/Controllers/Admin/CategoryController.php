@@ -10,10 +10,14 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        return Category::query()
-                ->paginate(request('perPage'), ['*'], 'page', request('page'));
-
-                
+        if(request()->has('page')){
+            $categories = Category::query()
+                            ->paginate(request('perPage') ?? 10, ['*'], 'page', request('page') ?? 1);
+        }else{
+            $categories = Category::where('status', 1)->get();
+        }
+        
+        return response()->json($categories);       
     }
     
     public function store(Request $request)

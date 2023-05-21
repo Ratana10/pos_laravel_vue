@@ -26,12 +26,11 @@
             </div>
             <div>
                <div class="input-group">
-                  <input v-model="search" type="text" class="form-control" placeholder="Search Product" aria-label="Search product">
+                  <input v-model="search" type="text" class="form-control" placeholder="Search Product">
                   <div class="input-group-prepend">
-                     <select name="" id="" class="btn btn-default">
-                        <option value="">Name</option>
-                        <option value="">Phone Number</option>
-                     </select>
+                     <span class="input-group-text">
+                        <i class="fa fa-search"></i>
+                     </span>
                   </div>
                </div>
             </div>
@@ -75,10 +74,11 @@
 <script>
 import ProductTable from './ProductTable.vue';
 import { useToastr } from '../../toastr';
-
+import { debounce } from 'lodash';
 import {
    Bootstrap4Pagination
 } from 'laravel-vue-pagination';
+
 
 export default {
    components: {
@@ -92,10 +92,9 @@ export default {
       page: function(){
          this.getProducts();
       },
-      search: function(){
-         console.log('searchign');
-         this.handleSearch();
-      },
+      search: debounce(function(){
+         this.searchProduct();
+      }, 500),
    },
    data() {
       return {
@@ -125,12 +124,11 @@ export default {
       }
    },
    methods: {
-      handleSearch(){
+      searchProduct(){
          axios
             .get(`/api/v1/products/search?search=${this.search}`)
             .then(res =>{
                this.products = res.data;
-               console.log(this.products);
             })
       },
       handleSubmit(){
@@ -155,7 +153,6 @@ export default {
             .get(`/api/v1/products?page=${page}&perPage=${this.page}`)
             .then(res =>{
                this.products = res.data;
-               console.log(this.products);
             })
       }
 

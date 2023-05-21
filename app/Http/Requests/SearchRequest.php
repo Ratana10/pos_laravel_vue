@@ -22,7 +22,7 @@ class SearchRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'search' => 'required|string',
+            'search' => 'nullable',
             'perPage' => 'nullable|integer|min:1',
             'page' => 'nullable|integer|min:1',
         ];

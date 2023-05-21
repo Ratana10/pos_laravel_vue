@@ -18,6 +18,7 @@ class ProductController extends Controller
         return Product::query()
                 ->with('category:id,name')
                 ->with('unit:id,name')
+                ->latest()
                 ->paginate(request('perPage'), ['*'], 'page', request('page'));
 
                 
@@ -177,6 +178,9 @@ class ProductController extends Controller
                                     $query->where('name', 'like', "%{$validated['search']}%")
                                         ->orWhere('code', 'like', "%{$validated['search']}%");
                                 })
+                            ->orWhereHas('category', function ($query) use ($validated) {
+                                $query->where('name', 'like', "%{$validated['search']}%");
+                            })
                             ->with('category:id,name')
                             ->with('unit:id,name')
                             ->paginate($validated['perPage'] ?? 10, ['*'], 'page', $validated['page'] ?? 1);
