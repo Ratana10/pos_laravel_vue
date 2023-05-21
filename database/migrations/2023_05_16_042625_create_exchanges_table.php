@@ -17,7 +17,7 @@ return new class extends Migration
             $table->float('khmer');
             $table->boolean('status');
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent()->nullable();
+            $table->timestamp('updated_at')->useCurrentOnUpdate()->nullable();
         });
     }
 

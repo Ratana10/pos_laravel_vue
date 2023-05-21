@@ -18,7 +18,7 @@ return new class extends Migration
             $table->boolean('type')->comment('1=admin,0=normal')->default(0);
             $table->rememberToken();
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent()->nullable();
+            $table->timestamp('updated_at')->useCurrentOnUpdate()->nullable();
         });
     }
 

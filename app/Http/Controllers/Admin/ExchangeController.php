@@ -2,54 +2,68 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Models\Exchange;
 use Illuminate\Http\Request;
+use App\Traits\ResponseTrait;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\ExchangeRequest;
 
 class ExchangeController extends Controller
 {
+    use ResponseTrait;
+
     public function index()
     {
-        return Exchange::query()
-                ->get();
-                
+        try {
+            $exchanges = Exchange::latest()->get();
+            
+            return $this->responseSuccess($exchanges, 'success');
+        } catch (\Exception $ex) {
+            return $this->responseError([], $ex->getMessage());
+        } 
     }
     
-    public function store(Request $request)
+    public function store(ExchangeRequest $request)
     {
-        $request->validate([
-            'dollar' => 'required|numeric',
-            'khmer' => 'required|numeric',
-            'status' => 'required|',
-        ]);
-        
-        Exchange::create([
-            'dollar' => $request->dollar,
-            'khmer' => $request->khmer,
-            'status' => $request->status,
-        ]);
-        return response()->json(['success' => 'Exchange added successfully']);
-
+        $validated = $request->validated();
+        try {
+            $exchange = Exchange::create([
+                'dollar' => $validated['dollar'],
+                'khmer' => $validated['khmer'],
+                'status' => $validated['status'],
+            ]);
+            
+            return $this->responseSuccess($exchange, 'Exchange created successfully');
+        } catch (\Exception $ex) {
+            return $this->responseError([], $ex->getMessage());
+        }
     }
 
-    public function update(Request $request, Exchange $exchange)
+    public function update(ExchangeRequest $request, Exchange $exchange)
     {
-        $request->validate([
-            'dollar' => 'required|numeric',
-            'khmer' => 'required|numeric',
-            'status' => 'required|',
-        ]);
-        $exchange->update([
-            'dollar' => $request->dollar,
-            'khmer' => $request->khmer,
-            'status' => $request->status,
-        ]);
-        return response()->json(['success' => 'Exchange updated successfully']);
+        $validated = $request->validated();
+        
+        try {
+            $exchange->update([
+                'dollar' => $validated['dollar'],
+                'khmer' => $validated['khmer'],
+                'status' => $validated['status'],
+            ]);
+            
+            return $this->responseSuccess($exchange, 'Exchange updated successfully');
+        } catch (\Exception $ex) {
+            return $this->responseError([], $ex->getMessage());
+        }
     }
 
     public function destory(Exchange $exchange)
     {
-        $exchange->delete();
-        return response()->json(['success' => 'Exchange deleted successfully']);
+        try {
+            $exchange->delete();
+            
+            return $this->responseSuccess($exchange, 'Exchange deleted successfully');
+        } catch (\Exception $ex) {
+            return $this->responseError([], $ex->getMessage());
+        }
     }
 }

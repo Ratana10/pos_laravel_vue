@@ -29,7 +29,9 @@
 
 <script>
 import Swal from 'sweetalert2';
-
+import {
+   showToast
+} from '../../swalUtils';
 export default {
    props: {
       categories: {
@@ -53,7 +55,7 @@ export default {
                   title: 'Deleted!',
                   text: `${category.name} has been deleted.`,
                   icon: 'success',
-                  timer: 1000,
+                  timer: 1500,
                });
 
               axios
@@ -61,7 +63,9 @@ export default {
                  .then(res =>{
                     this.$emit('delete');
                  })
-   
+                 .catch(err => {
+                     showToast('error', err.message);
+                  })
             }
          })
       }

@@ -27,43 +27,49 @@
          </div>
          <div class="card">
             <div class="card-body">
-               <exchange-table :exchanges="exchanges" @edit="handleEdit" @delete="handleDelete" />
+               <div class="row">
+                  <div class="col-sm-12">
+                     <exchange-table :exchanges="exchanges" @edit="handleEdit" @delete="getExchange" />
+                  </div>
+               </div>
             </div>
          </div>
       </div>
    </div>
 
-   <modal-add-exchange :editing="editing" @submit="handleSubmit" />
+   <modal-add-exchange :editing="editing" @submit="getExchange" />
 </div>
 </template>
 
 <script>
 import ExchangeTable from './ExchangeTable.vue';
 import ModalAddExchange from './ModalAddExchange.vue';
-import { useToastr } from '../../toastr';
+import { showToast } from '../../swalUtils';
 
 export default {
    components: {
       ExchangeTable,
       ModalAddExchange,
    },
+   mounted() {
+      this.getExchange();
+   },
    data() {
       return {
          exchanges: [],
          editing: null,
-         toastr: useToastr(),
       }
    },
    methods: {
       handleSubmit(){
          $('#modal-add-exchange').modal('hide');
-         this.getexchanges();
+         this.getExchange();
       },
       handleDelete(exchange_id){
          axios
             .delete(`/api/v1/exchanges/${exchange_id}`)
             .then(res =>{
-               this.getexchanges();
+               this.getExchange();
                this.toastr.success('Exchange Deleted Successfully');
             })
       },
@@ -75,17 +81,19 @@ export default {
          this.editing = null;
          $('#modal-add-exchange').modal('show');
       },
-      getexchanges(){
+      getExchange(){
          axios.get('/api/v1/exchanges')
          .then(res =>{
-            this.exchanges = res.data;
+            this.exchanges = res.data.data;
          })
+         .catch(err =>{
+            showToast('error', err.message);  
+
+         });
       }
 
    },
-   mounted() {
-      this.getexchanges();
-   },
+   
 }
 </script>
 
