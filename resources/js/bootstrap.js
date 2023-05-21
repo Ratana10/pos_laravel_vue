@@ -10,6 +10,9 @@ window.axios = axios;
 import jquery from 'jquery';
 window.$ = window.jQuery = jquery;
 
+import { showToast } from './swalUtils';
+window.showToast = showToast;
+
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 /**

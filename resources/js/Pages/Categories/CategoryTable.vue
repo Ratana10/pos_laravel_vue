@@ -29,9 +29,7 @@
 
 <script>
 import Swal from 'sweetalert2';
-import {
-   showToast
-} from '../../swalUtils';
+
 export default {
    props: {
       categories: {

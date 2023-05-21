@@ -45,9 +45,6 @@
 
 <script>
 import {
-   showToast
-} from '../../swalUtils';
-import {
    Form,
    Field
 } from 'vee-validate'
