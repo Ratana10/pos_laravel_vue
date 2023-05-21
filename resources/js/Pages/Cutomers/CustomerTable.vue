@@ -21,7 +21,7 @@
          <td>{{ customer.description }}</td>
          <td>
             <button class="btn btn-primary btn-sm" @click="$emit('edit', customer)"><i class="fa fa-edit"></i></button>
-            <button class="btn btn-danger btn-sm ml-1" @click="$emit('delete', customer.id)"><i class="fa fa-trash"></i></button>
+            <button class="btn btn-danger btn-sm ml-1" @click="confirm(customer.id)"><i class="fa fa-trash"></i></button>
          </td>
       </tr>
    </tbody>
@@ -29,11 +29,36 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2';
+
 export default {
    props: {
       customers: {
          data: Array,
          default: null,
+      }
+   },
+   methods: {
+      confirm(customer_id) {
+         Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+         }).then((result) => {
+            if (result.isConfirmed) {
+               Swal.fire({
+                  title: 'Deleted!',
+                  text: 'Customer has been deleted.',
+                  icon: 'success',
+                  timer: 1000,
+            })
+               this.$emit('delete',customer_id);
+            }
+         })
       }
    },
 }
