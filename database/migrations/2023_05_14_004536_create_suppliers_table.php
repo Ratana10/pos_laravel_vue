@@ -14,12 +14,13 @@ return new class extends Migration
         Schema::create('suppliers', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->boolean('gender')->comment("1=male, 0=female");
+            $table->boolean('gender');
             $table->string('phone')->unique()->nullable();
             $table->longText('address')->nullable();
             $table->longText('description')->nullable();
             $table->boolean('status')->default(1);
-            $table->timestamp('created_at');
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent()->nullable();
         });
     }
 

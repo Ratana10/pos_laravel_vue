@@ -13,15 +13,14 @@ return new class extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->nullable();
-            $table->unsignedBigInteger('customer_id');
-            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('customer_id')
+                        ->constrained('customers', 'id')
+                        ->onUpdate('cascade');
             $table->decimal('total', 10, 2)->default(0.00);
-            $table->decimal('due_amount', 10, 2)->default(0.00);
-            $table->decimal('paid_amount', 10, 2)->default(0.00);
-            $table->decimal('exchange', 10, 2)->default(0.00);
-            $table->date('date');
-            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedInteger('status')->default(1);
+            $table->foreignId('created_by')
+                    ->constrained('users', 'id')
+                    ->onUpdate('cascade');
             $table->timestamp('created_at');
         });
     }

@@ -16,7 +16,8 @@ return new class extends Migration
             $table->integer('dollar');
             $table->float('khmer');
             $table->boolean('status');
-            $table->timestamp('created_at');
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent()->nullable();
         });
     }
 

@@ -13,13 +13,17 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('sale_id');
-            $table->foreign('sale_id')->references('id')->on('sales')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('sale_id')
+                    ->constrained('sales', 'id')
+                    ->onUpdate('cascade');
             $table->decimal('amount', 10, 2)->default(0.00);
-            $table->string('payment_method')->nullable();
-            $table->date('date');
-            $table->unsignedBigInteger('created_by')->nullable();
-            $table->timestamp('created_at');
+            $table->decimal('paid_amount', 10, 2)->default(0.00);
+            $table->decimal('change', 10, 2)->default(0);
+            $table->unsignedInteger('payment_method')->comment('1=cash,2=aba')->default(1);
+            $table->foreignId('created_by')
+                    ->constrained('users', 'id')
+                    ->onUpdate('cascade');
+            $table->timestamp('created_at')->useCurrent();
         });
     }
 

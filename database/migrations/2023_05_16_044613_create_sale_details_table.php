@@ -12,15 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('sale_details', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('sale_id');
-            $table->foreign('sale_id')->references('id')->on('sales')->onDelete('cascade')->onUpdate('cascade');
-            $table->unsignedBigInteger('product_id');
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('sale_id')
+                        ->constrained('sales', 'id')
+                        ->onUpdate('cascade');
+            $table->foreignId('product_id')
+                        ->constrained('products', 'id')
+                        ->onUpdate('cascade');
             $table->decimal('price', 10, 2)->default(0.00);
             $table->decimal('quantity',10, 2);
             $table->decimal('discount', 10, 2)->default(0.00);
-            $table->timestamp('created_at');
+            $table->decimal('amount', 10, 2)->default(0.00);
+            $table->timestamp('created_at')->useCurrent();
         });
     }
 
