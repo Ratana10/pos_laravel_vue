@@ -73,7 +73,6 @@ export default {
          let url = this.editing 
                   ? `/api/v1/units/${value.id}` 
                   : '/api/v1/units';
-                  
          let method = this.editing ? 'put' : 'post';
 
          axios
@@ -83,10 +82,10 @@ export default {
                data: value
             })
             .then(res =>{
-                  if(res.status == 200){
-                     this.$refs.form.resetForm();
-                     this.$emit('submit', 'success', `${this.editing ? 'Unit updated successfully' : 'Unit created successfully' }`);
-                  }
+               action.resetForm();
+                  $('#modal-add-unit').modal('hide');
+                  showToast('success', `${this.editing ? 'Unit updated successfully' : 'Unit created successfully' }`); 
+                  this.$emit('submit'); 
             })
             .catch(err =>{
                if(err.response.data.errors){

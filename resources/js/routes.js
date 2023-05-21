@@ -1,5 +1,5 @@
 import Dashboard from './Components/Dashboard.vue';
-import Customer from './Pages/Cutomers/Customer.vue';
+import Customer from './Pages/Customers/Customer.vue';
 import Supplier from './Pages/Suppliers/Supplier.vue'
 import Category from './Pages/Categories/Category.vue'
 import Unit from './Pages/Units/Unit.vue'

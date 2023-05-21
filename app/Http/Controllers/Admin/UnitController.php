@@ -16,9 +16,17 @@ class UnitController extends Controller
     public function index()
     {
         try {
-            $units = Unit::latest()
-                ->paginate(request('perPage'), ['*'], 'page', request('page'));
-
+            if(request()->has('status')){
+                $units = Unit::where('status', request('status'))
+                            ->select('id','name')
+                            ->latest()
+                            ->get();
+            }
+            else{
+                $units = Unit::latest()
+                            ->paginate(request('perPage'), ['*'], 'page', request('page'));
+            }
+           
             return $this->responseSuccess($units, 'success');
         } catch (\Exception $ex) {
             return $this->responseError([], $ex->getMessage());

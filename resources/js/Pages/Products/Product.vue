@@ -152,7 +152,10 @@ export default {
          axios
             .get(`/api/v1/products?page=${page}&perPage=${this.page}`)
             .then(res =>{
-               this.products = res.data;
+               this.products = res.data.data;
+            })
+            .catch(err=>{
+               showToast('error', err);
             })
       }
 

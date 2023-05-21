@@ -15,9 +15,15 @@ class CategoryController extends Controller
     public function index()
     {
         try {
-            $categories = Category::latest()
+            if(request()->has('status')){
+                $categories = Category::select('id','name')
+                            ->where('status', 1)->get();
+            }else{
+                $categories = Category::latest()               
                 ->paginate(request('perPage'), ['*'], 'page', request('page'));
-
+            }
+            
+            
             return $this->responseSuccess($categories, 'success');
         } catch (\Exception $ex) {
             return $this->responseError([], $ex->getMessage());
