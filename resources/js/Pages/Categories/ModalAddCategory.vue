@@ -11,7 +11,7 @@
                   <span aria-hidden="true">&times;</span>
                </button>
             </div>
-            <Form ref="formReset" @submit="handleSubmit" :validation-schema="schema" v-slot="{ errors }" :initial-values="editing ? editing : form">
+            <Form ref="form" @submit="handleSubmit" :validation-schema="schema" v-slot="{ errors }" :initial-values="editing ? editing : form">
                <Field name="id" type="hidden" />
                <div class="modal-body">
                   <div class="form-group">
@@ -38,8 +38,8 @@
    </div>
 </template>
 <script>
-import { useToastr } from '../../toastr';
 import {Form, Field} from 'vee-validate'
+import { showToast } from '../../swalUtils';
 import * as yup from 'yup';
 
 export default {
@@ -52,18 +52,28 @@ export default {
          default: null,
       }
    },
+   computed:{
+      schema(){
+         return yup.object({
+            name: yup.string().required(),
+            status: yup.string().required('please select status'),
+         })
+      }
+   },
    data() {
       return {
          form:{
             name: null,
             status: 1,
          },
-         toastr: useToastr(),
       }
    },
    methods: {
       handleSubmit(value, action){
-         let url = this.editing ? `/api/v1/categories/${value.id}` : '/api/v1/categories';
+         let url = this.editing 
+                  ? `/api/v1/categories/${value.id}` 
+                  : '/api/v1/categories';
+
          let method = this.editing ? 'put' : 'post';
 
          axios
@@ -74,26 +84,25 @@ export default {
             })
             .then(res =>{
                   action.resetForm();
-                  this.$emit('submit');
-                  this.toastr.success(`Category ${this.editing ? 'Update' : 'Add'} Successfully`);
-
+                  $('#modal-add-category').modal('hide');
+                  showToast(
+                     'success', 
+                     `${this.editing 
+                     ? 'Category updated successfully' 
+                     : 'Category created successfully' }`
+                  ); 
+                  this.$emit('submit'); 
+   
             })
             .catch(err =>{
                if(err.response.data.errors){
                   action.sertErrors(err.response.data.errors);
                }
-               console.log('error:', err);
+               showToast('error', err.message);  
             })
 
       },
    },
-   computed:{
-      schema(){
-         return yup.object({
-            name: yup.string().required(),
-            status: yup.string().required('please select status'),
-         })
-      }
-   }
+   
 }
 </script>

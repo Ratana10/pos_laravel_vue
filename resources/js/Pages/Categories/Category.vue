@@ -24,25 +24,20 @@
                   Add New Category
                </button>
             </div>
-            <div>
-               <div class="input-group">
-                  <input type="text" class="form-control" placeholder="Search Category" aria-label="Search Supplier">
-               </div>
-            </div>
          </div>
          <div class="card">
             <div class="card-body">
                <div class="row">
                   <div class="col-sm-12">
                         <label for="">Pages: </label>
-                        <select v-model="page" class="ml-2">
+                        <select v-model="perPage" class="ml-2">
                            <option v-for="page in pages" :key="page.name" :value="page.value">{{ page.name}}</option>
                         </select>
                   </div>
                </div>
                <div class="row">
                   <div class="col-sm-12">
-                  <category-table :categories="categories" @edit="handleEdit" @delete="handleDelete" />
+                  <category-table :categories="categories" @edit="handleEdit " @delete="getCategories" />
                   </div>
                </div>
                <div class="d-flex justify-content-between">
@@ -61,14 +56,14 @@
       </div>
    </div>
 
-   <modal-add-category :editing="editing" @submit="handleSubmit" />
+   <modal-add-category :editing="editing" @submit="getCategories" />
 </div>
 </template>
 
 <script>
 import CategoryTable from './CategoryTable.vue';
 import ModalAddCategory from './ModalAddCategory.vue';
-import { useToastr } from '../../toastr';
+import { showToast } from '../../swalUtils';
 import {
    Bootstrap4Pagination
 } from 'laravel-vue-pagination';
@@ -83,7 +78,7 @@ export default {
       this.getCategories();
    },
    watch:{
-      page: function(page){
+      perPage: function(newValu){
          this.getCategories();
       }
    },
@@ -91,8 +86,7 @@ export default {
       return {
          categories: [],
          editing: null,
-         toastr: useToastr(),
-         page: 10,
+         perPage: 10,
          pages:[
             {
                name: '10',
@@ -114,18 +108,6 @@ export default {
       }
    },
    methods: {
-      handleSubmit(){
-         $('#modal-add-category').modal('hide');
-         this.getCategories();
-      },
-      handleDelete(category_id){
-         axios
-            .delete(`/api/v1/categories/${category_id}`)
-            .then(res =>{
-               this.getCategories();
-               this.toastr.success('Category Deleted Successfully');
-            })
-      },
       handleEdit(category){
          this.editing = category;
          $('#modal-add-category').modal('show');
@@ -136,9 +118,9 @@ export default {
       },
       getCategories(page=1){
          axios
-         .get(`/api/v1/categories?page=${page}&perPage=${this.page}`)
+         .get(`/api/v1/categories?page=${page}&perPage=${this.perPage}`)
          .then(res =>{
-            this.categories = res.data;
+            this.categories = res.data.data;
          })
       }
 

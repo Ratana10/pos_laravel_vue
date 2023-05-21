@@ -2,46 +2,66 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Traits\ResponseTrait;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\CategoryRequest;
 
 class CategoryController extends Controller
 {
+    use ResponseTrait;
+    
     public function index()
     {
-        if(request()->has('page')){
-            $categories = Category::query()
-                            ->paginate(request('perPage') ?? 10, ['*'], 'page', request('page') ?? 1);
-        }else{
-            $categories = Category::where('status', 1)->get();
-        }
-        
-        return response()->json($categories);       
+        try {
+            $categories = Category::latest()
+                ->paginate(request('perPage'), ['*'], 'page', request('page'));
+
+            return $this->responseSuccess($categories, 'success');
+        } catch (\Exception $ex) {
+            return $this->responseError([], $ex->getMessage());
+        } 
     }
     
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
-        Category::create([
-            'name' => $request->name,
-            'status' => $request->status,
-        ]);
-        return response()->json(['success' => 'Category added successfully']);
-
+        $validated = $request->validated();
+        try {
+            $category = Category::create([
+                'name' => $validated['name'],
+                'status' => $validated['status'],
+            ]);
+            
+            return $this->responseSuccess($category, 'Category created successfully');
+        } catch (\Exception $ex) {
+            return $this->responseError([], $ex->getMessage());
+        }
     }
 
-    public function update(Request $request, Category $category)
+    public function update(CategoryRequest $request, Category $category)
     {
-        $category->update([
-            'name' => $request->name,
-            'status' => $request->status,
-        ]);
-        return response()->json(['success' => 'Category updated successfully']);
+        $validated = $request->validated();
+        try {
+            $category->update([
+                'name' => $validated['name'],
+                'status' => $validated['status'],
+            ]);
+            
+            return $this->responseSuccess($category, 'Category updated successfully');
+        } catch (\Exception $ex) {
+            return $this->responseError([], $ex->getMessage());
+        }
     }
 
-    public function destory(Category $Category)
+    public function destory(Category $category)
     {
-        $Category->delete();
-        return response()->json(['success' => 'Category deleted successfully']);
+        try {
+            $category->delete();
+            
+            return $this->responseSuccess($category, 'Category deleted successfully');
+        } catch (\Exception $ex) {
+            return $this->responseError([], $ex->getMessage());
+        }
     }
 }
