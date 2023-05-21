@@ -16,33 +16,26 @@ class CustomerRepository implements CrudInterface
 
    }
 
-   public function create(object $request): ?Customer
+   public function create(array $data): ?Customer
    {
       return Customer::create([
-         'name' => $request->name,
-         'gender' =>  $request->gender,
-         'phone' =>  $request->phone,
-         'address' =>  $request->address,
-         'description' =>  $request->description,
+         'name' => $data['name'],
+         'gender' =>  $data['gender'],
+         'phone' =>  $data['phone'],
+         'address' =>  $data['address'],
+         'description' =>  $data['description'],
       ]);
       
-      // return Customer::create([
-      //    'name' => $data['name'],
-      //    'gender' =>  $data['gender'],
-      //    'phone' =>  $data['phone'],
-      //    'address' =>  $data['address'],
-      //    'description' =>  $data['description'],
-      // ]);
    }
 
-   public function update(object $request, Object $customer): ?Customer
+   public function update(array $data, Object $customer): ?Customer
    {
       $customer->update([
-         'name' => $request->name,
-         'gender' =>  $request->gender,
-         'phone' =>  $request->phone,
-         'address' =>  $request->address,
-         'description' =>  $request->description,
+         'name' => $data['name'],
+         'gender' =>  $data['gender'],
+         'phone' =>  $data['phone'],
+         'address' =>  $data['address'],
+         'description' =>  $data['description'],
        ]);
       return $customer;
    }

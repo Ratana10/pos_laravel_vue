@@ -26,12 +26,11 @@
             </div>
             <div>
                <div class="input-group">
-                  <input type="text" class="form-control" placeholder="Search Customer" aria-label="Search Customer">
+                  <input v-model="search" type="text" class="form-control" placeholder="Search Customer">
                   <div class="input-group-prepend">
-                     <select name="" id="" class="btn btn-default">
-                        <option value="">Name</option>
-                        <option value="">Phone Number</option>
-                     </select>
+                     <span class="input-group-text">
+                        <i class="fa fa-search"></i>
+                     </span>
                   </div>
                </div>
             </div>
@@ -75,8 +74,9 @@
 <script>
 import CustomerTable from './CustomerTable.vue';
 import ModalAddCustomer from './ModalAddCustomer.vue';
-import { useToastr } from '../../toastr';
 import { showToast } from '../../swalUtils';
+import { debounce } from 'lodash';
+
 import {
    Bootstrap4Pagination
 } from 'laravel-vue-pagination';
@@ -93,13 +93,16 @@ export default {
    watch:{
       page: function(page){
          this.getCustomers();
-      }
+      },
+      search: debounce(function(){
+         this.searchCustomer();
+      }, 300),
    },
    data() {
       return {
          customers: [],
          editing: null,
-         toastr: useToastr(),
+         search: null,
          page: 10,
          pages:[
             {
@@ -122,6 +125,13 @@ export default {
       }
    },
    methods: {
+      searchCustomer(){
+         axios
+            .get(`/api/v1/customers/search?search=${this.search}`)
+            .then(res =>{
+               this.customers = res.data;
+            })
+      },
       handleSubmit(icon, title){
          $('#modal-add-customer').modal('hide');
          showToast(icon, title);               

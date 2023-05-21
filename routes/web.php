@@ -30,6 +30,7 @@ Route::prefix('/api/v1')->group(function (){
         Route::post('/customers', 'store')->name('customers.store');
         Route::put('/customers/{customer}', 'update')->name('customers.update');
         Route::delete('/customers/{customer}', 'destory')->name('customers.destory');
+        Route::get('/customers/search', 'search')->name('customers.search');
     });
 
     Route::controller(SupplierController::class)->group(function () {

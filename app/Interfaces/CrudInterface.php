@@ -8,9 +8,9 @@ interface CrudInterface
 {
    public function getAll(): Paginator;
 
-   public function create(object $data): Object|null;
+   public function create(array $data): Object|null;
 
-   public function update(object $data, object $obj): Object|null;
+   public function update(array $data, object $obj): Object|null;
 
    public function destory(object $obj): Object|null;
 
