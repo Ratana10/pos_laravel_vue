@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Traits\ResponseTrait;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\SearchRequest;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
+    use ResponseTrait;
+
     public function index()
     {
         return Product::query()
@@ -125,8 +128,6 @@ class ProductController extends Controller
             }
                 
         }
-
-       
         
         $product->update([
             'code' => $request->code,
@@ -168,5 +169,18 @@ class ProductController extends Controller
 
         // return $newProductCode;
         return response()->json(['generatedCode' => $newProductCode]);
+    }
+
+    public function search(SearchRequest $request){
+        $validated = $request->validated();
+        $products = Product::where(function ($query) use ($validated) {
+                                    $query->where('name', 'like', "%{$validated['search']}%")
+                                        ->orWhere('code', 'like', "%{$validated['search']}%");
+                                })
+                            ->with('category:id,name')
+                            ->with('unit:id,name')
+                            ->paginate($validated['perPage'] ?? 10, ['*'], 'page', $validated['page'] ?? 1);
+                                    
+        return response()->json($products);
     }
 }

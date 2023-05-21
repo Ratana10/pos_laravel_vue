@@ -68,6 +68,7 @@ Route::prefix('/api/v1')->group(function (){
         Route::delete('/products/{product}', 'destory')->name('products.destory');
 
         Route::get('/products-code', 'generateCode')->name('products.code');
+        Route::get('/products/search', 'search')->name('products.search');
     });
 
     Route::controller(PaymentController::class)->group(function () {

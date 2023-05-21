@@ -44,7 +44,7 @@
                </div>
                <div class="row">
                   <div class="col-sm-12">
-                     <payments-table :payments="payments" @edit="handleEdit" @delete="handleDelete" />
+                     <payment-table :payments="payments" @edit="handleEdit" @delete="handleDelete" />
                   </div>
                </div>
                <div class="d-flex justify-content-between">
@@ -67,14 +67,14 @@
 </template>
 
 <script>
-import PaymentsTable from './PaymenttTable.vue';
+import PaymentTable from './PaymentTable.vue';
 import {
    Bootstrap4Pagination
 } from 'laravel-vue-pagination';
 
 export default {
    components: {
-      PaymentsTable,
+      PaymentTable,
       Bootstrap4Pagination,
    },
    mounted() {
