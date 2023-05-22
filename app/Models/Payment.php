@@ -14,8 +14,9 @@ class Payment extends Model
     protected $fillable = [
         'sale_id', 
         'amount', 
+        'paid_amount', 
+        'change', 
         'payment_method', 
-        'date', 
         'created_by'
     ];
 }

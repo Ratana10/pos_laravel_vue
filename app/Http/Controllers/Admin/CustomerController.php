@@ -21,9 +21,19 @@ class CustomerController extends Controller
         $this->customerRepository = $customerRepository;
     }
     public function index(){
-        return Customer::latest()
+        try{
+            if(!request()->has('page')){
+                $customers = Customer::latest()
+                        ->get();
+            } else{
+                $customers = Customer::latest()
                         ->paginate(request('perPage'), ['*'], 'page', request('page'));
-
+            }  
+            return $this->responseSuccess($customers,'success');
+        }
+        catch(\Exception $exception){
+              return $this->responseError([], $exception->getMessage());
+        }
     }
 
     

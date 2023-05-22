@@ -12,12 +12,9 @@ class Sale extends Model
 
     protected $table = 'sales';
     protected $fillable = [
-        'code',
         'customer_id',
-        'total',
-        'due_amount',
-        'paid_amount',
-        'exchange',
+        'total', 
+        'status',   
         'created_by',
         'date',
     ];

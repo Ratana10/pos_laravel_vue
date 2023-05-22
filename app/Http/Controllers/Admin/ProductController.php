@@ -36,6 +36,7 @@ class ProductController extends Controller
     public function store(ProductRequest $request)
     {
         $validated = $request->validated();
+        dd($validated['discount']);
         $imageName = null;
         try {
             if ($validated['image']) {

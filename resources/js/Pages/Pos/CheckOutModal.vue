@@ -22,8 +22,8 @@
                <div class="form-group">
                   <option value="">Select Method</option>
                   <select v-model="payment_method" class="form-control">
-                     <option value="aba">ABA</option>
-                     <option value="cash">Cash</option>
+                     <option value="2">ABA</option>
+                     <option value="1">Cash</option>
                   </select>
                </div>
                <div class="form-group">
@@ -52,29 +52,6 @@ export default {
    props: {
       total: Number,
    },
-   data() {
-      return {
-         customers: [],
-         change: 0,
-         received_amount: null,
-         customer_id: null,
-         payment_method: 'aba',
-      }
-   },
-   methods: {
-      handleSubmit(){
-         // console.log('test', this.received_amount, this.customer_id, this.payment_method)
-         this.$emit('submit', this.customer_id, this.received_amount, this.payment_method)
-      },
-      getCustomers() {
-         console.log('test ustomer')
-         axios
-            .get('/api/v1/customers')
-            .then(res => {
-               this.customers = res.data.data.data;
-            })
-      },
-   },
    mounted() {
       this.getCustomers();
    },
@@ -87,7 +64,30 @@ export default {
          }
 
       }
-   }
+   },
+   data() {
+      return {
+         customers: [],
+         change: 0,
+         received_amount: null,
+         customer_id: null,
+         payment_method: 'aba',
+      }
+   },
+   methods: {
+      handleSubmit(){
+         // console.log('test', this.received_amount, this.customer_id, this.payment_method)
+         this.$emit('submit', this.customer_id, this.received_amount, this.change, this.payment_method)
+      },
+      getCustomers() {
+         axios
+            .get('/api/v1/customers')
+            .then(res => {    
+               this.customers = res.data.data;
+            })
+      },
+   },
+  
 
 }
 </script>

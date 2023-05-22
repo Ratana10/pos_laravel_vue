@@ -17,5 +17,6 @@ class SaleDetail extends Model
         'price',
         'quantity',
         'discount',
+        'amount',
     ];
 }
