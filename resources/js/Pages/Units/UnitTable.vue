@@ -8,7 +8,7 @@
          <th style="width: 100px;">Actions</th>
       </tr>
    </thead>
-   <tbody  v-if="units.data && units.data.length > 0">
+   <tbody v-if="units.data && units.data.length > 0">
       <tr v-for="(unit, index) in units.data" :key="index">
          <td>{{ index+1 }}</td>
          <td>{{ unit.name }}</td>
@@ -49,9 +49,33 @@ export default {
             confirmButtonText: 'Yes, delete it!'
          }).then((result) => {
             if (result.isConfirmed) {
-               this.$emit('delete',unit.id);
+               this.handleDelete(unit.id);
+               Swal.fire({
+                  title: 'Deleted!',
+                  text: `${category.name} has been deleted.`,
+                  icon: 'success',
+                  timer: 1500,
+               });
             }
          })
+      },
+      handleDelete(unit_id) {
+         axios
+            .delete(`/api/v1/units/${unit_id}`)
+            .then(res => {
+               if (res.data.status) { // success response
+                  this.$emit('delete');
+               } else { // fail response
+                  Swal.fire({
+                     icon: 'error',
+                     title: 'Oops Unable to delete ...',
+                     text: `Something went wrong: ${res.data.message}!`,
+                  })
+               }
+            })
+            .catch(err => {
+               showToast('error', err.message);
+            })
       }
    },
 }

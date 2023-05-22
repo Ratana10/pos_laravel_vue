@@ -41,7 +41,7 @@
                   <div class="col-sm-12">
                      <div>
                         <label for="">Pages: </label>
-                        <select v-model="page" class="ml-2">
+                        <select v-model="perPage" class="ml-2">
                            <option v-for="page in pages" :key="page.name" :value="page.value">{{ page.name}}</option>
                         </select>
                      </div>
@@ -49,15 +49,15 @@
                </div>
                <div class="row">
                   <div class="col-sm-12">
-                     <product-table :products="products" @edit="handleEdit" @delete="handleDelete" />
+                     <product-table :products="products" @edit="handleEdit" @delete="getProducts" />
                   </div>
                </div>
                <div class="d-flex justify-content-between">
-                     <div class="dataTables_info" role="status" aria-live="polite">
-                        Showing {{ (products.current_page - 1) * products.per_page + 1 }}
-                        - {{ Math.min(products.current_page * products.per_page, products.total) }}
-                        of {{ products.total }}
-                     </div>
+                  <div class="dataTables_info" role="status" aria-live="polite">
+                     Showing {{ (products.current_page - 1) * products.per_page + 1 }}
+                     - {{ Math.min(products.current_page * products.per_page, products.total) }}
+                     of {{ products.total }}
+                  </div>
                   <div class="">
                      <Bootstrap4Pagination :data="products" @pagination-change-page="getProducts" />
                   </div>
@@ -73,12 +73,15 @@
 
 <script>
 import ProductTable from './ProductTable.vue';
-import { useToastr } from '../../toastr';
-import { debounce } from 'lodash';
+import {
+   useToastr
+} from '../../toastr';
+import {
+   debounce
+} from 'lodash';
 import {
    Bootstrap4Pagination
 } from 'laravel-vue-pagination';
-
 
 export default {
    components: {
@@ -88,11 +91,11 @@ export default {
    mounted() {
       this.getProducts();
    },
-   watch:{
-      page: function(){
+   watch: {
+      perPage: function () {
          this.getProducts();
       },
-      search: debounce(function(){
+      search: debounce(function () {
          this.searchProduct();
       }, 500),
    },
@@ -102,9 +105,8 @@ export default {
          editing: null,
          toastr: useToastr(),
          search: null,
-         page: 10,
-         pages:[
-            {
+         perPage: 10,
+         pages: [{
                name: '10',
                value: 10,
             },
@@ -124,43 +126,29 @@ export default {
       }
    },
    methods: {
-      searchProduct(){
+      searchProduct() {
          axios
             .get(`/api/v1/products/search?search=${this.search}`)
-            .then(res =>{
+            .then(res => {
                this.products = res.data;
             })
       },
-      handleSubmit(){
-        
-         this.getProducts();
-      },
-      handleDelete(product_id){
-         axios
-            .delete(`/api/v1/products/${product_id}`)
-            .then(res =>{
-               this.getProducts();
-               this.toastr.success('Product Deleted Successfully');
-            })
-      },
-      handleEdit(product){
+      handleEdit(product) {
          this.editing = product;
       },
-      handleAdd() {
-      },
-      getProducts(page=1){
+      getProducts(page = 1) {
          axios
-            .get(`/api/v1/products?page=${page}&perPage=${this.page}`)
-            .then(res =>{
+            .get(`/api/v1/products?page=${page}&perPage=${this.perPage}`)
+            .then(res => {
                this.products = res.data.data;
             })
-            .catch(err=>{
+            .catch(err => {
                showToast('error', err);
             })
       }
 
    },
- 
+
 }
 </script>
 

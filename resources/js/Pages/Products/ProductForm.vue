@@ -201,12 +201,9 @@ export default {
    },
    mounted() {
       if (this.route.name == 'admin.products.edit') {
-         let product_id = this.route.params.id;
-         console.log('testing');
-         this.getProduct(product_id);
+         this.getProduct(this.route.params.id);
       } else {
          this.getProductCode();
-
       }
       this.getUnits();
       this.getCategories();
@@ -215,8 +212,8 @@ export default {
       schema() {
          return yup.object({
             name: yup.string().required(),
-            category_id: yup.string().required('please select category'),
-            unit_id: yup.string().required('please select unit'),
+            category_id: yup.number().required('please select category'),
+            unit_id: yup.number().required('please select unit'),
             price: yup.number().required(),
             discount: yup.number().required(),
             quantity: yup.number().required(),
@@ -257,7 +254,6 @@ export default {
       },
       handleSubmit(value, action) {
          value.image = this.form.image;
-         console.log(value);
          let url = this.form.id ? `/api/v1/products/${this.form.id}` : '/api/v1/products';
          let method = this.form.id ? 'put' : 'post';
          axios
@@ -267,12 +263,13 @@ export default {
                data: value
             })
             .then(res => {
+               action.resetForm();
                this.router.push("/admin/products");
             })
             .catch(err => {
-               // if(err.respone.data.errors){
-               //    action.setErrors(err.respone.data.errors);
-               // }
+               if(err.respone.data.errors){
+                  action.setErrors(err.respone.data.errors);
+               }
                showToast('error', err);
             })
 
@@ -322,12 +319,12 @@ export default {
       getProduct(product_id) {
          axios
             .get(`/api/v1/products/${product_id}/edit`)
-            .then(res => {
-               this.form = res.data.product;
+            .then(res => {               
+               this.form = res.data.data;
                this.editing_image = true;
             })
             .catch(err => {
-               console.log('errors: ', err)
+               showToast('error', err);
             })
       }
    },

@@ -83,8 +83,6 @@ class ProductController extends Controller
     {
         $validated = $request->validated();
         $imageName = null;
-
-        // return $request->all();
         try {
             if ($validated['image']) {
                 if ($product->image != $validated['image']) {
@@ -127,40 +125,28 @@ class ProductController extends Controller
             return $this->responseSuccess($product, 'Product updated successfully');
         } catch (\Exception $ex) {
             return $this->responseError([], $ex->getMessage());
-        } 
-        
-        
-
-        $product->update([
-            'code' => $request->code,
-            'name' => $request->name,
-            'category_id' => $request->category_id,
-            'unit_id' => $request->unit_id,
-            'cost' => $request->cost,
-            'price' => $request->price,
-            'quantity' => $request->quantity,
-            'alert' => $request->alert,
-            'image' => $imageName,
-            'status' => $request->status,
-        ]);
-
-        return response()->json(['success' => 'Product updated successfully']);
+        }         
     }
 
     public function destory(Product $product)
     {
-        if ($product->image) {
-            // Delete the existing image
-            $path = public_path('uploads/products/' . $product->image);
-
-            if (File::exists($path)) {
-
-                File::delete($path);
+        try{
+            if ($product->image) {
+                // Delete the existing image
+                $path = public_path('uploads/products/' . $product->image);
+                if (File::exists($path)) {
+                    File::delete($path);
+                }
             }
-        }
+            $product->delete();
+            return $this->responseSuccess($product, 'Product deleted successfully');
 
-        $product->delete();
-        return response()->json(['success' => 'Product deleted successfully']);
+        }catch(\Exception $ex){
+            return $this->responseError([], $ex->getMessage());
+            
+        }
+        
+
     }
 
     public function generateCode()

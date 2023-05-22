@@ -33,7 +33,7 @@
          <td>{{ product.status == 1 ? 'Active' : 'Inactive' }}</td>
          <td>
             <router-link :to="`/admin/products/${product.id}/edit`" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></router-link>
-            <button class="btn btn-danger btn-sm ml-1" @click="$emit('delete', product.id)"><i class="fa fa-trash"></i></button>
+            <button class="btn btn-danger btn-sm ml-1" @click="confirm(product)"><i class="fa fa-trash"></i></button>
          </td>
       </tr>
    </tbody>
@@ -41,12 +41,48 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2';
+
 export default {
    props: {
       products: {
          data: Array,
          default: null,
       }
+   },
+   methods: {
+      confirm(product){
+         Swal.fire({
+            title: `Are you sure delete \n'${product.name}' ?`,
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+         }).then((result) => {
+            if (result.isConfirmed) {
+               Swal.fire({
+                  title: 'Deleted!',
+                  text: `${product.name} has been deleted.`,
+                  icon: 'success',
+                  timer: 1500,
+               });
+               this.handleDelete(product.id);
+            }
+         })
+      },
+      handleDelete(product_id){
+         axios
+            .delete(`/api/v1/products/${product_id}`)
+            .then(res =>{
+               showToast('success', 'Product deleted successfully');
+               this.$emit('delete')
+            })
+            .catch(err =>{
+               showToast('error', err);
+            })
+      },
    },
 }
 </script>

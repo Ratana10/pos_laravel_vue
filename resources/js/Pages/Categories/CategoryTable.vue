@@ -29,6 +29,9 @@
 
 <script>
 import Swal from 'sweetalert2';
+import {
+   showToast
+} from '../../swalUtils';
 
 export default {
    props: {
@@ -49,23 +52,33 @@ export default {
             confirmButtonText: 'Yes, delete it!'
          }).then((result) => {
             if (result.isConfirmed) {
+               this.handleDelete(category.id);
                Swal.fire({
                   title: 'Deleted!',
                   text: `${category.name} has been deleted.`,
                   icon: 'success',
                   timer: 1500,
                });
-
-              axios
-                 .delete(`/api/v1/categories/${category.id}`)
-                 .then(res =>{
-                    this.$emit('delete');
-                 })
-                 .catch(err => {
-                     showToast('error', err.message);
-                  })
             }
          })
+      },
+      handleDelete(category_id) {
+         axios
+            .delete(`/api/v1/categories/${category_id}`)
+            .then(res => {
+               if (res.data.status) { // success response
+                  this.$emit('delete');
+               } else { // fail response
+                  Swal.fire({
+                     icon: 'error',
+                     title: 'Oops...',
+                     text: `Something went wrong: ${res.data.message}!`,
+                  })
+               }
+            })
+            .catch(err => {
+               showToast('error', err.message);
+            })
       }
    },
 }
