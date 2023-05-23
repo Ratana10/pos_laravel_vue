@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Enums\SaleStatus;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Sale extends Model
 {
@@ -16,6 +18,21 @@ class Sale extends Model
         'total', 
         'status',   
         'created_by',
-        'date',
     ];
+
+    protected $casts = [
+        'created_at' => 'datetime',
+        'status' => SaleStatus::class,
+    ];
+    
+
+    public function user(): HasOne
+    {
+        return $this->hasOne(User::class, 'id', 'created_by');
+    }
+
+    public function customer(): HasOne
+    {
+        return $this->hasOne(Customer::class, 'id', 'customer_id');
+    }
 }

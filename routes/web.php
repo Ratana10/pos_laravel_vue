@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\ExchangeController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\PosController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\SaleController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\ApplicationController;
@@ -79,6 +80,10 @@ Route::prefix('/api/v1')->group(function (){
 
     Route::controller(PaymentController::class)->group(function () {
         Route::get('/payments', 'index')->name('payments.index');
+    });
+
+    Route::controller(SaleController::class)->group(function () {
+        Route::get('/sales', 'index')->name('sales.index');
     });
 
     Route::controller(PosController::class)->group(function () {
