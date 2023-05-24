@@ -27,7 +27,7 @@ class SaleController extends Controller
                     'color' => $sale->status->color(),
                 ],
                 'user' => $sale->user,
-                'created_at' => $sale->created,
+                'created_at' => $sale->created_at->format('Y-m-d'),
             ]);
             return $this->responseSuccess($sales,'success');
         }

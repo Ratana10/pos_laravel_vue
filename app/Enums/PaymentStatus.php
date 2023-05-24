@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum PaymentType: int
+enum PaymentStatus: int
 {
    case PAID = 1;
    case UNPAID = 2;
@@ -12,9 +12,9 @@ enum PaymentType: int
    {
       return match($this)
       {
-         PaymentType::PAID => 'primary',
-         PaymentType::UNPAID => 'danger',
-         PaymentType::PARTIALLY_PAID => 'warning',
+         PaymentStatus::PAID => 'primary',
+         PaymentStatus::UNPAID => 'danger',
+         PaymentStatus::PARTIALLY_PAID => 'warning',
       };
    }
 }

@@ -300,7 +300,9 @@ export default {
          axios
             .get(`/api/v1/categories?status=1`)
             .then(res => {
-               this.categories = res.data.data;
+               if(res.data.status == true){
+                  this.categories = res.data.data;
+               }
             })
             .catch(err => {
                showToast('error', err.message);
@@ -310,18 +312,23 @@ export default {
          axios
             .get('/api/v1/products-code')
             .then(res => {
-               this.form.code = res.data.generatedCode;
+               if(res.data.status == true){
+                  this.form.code = res.data.data;
+               }
             })
             .catch(err => {
-               console.log('errors: ', err)
+               showToast('error', err);
+
             })
       },
       getProduct(product_id) {
          axios
             .get(`/api/v1/products/${product_id}/edit`)
-            .then(res => {               
-               this.form = res.data.data;
-               this.editing_image = true;
+            .then(res => {  
+               if(res.data.status == true){             
+                  this.editing_image = true;
+                  this.form = res.data.data;
+               }
             })
             .catch(err => {
                showToast('error', err);

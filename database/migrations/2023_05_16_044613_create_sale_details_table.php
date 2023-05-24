@@ -14,10 +14,12 @@ return new class extends Migration
         Schema::create('sale_details', function (Blueprint $table) {
             $table->foreignId('sale_id')
                         ->constrained('sales', 'id')
-                        ->onUpdate('cascade');
+                        ->onUpdate('cascade')
+                        ->onDelete('cascade');
             $table->foreignId('product_id')
                         ->constrained('products', 'id')
-                        ->onUpdate('cascade');
+                        ->onUpdate('cascade')
+                        ->onDelete('cascade');
             $table->decimal('price', 10, 2)->default(0.00);
             $table->decimal('quantity',10, 2);
             $table->decimal('discount', 10, 2)->default(0.00);

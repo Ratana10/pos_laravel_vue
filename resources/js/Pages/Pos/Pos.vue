@@ -184,8 +184,8 @@ export default {
             // sale
             customer_id: customer_id,
             total: this.total,
-            status: 1,
             created_by: 1,
+            
             // sale Detail
             saleDetail: saleDetail,
             // payment

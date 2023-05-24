@@ -14,14 +14,14 @@ return new class extends Migration
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
             $table->foreignId('customer_id')
-                        ->constrained('customers', 'id')
-                        ->onUpdate('cascade');
+                    ->constrained('customers', 'id')
+                     ->onUpdate('cascade');
             $table->decimal('total', 10, 2)->default(0.00);
-            $table->unsignedInteger('status')->default(1);
+            $table->unsignedInteger('status')->comment('1=paid,2=unpaid,3=partially_paid')->default(2);
             $table->foreignId('created_by')
                     ->constrained('users', 'id')
                     ->onUpdate('cascade');
-            $table->timestamp('created_at');
+            $table->timestamp('created_at')->useCurrent();
         });
     }
 

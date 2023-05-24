@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use App\Http\Requests\SearchRequest;
 use Illuminate\Support\Facades\File;
+use App\Helpers\Helper;
 
 class ProductController extends Controller
 {
@@ -36,7 +37,6 @@ class ProductController extends Controller
     public function store(ProductRequest $request)
     {
         $validated = $request->validated();
-        dd($validated['discount']);
         $imageName = null;
         try {
             if ($validated['image']) {
@@ -153,12 +153,16 @@ class ProductController extends Controller
     public function generateCode()
     {
 
-        $lastProductCode = Product::orderBy('code', 'desc')->pluck('code')->first();
-        $newProductCodeNumber = intval(substr($lastProductCode, 1)) + 1;
-        $newProductCode = 'P' . str_pad($newProductCodeNumber, 3, '0', STR_PAD_LEFT);
+        // $lastProductCode = Product::orderBy('code', 'desc')->pluck('code')->first();
+        // $newProductCodeNumber = intval(substr($lastProductCode, 1)) + 1;
+        // $newProductCode = 'P' . str_pad($newProductCodeNumber, 3, '0', STR_PAD_LEFT);
 
-        // return $newProductCode;
-        return response()->json(['generatedCode' => $newProductCode]);
+        // // return $newProductCode;
+        // return response()->json(['generatedCode' => $newProductCode]);
+        
+        $generatedCode = Helper::IDGenderator(Product::class, 'code', 4, 'P');
+        return $this->responseSuccess($generatedCode, 'success');
+        
     }
 
     public function search(SearchRequest $request)

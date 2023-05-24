@@ -129,7 +129,9 @@ export default {
          axios
             .get(`/api/v1/customers/search?search=${this.search}`)
             .then(res =>{
-               this.customers = res.data;
+               if(res.status == true){
+                  this.customers = res.data.data;
+               }
             })
       },
       handleSubmit(icon, title){
@@ -156,7 +158,9 @@ export default {
          axios
          .get(`/api/v1/customers?page=${page}&perPage=${this.page}`)
          .then(res =>{
-            this.customers = res.data;
+            if(res.data.status == true){
+               this.customers = res.data.data;
+            }
          })
       },
    },
