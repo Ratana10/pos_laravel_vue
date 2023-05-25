@@ -29,11 +29,12 @@ class SaleService
    {
       $payment = new Payment;
       $payment->sale_id = $sale->id;
-      $payment->amount = $request->amount;
+      $payment->amount = $request->total;
       $payment->paid_amount = $request->paid_amount;
       $payment->change = $request->change;
       $payment->payment_method = $request->payment_method;
       $payment->created_by = $request->created_by;
+      $payment->save();
    }
    private function createSaleDetail($sale, $request){
       foreach ($request->saleDetail as $item)

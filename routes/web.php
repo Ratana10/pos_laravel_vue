@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\SaleController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\ApplicationController;
+use App\Http\Controllers\Test\SaleTestController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,7 +32,7 @@ Route::prefix('/api/v1')->group(function (){
         Route::post('/customers', 'store')->name('customers.store');
         Route::put('/customers/{customer}', 'update')->name('customers.update');
         Route::delete('/customers/{customer}', 'destory')->name('customers.destory');
-        Route::get('/customers/search', 'search')->name('customers.search');
+        Route::get('/customers-search', 'search')->name('customers.search');
     });
 
     Route::controller(SupplierController::class)->group(function () {
@@ -92,6 +93,9 @@ Route::prefix('/api/v1')->group(function (){
 
     });
     
+    Route::controller(SaleTestController::class)->group(function () {
+        Route::get('/sales/test', 'index')->name('salestest.index');
+    });
 
     
 });

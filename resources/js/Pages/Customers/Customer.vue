@@ -127,9 +127,9 @@ export default {
    methods: {
       searchCustomer(){
          axios
-            .get(`/api/v1/customers/search?search=${this.search}`)
+            .get(`/api/v1/customers-search?search=${this.search}`)
             .then(res =>{
-               if(res.status == true){
+               if(res.status){
                   this.customers = res.data.data;
                }
             })

@@ -101,6 +101,14 @@
                </router-link>
             </li>
             <li class="nav-item">
+               <router-link to="/admin/sales/test" class="nav-link" active-class="active">
+                  <i class="nav-icon fas fa-th"></i>
+                  <p>
+                     SaleTest
+                  </p>
+               </router-link>
+            </li>
+            <li class="nav-item">
                <router-link to="/admin/pos" class="nav-link" active-class="active">
                   <i class="nav-icon fas fa-th"></i>
                   <p>

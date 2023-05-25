@@ -32,15 +32,7 @@ class PosController extends Controller
             'categories' => $categories
         ]);
     }
-      // if($request->paid_amount >= $request->total){
-                //     $sale->status = SaleStatus::PAID;
-                    
-                // }else if($request->paid_amount < $request->total)
-                // {
-                //     $sale->status = SaleStatus::PARTIALLY_PAID;
-                // }else if($request->paid_amount == 0){
-                //     $sale->status = SaleStatus::UNPAID;  
-                // }
+
     public function store(Request $request)
     {
         // try {

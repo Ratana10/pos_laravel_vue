@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Customer extends Model
 {
     use HasFactory;
+    
     public $timestamps = false;
     protected $table = 'customers';
     protected $fillable = [
@@ -19,6 +20,9 @@ class Customer extends Model
         'description'
     ];
 
+    // protected $attributes = [
+    //     'phone' => null,
+    // ];
 
     public function sale(): HasMany
     {

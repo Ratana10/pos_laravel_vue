@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\SaleStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Sale extends Model
@@ -34,5 +35,11 @@ class Sale extends Model
     public function customer(): HasOne
     {
         return $this->hasOne(Customer::class, 'id', 'customer_id');
+    }
+
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class, 'sale_id', 'id');
     }
 }
