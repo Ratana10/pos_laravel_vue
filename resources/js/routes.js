@@ -8,16 +8,17 @@ import Product from './Pages/Products/Product.vue'
 import ProductForm from './Pages/Products/ProductForm.vue'
 import Payment from './Pages/Payments/Payment.vue'
 import Sale from './Pages/Sales/Sale.vue'
-import SaleTest from './Pages/SaleTest/SaleTest.vue'
+import Invoice from './Pages/SaleTest/Invoice.vue'
 import Pos from './Pages/Pos/Pos.vue'
 
 
 export default
 [
+
    {
-      path: '/admin/sales/test',
-      name: 'admin.sale.test',
-      component: SaleTest,
+      path: '/admin/sales/test-invoice',
+      name: 'admin.sale.invoice',
+      component: Invoice,
    },
    {
       path: '/admin/dashboard',

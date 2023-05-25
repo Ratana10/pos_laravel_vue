@@ -68,6 +68,7 @@
 
 <script>
 import SaleTable from './SaleTable.vue';
+
 import {
    Bootstrap4Pagination
 } from 'laravel-vue-pagination';
@@ -106,6 +107,9 @@ export default {
       }
    },
    methods: {
+      handleAdd(){
+
+      },
       getSales(page =1) {
          axios
             .get(`/api/v1/sales/test?page=${page}&perPage=${this.perPage}`)

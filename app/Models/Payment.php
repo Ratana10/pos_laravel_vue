@@ -15,10 +15,12 @@ class Payment extends Model
 
     protected $table = 'payments';
     protected $fillable = [
-        'sale_id', 
-        'amount', 
+        'sale_code',
+        'sale_id',
+        'due_amount', 
         'paid_amount', 
         'change', 
+        'amount', 
         'payment_method', 
         'created_by'
     ];

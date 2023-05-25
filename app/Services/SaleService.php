@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Enums\SaleStatus;
+use App\Helpers\Helper;
 use App\Models\Payment;
 use App\Models\Product;
 use App\Models\Sale;
@@ -17,7 +18,7 @@ class SaleService
          return DB::transaction(function () use ($request) {
             $sale = $this->createSale($request);    //create sale
             $this->createSaleDetail($sale, $request); //create saledetail
-            if($sale->status->name != SaleStatus::UNPAID){  
+            if($sale->status != SaleStatus::UNPAID){  
                $this->createPayment($sale, $request);  //create payment
             }
          });
@@ -28,10 +29,12 @@ class SaleService
    private function createPayment($sale, $request)
    {
       $payment = new Payment;
+      $payment->sale_code = $sale->code;
       $payment->sale_id = $sale->id;
-      $payment->amount = $request->total;
+      $payment->due_amount = $request->total;
       $payment->paid_amount = $request->paid_amount;
       $payment->change = $request->change;
+      $payment->amount = $request->paid_amount-$request->change;
       $payment->payment_method = $request->payment_method;
       $payment->created_by = $request->created_by;
       $payment->save();
@@ -57,12 +60,12 @@ class SaleService
    {
       try{
          $sale = new Sale;
+         $sale->code = Helper::IDGenderator(Sale::class, 'code', 4,'S');
          $sale->customer_id = $request->customer_id;
          $sale->total = $request->total;
          $sale->status = $this->getSaleStatus($request->paid_amount, $request->total);
          $sale->created_by = $request->created_by;
-         $sale->save();
-         
+         $sale->save();         
          return $sale;
       }catch(\Throwable $th){
          throw $th;
@@ -75,8 +78,9 @@ class SaleService
          return SaleStatus::PAID;
       }
       else if($paid_amount != 0 && $paid_amount !=null){
-         return SaleStatus::PARTIALLY_PAID;
+         return SaleStatus::PARTIAL;
       }else{
+         
          return SaleStatus::UNPAID;
       }
    }

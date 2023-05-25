@@ -5,12 +5,12 @@ enum SaleStatus: int
 {
    case PAID = 1;
    case UNPAID = 2;
-   case PARTIALLY_PAID = 3;
+   case PARTIAL = 3;
 
    public function color(){
       return match($this){
          SaleStatus::UNPAID => 'danger',
-         SaleStatus::PARTIALLY_PAID => 'warning',
+         SaleStatus::PARTIAL=> 'warning',
          SaleStatus::PAID => 'success',
       };
    }

@@ -14,17 +14,18 @@ class SaleTestController extends Controller
     {
         try {
             $sales = Sale::query()
-                // ->select('sales.id', 'sales.total', 'name as customer_name')
                 ->with('customer:id,name')
-                ->with('payments:sale_id,paid_amount')
                 ->latest()
                 ->paginate(request('perPage'), ['*'], 'page', request('page'))
                 ->through(function ($sale) {
                     // $sale->load('payments');
-                    $total_paid = $sale->payments->sum('paid_amount');
+                    if(!$sale->payments){
+                        dd('test');
+                    }
+                    $total_paid = $sale->payments->sum('amount');
 
                     return [
-                        'id' => $sale->id,
+                        'sale_code' =>$sale->code,
                         'customer' => $sale->customer->name,
                         'due_amount' => $sale->total,
                         'status' => [

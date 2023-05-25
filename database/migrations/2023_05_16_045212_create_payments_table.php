@@ -16,9 +16,11 @@ return new class extends Migration
             $table->foreignId('sale_id')
                     ->constrained('sales', 'id')
                     ->onUpdate('cascade');
-            $table->decimal('amount', 10, 2)->default(0.00);
+            $table->string('sale_code')->nullable();
+            $table->decimal('due_amount', 10, 2)->default(0.00);
             $table->decimal('paid_amount', 10, 2)->default(0.00);
             $table->decimal('change', 10, 2)->default(0);
+            $table->decimal('amount', 10, 2)->default(0.00);
             $table->unsignedInteger('payment_method')->comment('1=cash,2=aba')->default(1);
             $table->foreignId('created_by')
                     ->constrained('users', 'id')

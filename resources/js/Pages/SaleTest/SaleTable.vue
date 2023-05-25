@@ -4,7 +4,7 @@
       <tr>
          <th style="width: 10px;">#</th>
          <th>Date</th>
-         <th>Sale Id</th>
+         <th>Sale Code</th>
          <th>Customer</th>
          <th>Due_amount</th>
          <th>Paid_Amount</th>
@@ -17,7 +17,7 @@
       <tr v-for="(sale, index) in sales.data" :key="index">
          <td>{{ index+1 }}</td>
          <td>{{ sale.created_at }}</td>
-         <td>{{ sale.id }}</td>
+         <td>{{ sale.sale_code }}</td>
          <td>{{ sale.customer }}</td>
          <td>$ {{ sale.due_amount }}</td>
          <td>$ {{ sale.paid_amount }}</td>

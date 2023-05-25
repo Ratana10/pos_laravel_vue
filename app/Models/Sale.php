@@ -15,6 +15,7 @@ class Sale extends Model
 
     protected $table = 'sales';
     protected $fillable = [
+        'code',
         'customer_id',
         'total', 
         'status',   

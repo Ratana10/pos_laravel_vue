@@ -8,7 +8,7 @@ class Helper
       $data = $model::orderBy('id', 'desc')->first();
       if(!$data){
          $or_length = $length;
-         $last_name = '';
+         $last_number = '1';
       }
       else{
          $code = substr($data->$field, strlen($prefix)+1);

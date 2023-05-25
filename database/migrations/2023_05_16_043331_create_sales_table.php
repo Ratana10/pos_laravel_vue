@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\SaleStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,11 +14,12 @@ return new class extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
+            $table->string('code');
             $table->foreignId('customer_id')
                     ->constrained('customers', 'id')
                      ->onUpdate('cascade');
             $table->decimal('total', 10, 2)->default(0.00);
-            $table->unsignedInteger('status')->comment('1=paid,2=unpaid,3=partially_paid')->default(2);
+            $table->unsignedInteger('status')->comment('1=paid,2=unpaid,3=partial')->default(2);
             $table->foreignId('created_by')
                     ->constrained('users', 'id')
                     ->onUpdate('cascade');

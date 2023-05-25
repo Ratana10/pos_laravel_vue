@@ -119,15 +119,18 @@
 </section>
 
 <check-out-modal :total="total" @submit="handleSubmit" />
+<invoice-modal />
 </template>
 
 <script>
 import CheckOutModal from './CheckOutModal.vue';
+import InvoiceModal from './InvoiceModal.vue';
 import moment from 'moment';
 import Swal from 'sweetalert2';
 export default {
    components: {
       CheckOutModal,
+      InvoiceModal,
    },
    mounted() {
       this.getProducts();
@@ -169,6 +172,7 @@ export default {
          return formattedNumber;
       },
       handleSubmit(customer_id, received_amount, change, payment_method) {
+
          let saleDetail = [];
          this.carts.forEach(e => {
             saleDetail.push({
@@ -200,6 +204,7 @@ export default {
             .then(res => {
                if (res.data.status) {
                   $('#check-out-modal').modal('hide');
+
                   this.clearCarts();
                   Swal.fire({
                      icon: 'success',
