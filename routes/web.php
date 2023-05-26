@@ -81,6 +81,9 @@ Route::prefix('/api/v1')->group(function (){
 
     Route::controller(PaymentController::class)->group(function () {
         Route::get('/payments', 'index')->name('payments.index');
+        Route::post('/payments', 'store')->name('payments.store');
+        Route::get('/payments-check', 'checkPaymentToUpdateStatus')->name('payments.checkPaymentToUpdateStatus');
+
     });
 
     Route::controller(SaleController::class)->group(function () {

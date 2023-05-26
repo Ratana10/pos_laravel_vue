@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Admin;
 use App\Traits\ResponseTrait;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PaymentRequest;
+use App\Models\Payment;
 use App\Models\Sale;
 use Illuminate\Http\Request;
+use App\Services\SaleService;
 
 class SaleController extends Controller
 {
@@ -18,13 +21,10 @@ class SaleController extends Controller
                 ->latest()
                 ->paginate(request('perPage'), ['*'], 'page', request('page'))
                 ->through(function ($sale) {
-                    // $sale->load('payments');
-                    if(!$sale->payments){
-                        dd('test');
-                    }
                     $total_paid = $sale->payments->sum('amount');
 
                     return [
+                        'id' => $sale->id,
                         'sale_code' =>$sale->code,
                         'customer' => $sale->customer->name,
                         'due_amount' => $sale->total,
@@ -43,4 +43,6 @@ class SaleController extends Controller
             return $this->responseError([], $exception->getMessage());
         }
     }
+
+    
 }

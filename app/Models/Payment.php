@@ -47,8 +47,9 @@ class Payment extends Model
         return $this->hasOne(User::class, 'id', 'created_by');
     }
 
-    public function sale(): HasOne
+    public function sale()
     {
+        // return $this->belongsTo(Sales::class);
         return $this->hasOne(Sale::class, 'id', 'sale_id');
         
     }

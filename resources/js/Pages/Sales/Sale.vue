@@ -44,7 +44,7 @@
                   </div>
                   <div class="row">
                      <div class="col-sm-12">
-                        <sale-table :sales="sales" @edit="handleEdit" @delete="handleDelete" />
+                        <sale-table :sales="sales" @edit="handleEdit" @delete="handleDelete" @show="showModalAddPayment" />
                      </div>
                   </div>
                   <div class="d-flex justify-content-between">
@@ -63,12 +63,13 @@
          </div>
       </div>
    
+      <modal-add-payment :editing="editing"  />
    </div>
    </template>
    
    <script>
    import SaleTable from './SaleTable.vue';
-   
+   import ModalAddPayment from '../Payments/ModalAddPayment.vue'
    import {
       Bootstrap4Pagination
    } from 'laravel-vue-pagination';
@@ -77,6 +78,7 @@
       components: {
          SaleTable,
          Bootstrap4Pagination,
+         ModalAddPayment,
       },
       mounted() {
          this.getSales();
@@ -85,6 +87,7 @@
       data() {
          return {
             sales: [],
+            editing: null,
             perPage: 10,
             pages:[
                {
@@ -107,12 +110,13 @@
          }
       },
       methods: {
-         handleAdd(){
-   
+         showModalAddPayment(sale){
+            this.editing = sale;
+            $('#modal-add-payment').modal('show')
          },
          getSales(page =1) {
             axios
-               .get(`/api/v1/sales/test?page=${page}&perPage=${this.perPage}`)
+               .get(`/api/v1/sales?page=${page}&perPage=${this.perPage}`)
                .then(res => {
                   this.sales = res.data.data;
                   console.log(this.sales)

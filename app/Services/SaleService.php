@@ -19,18 +19,18 @@ class SaleService
             $sale = $this->createSale($request);    //create sale
             $this->createSaleDetail($sale, $request); //create saledetail
             if($sale->status != SaleStatus::UNPAID){  
-               $this->createPayment($sale, $request);  //create payment
+               $this->createPayment($sale->id, $sale->code, $request);  //create payment
             }
          });
       } catch (\Throwable $th) {
          throw $th;
       }
    }
-   private function createPayment($sale, $request)
+   public function createPayment($sale_id, $sale_code, $request)
    {
       $payment = new Payment;
-      $payment->sale_code = $sale->code;
-      $payment->sale_id = $sale->id;
+      $payment->sale_code = $sale_code;
+      $payment->sale_id = $sale_id;
       $payment->due_amount = $request->total;
       $payment->paid_amount = $request->paid_amount;
       $payment->change = $request->change;

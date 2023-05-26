@@ -11,6 +11,8 @@
          <th>Remain</th>
          <th>Status</th>
          <th>SellBy</th>
+         <th>Add Payment</th>
+
       </tr>
    </thead>
    <tbody>
@@ -21,11 +23,12 @@
          <td>{{ sale.customer }}</td>
          <td>$ {{ sale.due_amount }}</td>
          <td>$ {{ sale.paid_amount }}</td>
-         <td>{{ sale.remain }}</td>   
-         <td >
+         <td>{{ sale.remain }}</td>
+         <td>
             <span :class="`btn btn-sm btn-${sale.status.color} `">{{ sale.status.name }}</span>
          </td>
-         <td>{{ sale.sell_by }}</td>
+         <td> <button class="btn btn-primary btn-sm" @click="$emit('edit', customer)"><i class="fa fa-edit"></i></button>
+         </td>
       </tr>
    </tbody>
 </table>

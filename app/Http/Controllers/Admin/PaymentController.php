@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Enums\SaleStatus;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 use App\Traits\ResponseTrait;
-
+use App\Http\Controllers\Controller;
+use App\Http\Requests\PaymentRequest;
+use App\Models\Sale;
 
 class PaymentController extends Controller
 {
@@ -41,5 +43,49 @@ class PaymentController extends Controller
         catch(\Exception $exception){
               return $this->responseError([], $exception->getMessage());
         }
+    }
+
+    public function store(PaymentRequest $request)
+    {   
+        $validated = $request->validated();
+        try {
+            $payment = Payment::create([
+                'sale_code' => $validated['sale_code'],
+                'sale_id' => $validated['sale_id'],
+                'due_amount' => $validated['due_amount'],
+                'paid_amount' => $validated['paid_amount'],
+                'change' => $validated['change'],
+                'amount' => $validated['paid_amount'] - $validated['change'],
+                'payment_method' => $validated['payment_method'],
+                'created_by' => 1,
+            ]);            
+            $this->checkPaymentToUpdateStatus($validated['sale_id']);
+            return $this->responseSuccess($payment, 'success');
+        } catch (\Exception $ex) {
+            return $this->responseError([], $ex->getMessage());
+        }
+    }
+    public function checkPaymentToUpdateStatus($sale_id)
+    {
+        $sale = Sale::find($sale_id);
+        $total_paid_amount = Payment::where('sale_id', $sale_id)->sum('amount');
+        
+        $sale->update([
+            'status' => $this->checkStatus($total_paid_amount, $sale->total),
+        ]);
+
+    }
+
+    public function checkStatus($total_paid_amount, $total)
+    {
+        if($total_paid_amount >= $total){
+            return SaleStatus::PAID;
+         }
+         else if($total_paid_amount != 0 && $total_paid_amount !=null){
+            return SaleStatus::PARTIAL;
+         }else{
+            
+            return SaleStatus::UNPAID;
+         }
     }
 }
