@@ -17,6 +17,7 @@
         "laravel-vue-pagination": "^4.1.0",
         "lodash": "^4.17.21",
         "moment": "^2.29.4",
+        "print-js": "^1.6.0",
         "toastr": "^2.1.4",
         "vee-validate": "^4.9.3",
         "vue": "^3.3.2",

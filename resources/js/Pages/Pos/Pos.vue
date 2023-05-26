@@ -213,6 +213,7 @@ export default {
                      showConfirmButton: false,
                      timer: 1500
                   })
+                  // $('#invoice-modal').modal('show');
                }
 
             })

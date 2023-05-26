@@ -32,7 +32,7 @@
                         </tr>
                      </thead>
                      <tbody>
-                        <tr v-for="cart in carts" :key="index" >
+                        <tr>
                            <td>Item 1</td>
                            <td>2</td>
                            <td>$10</td>
@@ -67,12 +67,6 @@
 <script>
 import printJS from 'print-js'
 export default {
-   props:{
-      carts:{
-         data: Array,
-         default: null,
-      }
-   }, 
    methods: {
       print() {
          printJS({
