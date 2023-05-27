@@ -17,16 +17,21 @@
    </div>
    <div class="content">
       <div class="container-fluid">
-         <div class="d-flex justify-content-between">
+         <div class="d-flex justify-content-between mb-1">
             <div>
-               <button @click="handleAdd" type="button" class="btn btn-primary mb-2">
-                  <i class="fa fa-plus"></i>
-                  Add New payments
-               </button>
+
             </div>
             <div>
-               <div class="input-group">
-                  <input type="text" class="form-control" placeholder="Search payments" aria-label="Search Supplier">
+               <div class="btn-group mr-3">
+                  <button :class="selectedStatus === null ? 'btn btn-secondary':'btn btn-info' " @click="getSales()">
+                     All
+                  </button>
+                  <div class="btn-group" v-for="(item, index) in saleStatuses" :key="index">
+                     <button :class="selectedStatus === item.value ? 'btn btn-secondary':`btn btn-${item.color}` "   @click="getSales(item.value)">
+                        <span class="mr-2">{{ item.name }}</span>
+                        <span class="badge badge-pill badge-info">{{ item.count }}</span>
+                     </button>
+                  </div>
                </div>
             </div>
          </div>
@@ -86,12 +91,15 @@ export default {
    },
    mounted() {
       this.getSales();
+      this.getNumberOfSaleStatus();
    },
 
    data() {
       return {
          sales: [],
          editing: null,
+         saleStatuses: null,
+         selectedStatus: null,
          perPage: 10,
          pages: [{
                name: '10',
@@ -113,19 +121,38 @@ export default {
       }
    },
    methods: {
-      handleAdd() {
+      getNumberOfSaleStatus() {
+         axios
+            .get(`/api/v1/sales-status`)
+            .then(res => {
+               if (res.data.status == true) {
+                 this.saleStatuses = res.data.data
+               }
+            })
+            .catch(err => {
+               showToast('error', err)
+            })
+      },
+      handleAddInvoice() {
          $('#invoice-modal').modal('show');
       },
       showModalAddPayment(sale) {
          this.editing = sale;
          $('#modal-add-payment').modal('show')
       },
-      getSales(page = 1) {
+      getSales(status = null, page = 1) {
+         this.selectedStatus = status;
+         console.log(this.selectedStatus);
          axios
-            .get(`/api/v1/sales?page=${page}&perPage=${this.perPage}`)
+            .get(`/api/v1/sales?page=${page}&perPage=${this.perPage}`, {
+               params: {
+                  status: status,
+               }
+            })
             .then(res => {
-               this.sales = res.data.data;
-               console.log(this.sales)
+               if (res.data.status == true) {
+                  this.sales = res.data.data;
+               }
             })
             .catch(err => {
                showToast('error', err)

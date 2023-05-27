@@ -88,6 +88,7 @@ Route::prefix('/api/v1')->group(function (){
 
     Route::controller(SaleController::class)->group(function () {
         Route::get('/sales', 'index')->name('sales.index');
+        Route::get('/sales-status', 'getNumberOfSaleStatus')->name('sales.status');
     });
 
     Route::controller(PosController::class)->group(function () {

@@ -15,7 +15,7 @@
             
          </tr>
       </thead>
-      <tbody>
+      <tbody v-if="sales.data && sales.data.length > 0">
          <tr v-for="(sale, index) in sales.data" :key="index">
             <td>{{ index+1 }}</td>
             <td>{{ sale.created_at }}</td>
@@ -31,6 +31,11 @@
             <td>
                <button class="btn btn-primary" @click="$emit('show', sale)">Payment</button>
             </td>
+         </tr>
+      </tbody>
+      <tbody v-else>
+         <tr>
+            <td colspan="10" class="text-center">No Record</td>
          </tr>
       </tbody>
    </table>
