@@ -3,7 +3,7 @@
    <thead>
       <tr>
          <th style="width: 10px;">#</th>
-         <th>Sale</th>
+         <th>SaleCode</th>
          <th>Amount</th>
          <th>Payment Method</th>
          <th>Sell By</th>
@@ -14,7 +14,7 @@
    <tbody>
       <tr v-for="(payment, index) in payments.data" :key="index">
          <td>{{ index+1 }}</td>
-         <td>{{ payment.sale_id }}</td>
+         <td>{{ payment.sale_code }}</td>
          <td>$ {{ payment.amount }}</td>
          <td >
             <span :class="`badge badge-${payment.payment_method.color}`">{{ payment.payment_method.name }}</span>

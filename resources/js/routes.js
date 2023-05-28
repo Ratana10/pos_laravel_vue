@@ -1,83 +1,64 @@
-import Dashboard from './Components/Dashboard.vue';
-import Customer from './Pages/Customers/Customer.vue';
-import Supplier from './Pages/Suppliers/Supplier.vue'
-import Category from './Pages/Categories/Category.vue'
-import Unit from './Pages/Units/Unit.vue'
-import Exchange from './Pages/Exchanges/Exchange.vue'
-import Product from './Pages/Products/Product.vue'
-import ProductForm from './Pages/Products/ProductForm.vue'
-import Payment from './Pages/Payments/Payment.vue'
-import Sale from './Pages/Sales/Sale.vue'
-import Invoice from './Pages/SaleTest/Invoice.vue'
-import Pos from './Pages/Pos/Pos.vue'
-
 
 export default
 [
-
-   {
-      path: '/admin/sales/test-invoice',
-      name: 'admin.sale.invoice',
-      component: Invoice,
-   },
    {
       path: '/admin/dashboard',
       name: 'admin.dashboard',
-      component: Dashboard,
+      component:  ()=> import('./Components/Dashboard.vue'),
    },
    {
       path: '/admin/customers',
       name: 'admin.customers',
-      component: Customer,
+      component:  ()=> import('./Pages/Customers/Customer.vue'),
    }, 
    {
       path: '/admin/suppliers',
       name: 'admin.suppliers',
-      component: Supplier,
+      component:  ()=> import('./Pages/Suppliers/Supplier.vue'),
    },
    {
       path: '/admin/categories',
       name: 'admin.categories',
-      component: Category,
+      component:  ()=> import('./Pages/Categories/Category.vue'),
    },
    {
       path: '/admin/exchanges',
       name: 'admin.exchanges',
-      component: Exchange,
+      component:  ()=> import('./Pages/Exchanges/Exchange.vue'),
    },
    {
       path: '/admin/units',
       name: 'admin.units',
-      component: Unit,
+      component: ()=> import('./Pages/Units/Unit.vue'),
    },
    {
       path: '/admin/products',
       name: 'admin.products',
-      component: Product,
+      component: ()=> import('./Pages/Products/Product.vue'),
    },
    {
       path: '/admin/products/create',
       name: 'admin.products.create',
-      component: ProductForm,
+      component: ()=> import('./Pages/Products/ProductForm.vue'),
    },
    {
       path: '/admin/products/:id/edit',
       name: 'admin.products.edit',
-      component: ProductForm,
+      component: ()=> import('./Pages/Products/ProductForm.vue'),
    },
    {
       path: '/admin/payments',
       name: 'admin.payments',
-      component: Payment,
+      component: ()=> import('./Pages/Payments/Payment.vue'),
    },
    {
       path: '/admin/sales',
       name: 'admin.sales',
-      component: Sale,
+      component: ()=> import('./Pages/Sales/Sale.vue'),
    },
    {
       path: '/admin/pos',
       name: 'admin.pos',
-      component: Pos,
+      component: ()=> import('./Pages/Pos/Pos.vue'),
    },
 ]

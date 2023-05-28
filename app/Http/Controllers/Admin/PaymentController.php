@@ -24,7 +24,7 @@ class PaymentController extends Controller
             ->paginate(request('perPage'), ['*'], 'page', request('page'))
             ->through(fn ($payment)=>[
                 'id' => $payment->id,
-                'sale_id' => $payment->sale_id,
+                'sale_code' => $payment->sale_code,
                 'amount' => $payment->amount,
                 'paid_amount' => $payment->paid_amount,
                 'change' => $payment->change,
