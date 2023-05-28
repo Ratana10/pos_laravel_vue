@@ -12,19 +12,19 @@
             <th>Status</th>
             <th>SellBy</th>
             <th>Add Payment</th>
-            
+
          </tr>
       </thead>
       <tbody v-if="sales.data && sales.data.length > 0">
          <tr v-for="(sale, index) in sales.data" :key="index">
-            <td>{{ index+1 }}</td>
+            <td>{{ index + 1 }}</td>
             <td>{{ sale.created_at }}</td>
             <td>{{ sale.sale_code }}</td>
             <td>{{ sale.customer }}</td>
             <td>$ {{ sale.due_amount }}</td>
             <td>$ {{ sale.paid_amount }}</td>
-            <td>$ {{ sale.remain }}</td>   
-            <td >
+            <td>$ {{ sale.remain }}</td>
+            <td>
                <span :class="`btn btn-sm btn-${sale.status.color} `">{{ sale.status.name }}</span>
             </td>
             <td>{{ sale.sell_by }}</td>
@@ -39,20 +39,20 @@
          </tr>
       </tbody>
    </table>
-   </template>
+</template>
    
-   <script>
-   export default {
-      props: {
-         sales: {
-            data: Array,
-            default: null,
-         }
-      },
-   }
-   </script>
+<script>
+export default {
+   props: {
+      sales: {
+         data: Array,
+         default: null,
+      }
+   },
+}
+</script>
    
-   <style lang="">
+<style lang="">
       
    </style>
    
