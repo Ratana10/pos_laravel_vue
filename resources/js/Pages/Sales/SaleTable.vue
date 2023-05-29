@@ -11,7 +11,7 @@
             <th>Remain</th>
             <th>Status</th>
             <th>SellBy</th>
-            <th>Add Payment</th>
+            <th>Actions</th>
 
          </tr>
       </thead>
@@ -28,8 +28,18 @@
                <span :class="`btn btn-sm btn-${sale.status.color} `">{{ sale.status.name }}</span>
             </td>
             <td>{{ sale.sell_by }}</td>
-            <td>
-               <button class="btn btn-primary" @click="$emit('show', sale)">Payment</button>
+            <td >
+               <!-- {{ actionsOptions }} -->
+               <select @change="onChangeAction(sale, $event.target.value)">
+                  <option >Select Option ...</option>
+                  <option 
+                   v-for="(item, index) in actionOptions" 
+                   :key="index" :value="item.value"
+                   class="form-control">
+                   {{ item.label }}
+                  </option>
+               </select>
+               <!-- <button class="btn btn-primary" @click="$emit('show', sale)">Payment</button> -->
             </td>
          </tr>
       </tbody>
@@ -41,14 +51,24 @@
    </table>
 </template>
    
-<script>
-export default {
-   props: {
-      sales: {
-         data: Array,
-         default: null,
-      }
+<script setup>
+import { defineProps } from 'vue';
+const props = defineProps({
+   sales:{
+      data: Array,
+      default: null,
    },
+   actionOptions: {
+      data: Array,
+      default: null,
+   }
+})
+
+const onChangeAction = (sale, value)=>{
+   let selectedOption = props.actionOptions.find(e => e.value === value)
+   if(selectedOption && selectedOption.function){
+      selectedOption.function(sale);
+   }
 }
 </script>
    

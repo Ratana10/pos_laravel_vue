@@ -23,11 +23,11 @@
             </div>
             <div>
                <div class="btn-group mr-3">
-                  <button :class="selectedStatus === null ? 'btn btn-secondary':'btn btn-info' " @click="getSales()">
+                  <button :class="selectedStatus === null ? 'btn btn-secondary':'btn btn-info' " @click="getSales(perPage, 1)">
                      All
                   </button>
                   <div class="btn-group" v-for="(item, index) in saleStatuses" :key="index">
-                     <button :class="selectedStatus === item.value ? 'btn btn-secondary':`btn btn-${item.color}` "   @click="getSales(item.value)">
+                     <button :class="selectedStatus === item.value ? 'btn btn-secondary':`btn btn-${item.color}` "   @click="getSales(perPage, 1, item.value)">
                         <span class="mr-2">{{ item.name }}</span>
                         <span class="badge badge-pill badge-info">{{ item.count }}</span>
                      </button>
@@ -42,14 +42,16 @@
                      <div>
                         <label for="">Pages: </label>
                         <select v-model="perPage" class="ml-2">
-                           <option v-for="page in pages" :key="page.name" :value="page.value">{{ page.name}}</option>
+                           <option v-for="page in pages" :key="page.name" :value="page.value">{{ page.label}}</option>
                         </select>
                      </div>
                   </div>
                </div>
                <div class="row">
                   <div class="col-sm-12">
-                     <sale-table :sales="sales" @edit="handleEdit" @delete="handleDelete" @show="showModalAddPayment" />
+                     <sale-table 
+                        :sales="sales" :actionOptions="actionOptions" 
+                        @edit="handleEdit" @delete="handleDelete" @show="openModal" />
                   </div>
                </div>
                <div class="d-flex justify-content-between">
@@ -59,7 +61,7 @@
                      of {{ sales.total }}
                   </div>
                   <div class="">
-                     <Bootstrap4Pagination :data="sales" @pagination-change-page="getSales" />
+                     <Bootstrap4Pagination :data="sales" @pagination-change-page="onPageChange" />
                   </div>
                </div>
 
@@ -69,12 +71,65 @@
    </div>
 
    <modal-add-payment :editing="editing" />
-   <invoice />
-
 </div>
 </template>
+<script setup>
+import {
+   ref,
+   onMounted,
+   watch
+} from 'vue'
+import { Bootstrap4Pagination } from 'laravel-vue-pagination';
+import ModalAddPayment from '../Payments/ModalAddPayment.vue'
+import SaleTable from './SaleTable.vue';
+import UseSales from '../../Composables/sales';
 
-<script>
+const { sales, getSales, saleStatuses, getCountSaleStatuses } = UseSales();
+
+onMounted(()=>{
+   getSales(perPage.value);
+   getCountSaleStatuses();
+});
+
+const perPage = ref(10);
+const pages = ref([
+   { label: '5', value: 5 },
+   { label: '10', value: 10 },
+   { label: '25', value: 25 },
+   { label: '50', value: 50 },
+   { label: '100', value: 100 },
+]);
+
+const onPageChange = (newPage) => {
+   getSales(perPage.value, newPage);
+};
+
+watch(perPage, (newValue) => {
+      console.log('perpage',perPage.value)
+      getSales(perPage.value);
+   },
+);
+
+const actionOptions = ref([
+   {label: 'Add Payment', value: 'add_payment', function: addPayment},
+   {label: 'View Payment', value: 'view_payment', function: viewPayment},
+])
+const editing = ref(null);
+function addPayment(sale){
+   editing.value = sale
+   console.log('editing', editing, sale);
+   openModal();
+}
+function viewPayment(){
+   alert('view payment function')
+}
+
+const openModal= () =>{
+   $('#modal-add-payment').modal('show');
+}
+
+</script>
+<!-- <script>
 import SaleTable from './SaleTable.vue';
 import ModalAddPayment from '../Payments/ModalAddPayment.vue'
 import Invoice from './InvoiceModal.vue'
@@ -160,7 +215,7 @@ export default {
       }
    }
 }
-</script>
+</script> -->
 
 <style scoped>
 </style>

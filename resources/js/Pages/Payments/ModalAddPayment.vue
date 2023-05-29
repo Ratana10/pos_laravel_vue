@@ -47,7 +47,7 @@
    
    <script>
 import { showToast } from '../../swalUtils';
-
+import Swal from 'sweetalert2'
    export default {
       props: {
          editing: Object,
@@ -95,7 +95,15 @@ import { showToast } from '../../swalUtils';
          createPayment(data){
             axios.post(`/api/v1/payments`, data)
                .then(res =>{
-                  console.log('success');
+                     $("#modal-add-payment").modal("hide");
+                     this.clearCarts();
+                  Swal.fire({
+                     icon: 'success',
+                     title: 'Payment Success',
+                     text: 'Thank You',
+                     showConfirmButton: false,
+                     timer: 1500
+                  })
                })
                .catch(err =>{
                   showToast('error', err);
