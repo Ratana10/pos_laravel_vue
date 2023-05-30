@@ -18,7 +18,11 @@ class PurchaseController extends Controller
      */
     public function index()
     {
-        //
+        $purchases = Purchase::latest()
+                    ->paginate(request('perPage'), ['*'], 'page', request('page'));
+                    
+        return $this->responseSuccess($purchases, 'fetch purchase successfully');
+        
     }
 
 
@@ -55,6 +59,8 @@ class PurchaseController extends Controller
             }
             
         });
+        return $this->responseSuccess([], 'created purchase successfully');
+
     }
 
     /**
