@@ -18,7 +18,6 @@ class UnitController extends Controller
         try {
             if(request()->has('status')){
                 $units = Unit::where('status', request('status'))
-                            ->select('id','name')
                             ->latest()
                             ->get();
             }

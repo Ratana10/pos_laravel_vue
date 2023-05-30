@@ -19,8 +19,7 @@ class ProductController extends Controller
     {
         try {
             if (request()->has('status')) {
-                $products = Product::select('id', 'name')
-                    ->where('status', 1)->get();
+                $products = Product::where('status', 1)->latest()->get();
             } else {
                 $products = Product::latest()
                     ->with('category:id,name')

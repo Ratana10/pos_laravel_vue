@@ -109,7 +109,7 @@
                </router-link>
             </li>
             <li class="nav-item">
-               <router-link to="/admin/purchase" class="nav-link" active-class="active">
+               <router-link to="/admin/purchases" class="nav-link" active-class="active">
                   <i class="nav-icon fas fa-th"></i>
                   <p>
                      Purchase 

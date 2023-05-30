@@ -23,8 +23,8 @@ return new class extends Migration
                     ->onUpdate('cascade');
             $table->decimal('price',10,2)->default(0);
             $table->decimal('discount',10,2)->default(0);
-            $table->unsignedInteger('quantity')->default(0);
-            $table->unsignedInteger('alert')->default(0);
+            $table->integer('quantity')->default(0);
+            $table->integer('alert')->default(0);
             $table->string('image')->nullable();
             $table->string('barcode')->nullable();
             $table->boolean('status')->default(1);

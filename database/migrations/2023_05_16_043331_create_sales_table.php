@@ -19,7 +19,7 @@ return new class extends Migration
                     ->constrained('customers', 'id')
                      ->onUpdate('cascade');
             $table->decimal('total', 10, 2)->default(0.00);
-            $table->unsignedInteger('status')->comment('1=paid,2=unpaid,3=partial')->default(2);
+            $table->integer('status')->comment('1=paid,2=unpaid,3=partial')->default(2);
             $table->foreignId('created_by')
                     ->constrained('users', 'id')
                     ->onUpdate('cascade');

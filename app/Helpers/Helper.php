@@ -7,7 +7,7 @@ class Helper
    {
       $data = $model::orderBy('id', 'desc')->first();
       if(!$data){
-         $or_length = $length;
+         $or_length = $length-1;
          $last_number = '1';
       }
       else{

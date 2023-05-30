@@ -19,10 +19,10 @@
         <div class="container-fluid">
            <div class="d-flex justify-content-between">
               <div>
-                <button @click="handleAdd" type="button" class="btn btn-primary mb-2">
+                <router-link to="/admin/purchases/create" type="button" class="btn btn-primary mb-2">
                   <i class="fa fa-plus"></i>
-                  Add New Customer
-               </button>
+                  Add New Purchase
+               </router-link>
               </div>
               <div>
                  <div class="input-group">

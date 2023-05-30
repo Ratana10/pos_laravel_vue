@@ -17,8 +17,14 @@ class SupplierController extends Controller
     public function index()
     {
         try {
-            $suppliers = Supplier::latest()
-                    ->paginate(request('perPage'), ['*'], 'page', request('page'));
+            if (request('status')) {
+                $suppliers = Supplier::where('status', 1)->latest()->get();
+            }
+            else{
+                $suppliers = Supplier::latest()
+                        ->paginate(request('perPage'), ['*'], 'page', request('page'));
+            
+            }
                     
             return $this->responseSuccess($suppliers, 'success');
         } catch (\Exception $ex) {

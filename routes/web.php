@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\ExchangeController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\PosController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\PurchaseController;
 use App\Http\Controllers\Admin\SaleController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\UnitController;
@@ -99,6 +100,11 @@ Route::prefix('/api/v1')->group(function (){
     
     Route::controller(SaleTestController::class)->group(function () {
         Route::get('/sales/test', 'index')->name('salestest.index');
+    });
+
+    Route::controller(PurchaseController::class)->group(function () {
+        Route::post('/purchases', 'store')->name('purchases.store');
+        Route::get('/purchases-code', 'generateCode')->name('purchases.code');
     });
 
     

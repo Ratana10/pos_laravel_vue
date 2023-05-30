@@ -62,17 +62,17 @@ export default
       component: ()=> import('./Pages/Pos/Pos.vue'),
    },
    {
-      path: '/admin/purchase',
+      path: '/admin/purchases',
       name: 'admin.purchase.index',
       component: ()=> import('./Pages/Purchases/PurchaseIndex.vue'),
    },
    {
-      path: '/admin/purchase/create',
+      path: '/admin/purchases/create',
       name: 'admin.purchase.create',
       component: ()=> import('./Pages/Purchases/PurchaseForm.vue'),
    },
    {
-      path: '/admin/purchase/:id/edit',
+      path: '/admin/purchases/:id/edit',
       name: 'admin.purchase.edit',
       component: ()=> import('./Pages/Purchases/PurchaseForm.vue'),
    },
