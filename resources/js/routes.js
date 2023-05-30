@@ -61,4 +61,19 @@ export default
       name: 'admin.pos',
       component: ()=> import('./Pages/Pos/Pos.vue'),
    },
+   {
+      path: '/admin/purchase',
+      name: 'admin.purchase.index',
+      component: ()=> import('./Pages/Purchases/PurchaseIndex.vue'),
+   },
+   {
+      path: '/admin/purchase/create',
+      name: 'admin.purchase.create',
+      component: ()=> import('./Pages/Purchases/PurchaseForm.vue'),
+   },
+   {
+      path: '/admin/purchase/:id/edit',
+      name: 'admin.purchase.edit',
+      component: ()=> import('./Pages/Purchases/PurchaseForm.vue'),
+   },
 ]

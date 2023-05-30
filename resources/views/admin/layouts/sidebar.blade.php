@@ -108,6 +108,14 @@
                   </p>
                </router-link>
             </li>
+            <li class="nav-item">
+               <router-link to="/admin/purchase" class="nav-link" active-class="active">
+                  <i class="nav-icon fas fa-th"></i>
+                  <p>
+                     Purchase 
+                  </p>
+               </router-link>
+            </li>
          </ul>
       </nav>
    </div>

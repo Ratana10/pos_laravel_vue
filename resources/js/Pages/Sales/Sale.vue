@@ -129,7 +129,7 @@ const openModal= () =>{
 }
 
 </script>
-<!-- <script>
+<!-- <script>KENJI SPA
 import SaleTable from './SaleTable.vue';
 import ModalAddPayment from '../Payments/ModalAddPayment.vue'
 import Invoice from './InvoiceModal.vue'
