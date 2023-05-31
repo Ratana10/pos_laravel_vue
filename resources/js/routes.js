@@ -63,17 +63,17 @@ export default
    },
    {
       path: '/admin/purchases',
-      name: 'admin.purchase.index',
+      name: 'admin.purchases.index',
       component: ()=> import('./Pages/Purchases/PurchaseIndex.vue'),
    },
    {
       path: '/admin/purchases/create',
-      name: 'admin.purchase.create',
+      name: 'admin.purchases.create',
       component: ()=> import('./Pages/Purchases/PurchaseForm.vue'),
    },
    {
       path: '/admin/purchases/:id/edit',
-      name: 'admin.purchase.edit',
+      name: 'admin.purchases.edit',
       component: ()=> import('./Pages/Purchases/PurchaseForm.vue'),
    },
 ]

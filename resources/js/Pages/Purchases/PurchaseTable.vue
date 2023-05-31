@@ -6,7 +6,7 @@
          <th>Date</th>
          <th>PO Code</th>
          <th>Total</th>
-         <th>Status</th>
+         <th>Payment Status</th>
          <th>Created By</th>
          <th style="width: 100px;">Actions</th>
       </tr>
@@ -17,17 +17,19 @@
          <td>{{ purchase.date }}</td>
          <td>{{ purchase.code }}</td>
          <td>$ {{ purchase.total }}</td>
-         <td>{{ purchase.status }}</td>
+         <td>
+               <span :class="`btn btn-sm btn-${purchase.status.color} `">{{ purchase.status.name }}</span>
+         </td>
          <td>{{ purchase.created_by }}</td>
          <td>
             <button class="btn btn-primary btn-sm" @click="$emit('edit', purchases)"><i class="fa fa-edit"></i></button>
-            <button class="btn btn-danger btn-sm ml-1" @click="confirm(purchases)"><i class="fa fa-trash"></i></button>
+            <button class="btn btn-danger btn-sm ml-1" @click="$emit('delete', purchase.id)"><i class="fa fa-trash"></i></button>
          </td>
       </tr>
    </tbody>
    <tbody v-else>
       <tr>
-         <td colspan="4" class="text-center">No Record</td>
+         <td colspan="7" class="text-center">No Record</td>
       </tr>
    </tbody>
 </table>

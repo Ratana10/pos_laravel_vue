@@ -105,6 +105,7 @@ Route::prefix('/api/v1')->group(function (){
     Route::controller(PurchaseController::class)->group(function () {
         Route::get('/purchases', 'index')->name('purchases.index');
         Route::post('/purchases', 'store')->name('purchases.store');
+        Route::delete('/purchases/{purchase}', 'destroy')->name('purchase.destroy');
         Route::get('/purchases-code', 'generateCode')->name('purchases.code');
     });
 

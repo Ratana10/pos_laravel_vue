@@ -115,9 +115,25 @@
                                  </td>
                               </tr>
                            </tbody>
+                           <tfoot>
+                              <tr>
+                                 <td colspan="8" class="text-right">Discount</td>
+                                 <td>0</td>
+                              </tr>
+                              <tr>
+                                 <td colspan="8" class="text-right">Sub Total</td>
+                                 <td>0</td>
+                              </tr>
+                              <tr>
+                                 <td colspan="8" class="text-right" style="text-align:right; font-weight:bold;">Total</td>
+                                 <td style="font-weight:bold;">$ {{ form.total }}</td>
+                              </tr>
+                           </tfoot>
                         </table>
                      </div>
-                     <div class="row">
+                     <button type="button" class="btn btn-primary" @click="save">Pay</button>
+
+                     <!-- <div class="row">
                         <div class="col-md-12 text-right">
                            <div class="form-group">
                               <h4>Sub-Total: $ {{ form.total }}</h4>
@@ -130,7 +146,7 @@
                            </div>
                            <button type="button" class="btn btn-primary" @click="save">Pay</button>
                         </div>
-                     </div>
+                     </div> -->
                   </div>
                </div>
             </div>
@@ -153,7 +169,7 @@ import useSuppliers from '../../Composables/suppliers';
 import useProducts from '../../Composables/products';
 import useUnits from '../../Composables/units';
 
-const {purchaseCode, getPurchaseCode, store} = usePurchases();
+const {purchaseCode, getPurchaseCode, storePurchase} = usePurchases();
 const {suppliers, getSuppliers} = useSuppliers();
 const {products, getProducts} = useProducts();
 const {units, getUnits} = useUnits();
@@ -222,11 +238,11 @@ const save = ()=>{
       }),
    }
 
-   console.log('save', data)
-   store(data);
+   savePurchase(data)
 }
-
-
+const savePurchase = async (data)=>{
+   await storePurchase(data);
+}
 
 </script>
 

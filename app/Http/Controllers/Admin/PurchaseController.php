@@ -18,8 +18,23 @@ class PurchaseController extends Controller
      */
     public function index()
     {
-        $purchases = Purchase::latest()
-                    ->paginate(request('perPage'), ['*'], 'page', request('page'));
+        $purchases = Purchase::query()
+                    ->with('user:id,name')
+                    ->latest()
+                    ->paginate(request('perpage'), ['*'], 'page', request('page'))
+                    ->through(function ($purchase){
+                        return [
+                            'id' => $purchase->id,
+                            'code' => $purchase->code,
+                            'date' => $purchase->date,
+                            'total' => $purchase->total,
+                            'status' => [
+                                'name' => $purchase->status->name,
+                                'color' => $purchase->status->color(),
+                            ],
+                            'created_by' => $purchase->user->name
+                        ];
+                    });
                     
         return $this->responseSuccess($purchases, 'fetch purchase successfully');
         
@@ -63,21 +78,6 @@ class PurchaseController extends Controller
 
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -90,9 +90,10 @@ class PurchaseController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Purchase $purchase)
     {
-        //
+        $purchase->delete();
+        return $this->responseSuccess([], 'delete purchase successfully');        
     }
 
     public function generateCode()

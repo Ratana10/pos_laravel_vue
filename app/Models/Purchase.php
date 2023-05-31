@@ -2,8 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Enums\PurchaseStatus;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Purchase extends Model
 {
@@ -15,4 +19,14 @@ class Purchase extends Model
         'status',
         'created_by'
     ];
+
+    protected $casts = [
+        'status' => PurchaseStatus::class,
+    ];
+
+  
+    public function user(): HasOne
+    {
+        return $this->hasOne(User::class, 'id', 'created_by');
+    }
 }
