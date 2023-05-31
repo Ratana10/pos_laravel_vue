@@ -73,18 +73,22 @@ import PurchaseTable from './PurchaseTable.vue';
 import {Bootstrap4Pagination} from 'laravel-vue-pagination';
 import usePurchases from '../../Composables/purchases';
 import usePagination from '../../pagination';
-
+import useNotifications from '../../notifications';
 
 const {purchases, getPurchases, destroyPurchase} = usePurchases();
 const { perpage, pages, onPageChange } = usePagination(getPurchases);
-
+const { confirmNotification} = useNotifications();
 onMounted(()=>{
    getPurchases(); 
 })
 
 const deletePurchase = async (id) =>{
-   await destroyPurchase(id)
-   await getPurchases();
+   await confirmNotification().then((result) =>{
+      if(result){
+         destroyPurchase(id)
+         getPurchases();
+      }
+   });  
 }
 
 </script>
