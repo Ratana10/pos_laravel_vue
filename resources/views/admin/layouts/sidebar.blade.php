@@ -69,7 +69,7 @@
                </router-link>
             </li>
             <li class="nav-item">
-               <router-link to="/admin/products" class="nav-link" active-class="active">
+               <router-link to="/admin/products"  class="nav-link" :class="$route.path.startsWith('/admin/products') ? 'active' : '' ">
                   <i class="nav-icon fas fa-th"></i>
                   <p>
                      Product
@@ -109,7 +109,7 @@
                </router-link>
             </li>
             <li class="nav-item">
-               <router-link to="/admin/purchases" class="nav-link" active-class="active">
+               <router-link to="/admin/purchases" class="nav-link" :class="$route.path.startsWith('/admin/purchases') ? 'active' : '' ">
                   <i class="nav-icon fas fa-th"></i>
                   <p>
                      Purchase 
