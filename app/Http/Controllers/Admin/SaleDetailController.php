@@ -14,6 +14,7 @@ class SaleDetailController extends Controller
     public function index()
     {
         $saledetails = SaleDetail::query()
+            ->with('product:id,name')
             ->when(request()->has('sale_id'), function($query){
                 $query->where('sale_id', request('sale_id'));
             })

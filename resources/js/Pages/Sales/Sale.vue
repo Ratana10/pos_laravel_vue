@@ -73,6 +73,7 @@
 
       <modal-add-payment :editing="editing" />
       <modal-view-payment :payments="payments" :sale_code="sale_code" />
+      <modal-view-sale-detail :sale_details="sale_details" :sale="sale"  :payments="payments" />
 
    </div>
 </template>
@@ -80,12 +81,13 @@
 import {
    ref,
    onMounted,
-   watch
+   watch,
+   reactive
 } from 'vue'
 import { Bootstrap4Pagination } from 'laravel-vue-pagination';
 import ModalAddPayment from '../Payments/ModalAddPayment.vue';
 import ModalViewPayment from './ModalViewPayment.vue';
-import ModalSaleDetail from './ModalViewSaleDetail.vue';
+import ModalViewSaleDetail from './ModalViewSaleDetail.vue';
 import SaleTable from './SaleTable.vue';
 import UseSales from '../../Composables/sales';
 import usePayment from '../../Composables/payments'
@@ -93,7 +95,7 @@ import useSaleDetails from '../../Composables/saleDetails'
 
 const { sales, getSales, saleStatuses, getCountSaleStatuses } = UseSales();
 const { payments, findPaymentBySale } = usePayment();
-const { saleDetails, findSaleDetailBySale } = useSaleDetails();
+const { sale_details, findSaleDetailBySale } = useSaleDetails();
 
 onMounted(() => {
    getSales(perPage.value);
@@ -114,10 +116,8 @@ const onPageChange = (newPage) => {
 };
 
 watch(perPage, (newValue) => {
-   console.log('perpage', perPage.value)
    getSales(perPage.value);
-},
-);
+});
 
 const actionOptions = ref([
    { label: 'Add Payment', value: 'add_payment', function: addPayment },
@@ -127,19 +127,22 @@ const actionOptions = ref([
 
 const editing = ref(null);
 const sale_code = ref(null);
+const sale = ref(null);
 
 function addPayment(sale) {
    editing.value = sale
-   console.log('editing', editing, sale);
    openModal();
 }
 function viewPayment(sale) {
    sale_code.value = sale.sale_code;
    findPaymentBySale(sale.id);
-   $('#modal-view-sale-detail').modal('show');
+   $('#modal-view-payment').modal('show');
 }
-function viewSaleDetail(sale) {
-   findSaleDetailBySale(sale.id);
+
+function viewSaleDetail(s) {
+   findSaleDetailBySale(s.id);
+   findPaymentBySale(s.id);
+   sale.value = s;
    $('#modal-view-sale-detail').modal('show');
 
 }
