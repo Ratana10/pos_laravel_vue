@@ -82,16 +82,23 @@ import {
    ref,
    onMounted,
    watch,
-   reactive
+   reactive,
+   defineAsyncComponent,
 } from 'vue'
 import { Bootstrap4Pagination } from 'laravel-vue-pagination';
-import ModalAddPayment from '../Payments/ModalAddPayment.vue';
-import ModalViewPayment from './ModalViewPayment.vue';
-import ModalViewSaleDetail from './ModalViewSaleDetail.vue';
+// import ModalAddPayment from '../Payments/ModalAddPayment.vue';
+// import ModalViewPayment from './ModalViewPayment.vue';
+// import ModalViewSaleDetail from './ModalViewSaleDetail.vue';
 import SaleTable from './SaleTable.vue';
 import UseSales from '../../Composables/sales';
 import usePayment from '../../Composables/payments'
 import useSaleDetails from '../../Composables/saleDetails'
+
+// Lazy-loaded modals
+const ModalAddPayment = defineAsyncComponent(() => import('../Payments/ModalAddPayment.vue'));
+const ModalViewPayment = defineAsyncComponent(() => import('./ModalViewPayment.vue'));
+const ModalViewSaleDetail = defineAsyncComponent(() => import('./ModalViewSaleDetail.vue'));
+
 
 const { sales, getSales, saleStatuses, getCountSaleStatuses } = UseSales();
 const { payments, findPaymentBySale } = usePayment();
