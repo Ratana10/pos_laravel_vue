@@ -1,10 +1,13 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import useNotifications from '../notifications';
+
 export default function usePurchases(){
 
    const purchases = ref({data: []})
    const purchaseCode = ref(null);
    const router = useRouter();
+   const { showToast } = useNotifications();
 
    const getPurchases = async (perpage=10, page=1) =>{
       await axios.get(`/api/v1/purchases`,{
@@ -30,6 +33,7 @@ export default function usePurchases(){
    const storePurchase = async (data) =>{
       await axios.post('/api/v1/purchases', data)
       await router.push({name: 'admin.purchases.index'})
+      showToast('success', 'create purchase successfully');
    };
 
    const destroyPurchase = async (id) =>{

@@ -23,7 +23,7 @@
          <td>{{ purchase.created_by }}</td>
          <td>
             <button class="btn btn-primary btn-sm" @click="$emit('edit', purchases)"><i class="fa fa-edit"></i></button>
-            <button class="btn btn-danger btn-sm ml-1" @click="$emit('delete', purchase.id)"><i class="fa fa-trash"></i></button>
+            <button class="btn btn-danger btn-sm ml-1" @click="$emit('delete', purchase)"><i class="fa fa-trash"></i></button>
          </td>
       </tr>
    </tbody>

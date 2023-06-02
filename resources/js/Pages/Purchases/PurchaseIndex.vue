@@ -82,10 +82,10 @@ onMounted(()=>{
    getPurchases(); 
 })
 
-const deletePurchase = async (id) =>{
-   await confirmNotification().then((result) =>{
+const deletePurchase = async (purchase) =>{
+   await confirmNotification(purchase.code).then((result) =>{
       if(result){
-         destroyPurchase(id)
+         destroyPurchase(purchase.id)
          getPurchases();
       }
    });  
