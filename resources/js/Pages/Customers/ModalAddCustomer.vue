@@ -66,6 +66,9 @@ export default {
       Form,
       Field
    },
+   mounted() {
+   console.log("modal"); 
+   },
    props: {
       editing: {
          data: Object,

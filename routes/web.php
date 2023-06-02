@@ -1,18 +1,19 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\PosController;
+use App\Http\Controllers\Admin\SaleController;
+use App\Http\Controllers\Admin\UnitController;
+use App\Http\Controllers\ApplicationController;
+use App\Http\Controllers\Admin\PaymentController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Test\SaleTestController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\ExchangeController;
-use App\Http\Controllers\Admin\PaymentController;
-use App\Http\Controllers\Admin\PosController;
-use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\PurchaseController;
-use App\Http\Controllers\Admin\SaleController;
 use App\Http\Controllers\Admin\SupplierController;
-use App\Http\Controllers\Admin\UnitController;
-use App\Http\Controllers\ApplicationController;
-use App\Http\Controllers\Test\SaleTestController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\SaleDetailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -90,6 +91,10 @@ Route::prefix('/api/v1')->group(function (){
     Route::controller(SaleController::class)->group(function () {
         Route::get('/sales', 'index')->name('sales.index');
         Route::get('/sales-status', 'getNumberOfSaleStatus')->name('sales.status');
+    });
+
+    Route::controller(SaleDetailController::class)->group(function () {
+        Route::get('/saledetails', 'index')->name('saledetails.index');
     });
 
     Route::controller(PosController::class)->group(function () {

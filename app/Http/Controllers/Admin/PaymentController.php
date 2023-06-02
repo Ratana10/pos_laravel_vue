@@ -20,6 +20,9 @@ class PaymentController extends Controller
             
             $payments = Payment::query()
             ->with('user:id,name')
+            ->when(request()->has('sale_id'), function($query){
+                $query->where('sale_id', request('sale_id'));
+            })
             ->latest()
             ->paginate(request('perPage'), ['*'], 'page', request('page'))
             ->through(fn ($payment)=>[
@@ -65,6 +68,7 @@ class PaymentController extends Controller
             return $this->responseError([], $ex->getMessage());
         }
     }
+    
     public function checkPaymentToUpdateStatus($sale_id)
     {
         $sale = Sale::find($sale_id);

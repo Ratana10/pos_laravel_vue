@@ -2,7 +2,7 @@
    <div>
 =      <div class="content-header">
          <div class="container-fluid">
-            <div class="row mb-2">
+            <div class="mb-2 row">
                <div class="col-sm-6">
                   <h1 class="m-0">Purchases</h1>
                </div>
@@ -19,7 +19,7 @@
          <div class="container-fluid">
             <div class="d-flex justify-content-between">
                <div>
-                  <router-link to="/admin/purchases/create" type="button" class="btn btn-primary mb-2">
+                  <router-link to="/admin/purchases/create" type="button" class="mb-2 btn btn-primary">
                      <i class="fa fa-plus"></i>
                      Add New Purchase
                   </router-link>

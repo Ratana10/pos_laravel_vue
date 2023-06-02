@@ -23,23 +23,21 @@
             <td>{{ sale.customer }}</td>
             <td>$ {{ sale.due_amount }}</td>
             <td>$ {{ sale.paid_amount }}</td>
-            <td>$ {{ sale.remain }}</td>
+            <td>$ {{ (sale.due_amount - sale.paid_amount).toFixed(2) }}</td>
             <td>
                <span :class="`btn btn-sm btn-${sale.status.color} `">{{ sale.status.name }}</span>
             </td>
             <td>{{ sale.sell_by }}</td>
-            <td >
+            <td>
                <!-- {{ actionsOptions }} -->
                <select @change="onChangeAction(sale, $event.target.value)">
-                  <option >Select Option ...</option>
-                  <option 
-                   v-for="(item, index) in actionOptions" 
-                   :key="index" :value="item.value"
-                   class="form-control">
-                   {{ item.label }}
+                  <option value="default" selected>Select Option ...</option>
+                  <option v-for="(item, index) in actionOptions" :key="index" :value="item.value" class="form-control">
+                     {{ item.label }}
                   </option>
                </select>
                <!-- <button class="btn btn-primary" @click="$emit('show', sale)">Payment</button> -->
+               
             </td>
          </tr>
       </tbody>
@@ -52,9 +50,9 @@
 </template>
    
 <script setup>
-import { defineProps } from 'vue';
+import { defineProps, ref } from 'vue';
 const props = defineProps({
-   sales:{
+   sales: {
       data: Array,
       default: null,
    },
@@ -64,9 +62,11 @@ const props = defineProps({
    }
 })
 
-const onChangeAction = (sale, value)=>{
+
+
+const onChangeAction = (sale, value) => {
    let selectedOption = props.actionOptions.find(e => e.value === value)
-   if(selectedOption && selectedOption.function){
+   if (selectedOption && selectedOption.function) {
       selectedOption.function(sale);
    }
 }
