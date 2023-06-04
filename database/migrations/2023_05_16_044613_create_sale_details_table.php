@@ -12,7 +12,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('sale_details', function (Blueprint $table) {
-            $table->id();
             $table->foreignId('sale_id')
                         ->constrained('sales', 'id')
                         ->onUpdate('cascade')
@@ -26,6 +25,7 @@ return new class extends Migration
             $table->decimal('discount', 10, 2)->default(0.00);
             $table->decimal('amount', 10, 2)->default(0.00);
             $table->timestamp('created_at')->useCurrent();
+            $table->primary(['sale_id', 'product_id']);
         });
     }
 

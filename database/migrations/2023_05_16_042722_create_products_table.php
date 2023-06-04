@@ -17,15 +17,18 @@ return new class extends Migration
             $table->string('name');
             $table->foreignId('category_id')
                     ->constrained('categories','id')
+                    ->onDelete('cascade')
                     ->onUpdate('cascade');
             $table->foreignId('unit_id')
                     ->constrained('units','id')
+                    ->onDelete('cascade')
                     ->onUpdate('cascade');
             $table->decimal('price',10,2)->default(0);
+            $table->decimal('cost',10,2)->default(0);
             $table->decimal('discount',10,2)->default(0);
             $table->integer('quantity')->default(0);
             $table->integer('alert')->default(0);
-            $table->string('image')->nullable();
+            $table->longText('image')->nullable();
             $table->string('barcode')->nullable();
             $table->boolean('status')->default(1);
             $table->timestamp('created_at')->useCurrent();

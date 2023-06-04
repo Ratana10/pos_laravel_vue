@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->boolean('gender');
             $table->string('phone')->unique()->nullable();
+            $table->string('facebook')->nullable();
             $table->longText('address')->nullable();
             $table->longText('description')->nullable();
             $table->boolean('status')->default(1);

@@ -11,14 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('purchases', function (Blueprint $table) {
+        Schema::create('purchases_order', function (Blueprint $table) {
             $table->id();
             $table->string('code')->nullable();
             $table->date('date');
+            $table->decimal('subtotal', 10, 2)->default(0);
+            $table->decimal('discount', 10, 2)->default(0);
             $table->decimal('total', 10, 2)->default(0);
-            $table->integer('status')->default(1)->comment('1=pending,2=received,3=return');
+            $table->foreignId('supplier_id')
+                    ->constrained('suppliers', 'id')
+                    ->onDelete('cascade')
+                    ->onUpdate('cascade');
+            $table->tinyInteger('payment_status')->default(2);
+            $table->tinyInteger('status')->default(2);
             $table->foreignId('created_by')
                     ->constrained('users', 'id')
+                    ->onDelete('cascade')
                     ->onUpdate('cascade');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrentOnUpdate()->nullable();
@@ -30,6 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('purchases');
+        Schema::dropIfExists('purchases_order');
     }
 };

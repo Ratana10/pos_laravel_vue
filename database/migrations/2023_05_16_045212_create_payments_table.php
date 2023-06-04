@@ -13,19 +13,23 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
+            $table->date('date');
             $table->foreignId('sale_id')
                     ->constrained('sales', 'id')
+                    ->onDelete('cascade')
                     ->onUpdate('cascade');
-            $table->string('sale_code')->nullable();
-            $table->decimal('due_amount', 10, 2)->default(0.00);
-            $table->decimal('paid_amount', 10, 2)->default(0.00);
+            $table->decimal('due_amount', 10, 2)->default(0);
+            $table->decimal('paid_amount', 10, 2)->default(0);
             $table->decimal('change', 10, 2)->default(0);
-            $table->decimal('amount', 10, 2)->default(0.00);
-            $table->integer('payment_method')->comment('1=cash,2=aba')->default(1);
+            $table->decimal('amount', 10, 2)->default(0);
+            $table->decimal('remain', 10, 2)->default(0);
+            $table->integer('pay_by')->default(1);
             $table->foreignId('created_by')
                     ->constrained('users', 'id')
+                    ->onDelete('cascade')
                     ->onUpdate('cascade');
             $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrentOnUpdate()->nullable();
         });
     }
 

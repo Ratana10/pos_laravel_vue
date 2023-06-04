@@ -11,27 +11,28 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('purchase_details', function (Blueprint $table) {
-            $table->id();
-            $table->string('purchase_code');
-            $table->foreignId('purchase_id')
-                    ->constrained('purchases', 'id')
-                    ->onUpdate('cascade');
-            $table->foreignId('supplier_id')
-                    ->constrained('suppliers', 'id')
+        Schema::create('purchase_order_details', function (Blueprint $table) {
+            $table->primary(['purchase_order_id','product_id']);
+            $table->foreignId('purchase_order_id')
+                    ->constrained('purchases_order', 'id')
+                    ->onDelete('cascade')
                     ->onUpdate('cascade');
             $table->foreignId('product_id')
                     ->constrained('products', 'id')
+                    ->onDelete('cascade')
                     ->onUpdate('cascade');
             $table->string('product_name');
             $table->decimal('cost', 10,2)->default(0);
-            $table->integer('quantity')->default(0);
+            $table->integer('quantity')->default(1);
             $table->foreignId('unit_id')
                     ->constrained('units', 'id')
+                    ->onDelete('cascade')
                     ->onUpdate('cascade');
             $table->decimal('discount', 10,2)->default(0);
             $table->decimal('amount', 10,2)->default(0);            
+            $table->tinyInteger('status')->default(2);            
             $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrentOnUpdate()->nullable();
         });
     }
 

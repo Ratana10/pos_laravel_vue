@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->boolean('status')->default(1)->comment('1=active, 0=inactive');
             $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrentOnUpdate()->nullable();
         });
     }
 
