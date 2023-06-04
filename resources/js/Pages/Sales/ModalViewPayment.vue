@@ -4,7 +4,7 @@
             <div class="modal-content">
                <div class="modal-header">
                   <h1 class="modal-title fs-5" id="exampleModalToggleLabel">
-                     <span class="text-lg font-semibold text-gray-400">VIEW PAYMENTS | Sale: {{ sale_code }} </span>
+                     <span class="text-lg font-semibold text-gray-400" v-if="sale">VIEW PAYMENTS | Sale: {{ sale.sale_code }} </span>
                      <span class=""></span>
                   </h1>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -12,6 +12,9 @@
                   </button>
                </div>
                <div class="modal-body">
+               <div class="mb-4" v-if="sale">
+                  <p>Payment Status: {{ sale.status.name }} </p>
+               </div>
                <table class="table text-center table-bordered">
                   <thead>
                      <tr class="bg-blue-400">
@@ -52,12 +55,12 @@
 <script setup>
 import { defineProps } from 'vue';
 const props = defineProps({
-   payments:{
+   payments: {
       data: Array,
       default: null,
    },
-   sale_code:{
-      data: String,
+   sale: {
+      type: Object,
       default: null,
    }
 })

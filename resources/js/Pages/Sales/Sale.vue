@@ -4,7 +4,7 @@
          <div class="container-fluid">
             <div class="mb-2 row">
                <div class="col-sm-6">
-                  <h1 class="m-0">Sales</h1>
+                  <h1 class="m-0 font-semibold">Sales</h1>
                </div>
                <div class="col-sm-6">
                   <ol class="breadcrumb float-sm-right">
@@ -72,9 +72,19 @@
       </div>
 
       <modal-add-payment :editing="editing" />
-      <modal-view-payment :payments="payments" :sale_code="sale_code" />
+      <!-- <modal-view-payment v-if="isModalViewPaymentVisible" :payments="payments" :sale_code="sale_code" /> -->
       <modal-view-sale-detail :sale_details="sale_details" :sale="sale"  :payments="payments" />
 
+      <suspense>
+      </suspense>
+         <suspense>
+            <template #default>
+               <modal-view-payment :payments="payments" :sale="sale" />
+            </template>
+            <template #fallback>
+               <p>Loading...</p>
+            </template>
+      </suspense>
    </div>
 </template>
 <script setup>
@@ -94,9 +104,12 @@ import UseSales from '../../Composables/sales';
 import usePayment from '../../Composables/payments'
 import useSaleDetails from '../../Composables/saleDetails'
 
+const isModalViewPaymentVisible = ref(false);
 // Lazy-loaded modals
+const ModalViewPayment = defineAsyncComponent (
+   ()=> import('./ModalViewPayment.vue')
+);
 const ModalAddPayment = defineAsyncComponent(() => import('../Payments/ModalAddPayment.vue'));
-const ModalViewPayment = defineAsyncComponent(() => import('./ModalViewPayment.vue'));
 const ModalViewSaleDetail = defineAsyncComponent(() => import('./ModalViewSaleDetail.vue'));
 
 
@@ -140,9 +153,9 @@ function addPayment(sale) {
    editing.value = sale
    openModal();
 }
-function viewPayment(sale) {
-   sale_code.value = sale.sale_code;
-   findPaymentBySale(sale.id);
+function viewPayment(s) {
+   sale.value = s;
+   findPaymentBySale(s.id);
    $('#modal-view-payment').modal('show');
 }
 

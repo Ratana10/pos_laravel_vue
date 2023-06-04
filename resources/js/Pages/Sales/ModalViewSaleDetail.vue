@@ -1,5 +1,6 @@
 <template lang="">
-<div class="modal fade" id="modal-view-sale-detail" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+<div>
+   <div class="modal fade" id="modal-view-sale-detail" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
    <div class="modal-dialog modal-lg modal-dialog-centered">
       <div class="modal-content">
          <div class="modal-header">
@@ -57,12 +58,12 @@
       </div>
    </div>
 </div>
+
+</div>
 </template>
 
 <script setup>
-import {
-   defineProps
-} from 'vue';
+import { defineProps } from 'vue';
 const props = defineProps({
    sale_details: {
       type: Array,
