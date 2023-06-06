@@ -29,6 +29,7 @@ export default function useNotifications() {
     });
   };
 
+
   const showToast = (icon, title) => {
     Swal.fire({
       icon: icon,

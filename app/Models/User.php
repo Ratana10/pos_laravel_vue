@@ -23,6 +23,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'type',
+        'status',
     ];
 
     /**
@@ -30,37 +32,37 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    // protected $hidden = [
+    //     'password',
+    //     'remember_token',
+    // ];
 
     /**
      * The attributes that should be cast.
      *
      * @var array<string, string>
      */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    // protected $casts = [
+    //     'email_verified_at' => 'datetime',
+    // ];
 
     /**
      * Get all of the comments for the User
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function payment(): HasMany
-    {
-        return $this->hasMany(Payment::class, 'created_by', 'id');
-    }
+    // public function payment(): HasMany
+    // {
+    //     return $this->hasMany(Payment::class, 'created_by', 'id');
+    // }
 
-    public function sale(): HasMany
-    {
-        return $this->hasMany(Sale::class, 'created_by', 'id');
-    }
+    // public function sale(): HasMany
+    // {
+    //     return $this->hasMany(Sale::class, 'created_by', 'id');
+    // }
     
-    public function purchases(): HasMany
-    {
-        return $this->hasMany(Purchase::class, 'created_by', 'id');
-    }
+    // public function purchases(): HasMany
+    // {
+    //     return $this->hasMany(Purchase::class, 'created_by', 'id');
+    // }
 }

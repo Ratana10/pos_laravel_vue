@@ -7,7 +7,7 @@
    </a>
 
    <div class="sidebar">
-      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+      <div class="pb-3 mt-3 mb-3 user-panel d-flex">
          <div class="image">
             <img src="https://adminlte.io/themes/v3/dist/img/user2-160x160.jpg" class="img-circle elevation-2"
                alt="User Image">
@@ -25,6 +25,14 @@
                   <i class="nav-icon fas fa-tachometer-alt"></i>
                   <p>
                      Dashboard
+                  </p>
+               </router-link>
+            </li>
+            <li class="nav-item">
+               <router-link to="/admin/users" class="nav-link" active-class="active">
+                  <i class="nav-icon fas fa-th"></i>
+                  <p>
+                     Users
                   </p>
                </router-link>
             </li>
@@ -72,7 +80,7 @@
                <router-link to="/admin/products"  class="nav-link" :class="$route.path.startsWith('/admin/products') ? 'active' : '' ">
                   <i class="nav-icon fas fa-th"></i>
                   <p>
-                     Product
+                     Products
                   </p>
                </router-link>
             </li>
@@ -88,7 +96,7 @@
                <router-link to="/admin/payments" class="nav-link" active-class="active">
                   <i class="nav-icon fas fa-th"></i>
                   <p>
-                     Payment
+                     Payments
                   </p>
                </router-link>
             </li>
@@ -96,7 +104,7 @@
                <router-link to="/admin/sales" class="nav-link" active-class="active">
                   <i class="nav-icon fas fa-th"></i>
                   <p>
-                     Sale
+                     Sales
                   </p>
                </router-link>
             </li>
@@ -112,7 +120,7 @@
                <router-link to="/admin/purchases" class="nav-link" :class="$route.path.startsWith('/admin/purchases') ? 'active' : '' ">
                   <i class="nav-icon fas fa-th"></i>
                   <p>
-                     Purchase 
+                     Purchase s
                   </p>
                </router-link>
             </li>

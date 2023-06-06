@@ -12,6 +12,11 @@ export default
       component:  ()=> import('./Pages/Customers/Customer.vue'),
    }, 
    {
+      path: '/admin/users',
+      name: 'admin.users.index',
+      component:  ()=> import('./Pages/Users/UserIndex.vue'),
+   }, 
+   {
       path: '/admin/suppliers',
       name: 'admin.suppliers',
       component:  ()=> import('./Pages/Suppliers/Supplier.vue'),
