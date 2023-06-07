@@ -22,7 +22,7 @@ class SupplierController extends Controller
             }
             else{
                 $suppliers = Supplier::latest()
-                        ->paginate(request('perPage'), ['*'], 'page', request('page'));
+                    ->paginate(request('perpage') ?? 10, ['*'], 'page', request('page') ?? 1);
             
             }
                     
@@ -36,15 +36,8 @@ class SupplierController extends Controller
     {
         $validated = $request->validated();
         try {
-            $supplier = Supplier::create([
-                'name' => $validated['name'],
-                'gender' =>  $validated['gender'],
-                'phone' =>  $validated['phone'] ?? null,
-                'address' =>  $validated['address'] ?? null,
-                'description' =>  $validated['description'] ?? null,
-                'status' =>  $validated['status'],
-            ]);
-            return $this->responseSuccess($supplier, 'Supplier create successfully');
+            $supplier = Supplier::create($validated);
+            return $this->responseSuccess($supplier, 'supplier create successfully');
 
         } catch (\Exception $ex) {
             return $this->responseError([], $ex->getMessage());
@@ -55,22 +48,15 @@ class SupplierController extends Controller
     {
         $validated = $request->validated();
         try {
-            $supplier->update([
-                'name' => $validated['name'],
-                'gender' =>  $validated['gender'],
-                'phone' =>  $validated['phone'] ?? null,
-                'address' =>  $validated['address'] ?? null,
-                'description' =>  $validated['description'] ?? null,
-                'status' =>  $validated['status'],
-            ]);
-            return $this->responseSuccess($supplier, 'Supplier Update successfully');
+            $supplier->update($validated);
+            return $this->responseSuccess($supplier, 'supplier update successfully');
 
         } catch (\Exception $ex) {
             return $this->responseError([], $ex->getMessage());
         }              
     }
 
-    public function destory(Supplier $supplier)
+    public function destroy(Supplier $supplier)
     {
         try {
             $supplier->delete();

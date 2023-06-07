@@ -25,6 +25,7 @@ class SupplierCreateRequest extends FormRequest
             'name' => 'required|max:100',
             'gender' => 'required',
             'phone' => 'nullable|unique:suppliers,phone,',
+            'facebook' => 'nullable|max:255',
             'address' => 'nullable|max:255',
             'description' => 'nullable|max:255',
             'status' => 'required',

@@ -25,7 +25,9 @@ class SupplierRequest extends FormRequest
             'name' => 'required|max:15',
             'gender' => 'required',
             'phone' => 'nullable|unique:supplier, phone,'.$this->id,
+            'facebook' => 'nullable|max:255',
             'address' => 'nullable|max:255',
+            'description' => 'nullable|max:255',
             'status' => 'required',
         ];
     }

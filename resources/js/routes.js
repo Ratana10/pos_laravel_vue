@@ -18,8 +18,8 @@ export default
    }, 
    {
       path: '/admin/suppliers',
-      name: 'admin.suppliers',
-      component:  ()=> import('./Pages/Suppliers/Supplier.vue'),
+      name: 'admin.suppliers.index',
+      component:  ()=> import('./Pages/Suppliers/SupplierIndex.vue'),
    },
    {
       path: '/admin/categories',
