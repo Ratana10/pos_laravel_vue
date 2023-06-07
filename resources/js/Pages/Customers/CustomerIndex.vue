@@ -19,14 +19,14 @@
       <div class="container-fluid">
          <div class="d-flex justify-content-between">
             <div>
-               <button @click="save" type="button" class="mb-2 btn btn-primary">
+               <button @click="openModal" type="button" class="mb-2 btn btn-primary">
                   <i class="fa fa-plus"></i>
                   Add New Customer
                </button>
             </div>
             <div>
                <div class="input-group">
-                  <input v-model="search" type="text" class="form-control" placeholder="Search Customer">
+                  <input  type="text" class="form-control" placeholder="Search Customer">
                   <div class="input-group-prepend">
                      <span class="input-group-text">
                         <i class="fa fa-search"></i>
@@ -40,7 +40,7 @@
                <div class="row">
                   <div class="col-sm-12">
                      <div>
-                        <label for="">Pages: </label>
+                        <label >Showing: </label>
                         <select v-model="perpage" class="ml-2">
                            <option v-for="(page, index) in pages" :key="index" :value="page.value">{{ page.label }} </option>
                         </select>
@@ -49,7 +49,7 @@
                </div>
                <div class="row">
                   <div class="col-sm-12">
-                     <customer-table :customers="customers" @edit="handleEdit" @delete="handleDelete" />
+                     <CustomerTable :customers="customers" @delete="deleteCustomer" @edit="editCustomer" />
                   </div>
                </div>
                <div class="d-flex justify-content-between">
@@ -67,34 +67,46 @@
       </div>
    </div>
 
-   <modal-add-customer :editing="editing" @submit="handleSubmit" />
+   <ModalAddCustomer :editing="editing" @submit="getCustomers" />
 </div>
 </template>
 
 <script setup>
-import { onMounted, ref, defineAsyncComponent } from 'vue';
-import useCustomers from '../../Composables/customers';
-import CustomerTable from './CustomerTable.vue';
-import ModalAddCustomer from './ModalAddCustomer.vue';
+
 import {Bootstrap4Pagination} from 'laravel-vue-pagination';
 import usePagination from '../../pagination';
+import CustomerTable from './CustomerTable.vue';
+import ModalAddCustomer from './ModalAddCustomer.vue';
+import { onMounted, ref } from 'vue';
+import useCustomers from '../../Composables/customers';
 import useNotifications from '../../notifications';
 
+const {customers, getCustomers, destroyCustomer} = useCustomers();
 
-const { customers, getCustomers, storeCustomer }  = useCustomers();
-const { perpage, pages, onPageChange } = usePagination();
-const { confirmNotification, showToast } = useNotifications();
+const {pages, perpage, onPageChange} = usePagination(getCustomers);
 
+const {confirmNotification} = useNotifications();
+onMounted(()=> getCustomers());
 
-onMounted(()=>{
-   getCustomers();
-})
+const deleteCustomer = async (customer) =>{
+   await confirmNotification(customer.name)
+   .then((result) =>{
+      if(result){
+         destroyCustomer(customer.id)
+         getCustomers();
+      }
+   });  
+}
 
 const editing = ref(null);
+const editCustomer = (customer) =>{
+   editing.value = customer;
+   $('#modal-add-customer').modal('show');
+}
 
-const save = async ()=>{
-   await $('#modal-add-customer').modal('show');
+const openModal = async ()=>{
    editing.value = null;
+   await $('#modal-add-customer').modal('show');
 }
 
 </script>

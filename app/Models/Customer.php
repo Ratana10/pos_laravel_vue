@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\GenderType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,7 +11,6 @@ class Customer extends Model
 {
     use HasFactory;
     
-    public $timestamps = false;
     protected $table = 'customers';
     protected $fillable = [
         'name', 
@@ -18,6 +18,10 @@ class Customer extends Model
         'phone', 
         'address', 
         'description'
+    ];
+    
+    protected $casts = [
+        'gender' => GenderType::class,
     ];
 
     // protected $attributes = [

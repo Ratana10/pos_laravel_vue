@@ -8,8 +8,8 @@ export default
    },
    {
       path: '/admin/customers',
-      name: 'admin.customers',
-      component:  ()=> import('./Pages/Customers/Customer.vue'),
+      name: 'admin.customers.index',
+      component:  ()=> import('./Pages/Customers/CustomerIndex.vue'),
    }, 
    {
       path: '/admin/users',

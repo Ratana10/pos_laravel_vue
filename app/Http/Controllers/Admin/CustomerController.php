@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Customer;
+use Illuminate\Http\Request;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
@@ -22,7 +23,7 @@ class CustomerController extends Controller
                     ->get();
             } else {
                 $customers = Customer::latest()
-                    ->paginate(request('perPage'), ['*'], 'page', request('page'));
+                    ->paginate(request('perpage') ?? 10, ['*'], 'page', request('page') ?? 1);
             }
             return $this->responseSuccess($customers, 'success');
         } catch (\Exception $exception) {
@@ -34,38 +35,32 @@ class CustomerController extends Controller
     {
         $validated = $request->validated();
         try {
-            $customer = Customer::create([
-                'name' => $validated['name'],
-                'gender' =>  $validated['gender'],
-                'phone' =>  $validated['phone'] ?? null,
-                'address' =>  $validated['address'] ?? null,
-                'description' =>  $validated['description'] ?? null,
-            ]);
-            $this->responseSuccess($customer, 'Customer created successfully');
+            Customer::create($validated);
+            $this->responseSuccess([], 'Customer created successfully');
         } catch (\Exception $ex) {
             $this->responseError([], $ex->getMessage());
         }
     }
 
-    public function update(CustomerCreateRequest $request, Customer $customer)
+    public function update(Request $request, Customer $customer)
     {
-        $validated = $request->validated();
+        $validated = $request->validate([
+            'name' => 'required|max:100',
+            'gender' => 'required',
+            'phone' => 'nullable|unique:customers,phone,'. $customer->id,
+            'address' => 'nullable|max:255',
+            'description' => 'nullable|max:255',
+        ]);
 
         try {
-            $customer->update([
-                'name' => $validated['name'],
-                'gender' =>  $validated['gender'],
-                'phone' =>  $validated['phone'] ?? null,
-                'address' =>  $validated['address'] ?? null,
-                'description' =>  $validated['description'] ?? null,
-            ]);
-            $this->responseSuccess($customer, 'Customer updated successfully');
+            $customer->update($validated);
+            $this->responseSuccess([], 'Customer updated successfully');
         } catch (\Exception  $ex) {
             $this->responseError([], $ex->getMessage());
         }
     }
 
-    public function destory(Customer $customer): JsonResponse
+    public function destroy(Customer $customer): JsonResponse
     {
         try {
             $deleted = $customer->delete();

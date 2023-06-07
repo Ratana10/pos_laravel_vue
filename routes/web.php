@@ -29,7 +29,7 @@ Route::prefix('/api/v1')->group(function () {
         Route::get('/customers', 'index')->name('customers.index');
         Route::post('/customers', 'store')->name('customers.store');
         Route::put('/customers/{customer}', 'update')->name('customers.update');
-        Route::delete('/customers/{customer}', 'destory')->name('customers.destory');
+        Route::delete('/customers/{customer}', 'destroy')->name('customers.destroy');
         Route::get('/customers-search', 'search')->name('customers.search');
     });
 

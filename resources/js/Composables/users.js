@@ -1,4 +1,3 @@
-import { success } from 'toastr';
 import {ref} from 'vue';
 
 export default function useUsers(){
@@ -7,10 +6,7 @@ export default function useUsers(){
 
    const getUsers = async (perpage=10, page=1)=>{
       await axios.get('/api/v1/users',{
-         params:{
-            page: page,
-            perpage: perpage,
-         }
+         params:{ page: page, perpage: perpage }
       })
       .then(res =>{
          if(res.data.status){
