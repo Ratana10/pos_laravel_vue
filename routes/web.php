@@ -53,7 +53,7 @@ Route::prefix('/api/v1')->group(function () {
         Route::get('/exchanges', 'index')->name('exchanges.index');
         Route::post('/exchanges', 'store')->name('exchanges.store');
         Route::put('/exchanges/{exchange}', 'update')->name('exchanges.update');
-        Route::delete('/exchanges/{exchange}', 'destory')->name('exchanges.destory');
+        Route::delete('/exchanges/{exchange}', 'destroy')->name('exchanges.destroy');
     });
 
     Route::controller(\App\Http\Controllers\Admin\UnitController::class)->group(function () {

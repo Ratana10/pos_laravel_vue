@@ -1,5 +1,6 @@
 <template>
 <div class="modal fade" id="modal-add-exchange" tabindex="-1">
+   <Form  @submit="submit" :validation-schema="schema" v-slot="{ errors,resetForm }" :initial-values="editing ? editing : form">
    <div class="modal-dialog">
       <div class="modal-content">
          <div class="modal-header ">
@@ -7,21 +8,20 @@
                <span v-if="editing">Edit Exchange</span>
                <span v-else>Add New Exchange</span>
             </h4>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="resetForm">
                <span aria-hidden="true">&times;</span>
             </button>
          </div>
-         <Form ref="form" @submit="handleSubmit" :validation-schema="schema" v-slot="{ errors }" :initial-values="editing ? editing : form">
             <Field name="id" type="hidden" />
             <div class="modal-body">
                <div class="form-group">
                   <label for="dollar">Dollar</label>
-                  <Field name="dollar" type="text" class="form-control" :class="{'is-invalid': errors.dollar}" placeholder="Enter Dollar" autofocus />
+                  <Field name="dollar" type="number" class="form-control" :class="{'is-invalid': errors.dollar}" placeholder="Enter Dollar" autofocus />
                   <span class="invalid-feedback">{{ errors.dollar }}</span>
                </div>
                <div class="form-group">
                   <label for="khmer">Khmer</label>
-                  <Field name="khmer" type="text" class="form-control" :class="{'is-invalid': errors.khmer}" placeholder="Enter Khmer" />
+                  <Field name="khmer" type="number" class="form-control" :class="{'is-invalid': errors.khmer}" placeholder="Enter Khmer" />
                   <span class="invalid-feedback">{{ errors.khmer }}</span>
                </div>
                <div class="form-group">
@@ -34,83 +34,80 @@
                </div>
             </div>
             <div class="modal-footer justify-content-between">
-               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+               <button type="button" class="btn btn-default" data-dismiss="modal" @click="resetForm">Close</button>
                <input type="submit" class="btn" :class=" editing ? 'btn-success' : 'btn-primary' " :value="editing ? 'Update' : 'Save'" />
             </div>
-         </Form>
+         </div>
       </div>
+   </Form>
    </div>
-</div>
 </template>
 
-<script>
-import {
-   Form,
-   Field
-} from 'vee-validate'
+<script setup>
+
 import * as yup from 'yup';
-export default {
-   components: {
-      Form,
-      Field
-   },
-   props: {
-      editing: {
-         data: Object,
-         default: null,
-      }
-   },
-   computed: {
-      schema() {
-         return yup.object({
-            // dollar: yup.number().required(),
-            khmer: yup.number().required(),
-            status: yup.string().required('please select status'),
+import { Form, Field } from 'vee-validate';
+import {reactive, defineEmits, defineProps } from 'vue';
+import useExchanges from '../../Composables/exchanges';
+import useNotifications from '../../notifications';
 
-         })
-      }
-   },
-   data() {
-      return {
-         form: {
-            dollar: 1,
-            khmer: 4000,
-            status: 1,
-         },
-      }
-   },
-   methods: {
-      handleSubmit(value, action) {
-         let url = this.editing ? `/api/v1/exchanges/${value.id}` : '/api/v1/exchanges';
-         let method = this.editing ? 'put' : 'post';
+const props = defineProps({
+   editing:{
+      type: Object,
+      default: null,
+   }
+})
 
-         axios
-            .request({
-               method: method,
-               url: url,
-               data: value
-            })
-            .then(res => {
-               action.resetForm();
-               $('#modal-add-exchange').modal('hide');
-               showToast(
-                  'success',
-                  `${this.editing 
-                     ? 'Exchange updated successfully' 
-                     : 'Exchange created successfully' }`
-               );
-               this.$emit('submit');
-            })
-            .catch(err => {
-               if (err.response.data.errors) {
-                  action.setErrors(err.response.data.errors);
-               }else{
-                  showToast('error', err.message);  
-               }
+const form = reactive({
+   dollar: 1,
+   khmer: 4000,
+   status: 1,
+})
 
-            })
-      },
-   },
+const schema = yup.object({
+   dollar: yup.number().required(),
+   khmer: yup.number().required(),
+   status: yup.string().required(),
+});
 
+const emit = defineEmits(['submit']);
+const submit = async (value, action) => {
+   if(props.editing){
+      editExchange(value, action);
+   }else{
+      createExchange(value, action)
+   }
+
+}
+
+const { storeExchange,updateExchange } = useExchanges();
+
+const createExchange = (value, action)=>{
+   storeExchange(value)
+   .then(res => {
+      const {showToast} = useNotifications();
+      showToast('success', 'exchange create successfully');
+      action.resetForm();
+      $('#modal-add-exchange').modal('hide');
+      emit('submit')
+   })
+  .catch(errors => {
+      action.setErrors(errors)
+   });
+}
+
+const editExchange = (value, action)=>{
+   console.log('test');
+   updateExchange(value)
+   .then(res => {
+      const {showToast} = useNotifications();
+      showToast('success', 'exchange update successfully');
+      action.resetForm();
+      $('#modal-add-exchange').modal('hide');
+      emit('submit')
+   })
+  .catch(errors => {
+      action.setErrors(errors)
+   });
 }
 </script>

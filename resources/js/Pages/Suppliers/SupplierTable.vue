@@ -16,8 +16,8 @@
          <td>{{ index+1 }}</td>
          <td>{{ supplier.name }}</td>
          <td>{{ supplier.gender == 1 ? 'Male' : 'Female' }}</td>
-         <td>{{ supplier.phone }}</td>
-         <td>{{ supplier.description }}</td>
+         <td>{{ supplier.phone ?? '---' }}</td>
+         <td>{{ supplier.description ?? '---' }}</td>
          <td>{{ supplier.status }}</td>
          <td>
             <button class="btn btn-primary btn-sm" @click="$emit('edit', supplier)"><i class="fa fa-edit"></i></button>

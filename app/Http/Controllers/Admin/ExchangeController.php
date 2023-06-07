@@ -14,24 +14,18 @@ class ExchangeController extends Controller
 
     public function index()
     {
-        try {
-            $exchanges = Exchange::latest()->get();
-            
-            return $this->responseSuccess($exchanges, 'success');
-        } catch (\Exception $ex) {
-            return $this->responseError([], $ex->getMessage());
-        } 
+        $exchanges = Exchange::latest()
+            ->paginate(request('perpage') ?? 10, ['*'], 'page', request('page') ?? 1);
+
+        return $this->responseSuccess($exchanges, 'success');
+      
     }
     
     public function store(ExchangeRequest $request)
     {
         $validated = $request->validated();
         try {
-            $exchange = Exchange::create([
-                'dollar' => $validated['dollar'],
-                'khmer' => $validated['khmer'],
-                'status' => $validated['status'],
-            ]);
+            $exchange = Exchange::create($validated);
             
             return $this->responseSuccess($exchange, 'Exchange created successfully');
         } catch (\Exception $ex) {
@@ -56,7 +50,7 @@ class ExchangeController extends Controller
         }
     }
 
-    public function destory(Exchange $exchange)
+    public function destroy(Exchange $exchange)
     {
         try {
             $exchange->delete();

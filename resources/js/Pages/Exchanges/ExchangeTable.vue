@@ -6,70 +6,37 @@
          <th>Dollar</th>
          <th>Khmer</th>
          <th>Status</th>
-         <th>Created_At</th>
-         <th>Updated_At</th>
          <th style="width: 100px;">Actions</th>
       </tr>
    </thead>
-   <tbody>
-      <tr v-for="(exchange, index) in exchanges" :key="index">
+   <tbody v-if="exchanges.data && exchanges.data.length > 0">
+      <tr v-for="(exchange, index) in exchanges.data" :key="index">
          <td>{{ index+1 }}</td>
          <td>{{ exchange.dollar }}</td>
          <td>{{ exchange.khmer }}</td>
          <td>{{ exchange.status == 1 ? 'Active' : 'Inactive' }}</td>
-         <td>{{ exchange.created_at }}</td>
-         <td>{{ exchange.updated_at }}</td>
          <td>
             <button class="btn btn-primary btn-sm" @click="$emit('edit', exchange)"><i class="fa fa-edit"></i></button>
-            <button class="btn btn-danger btn-sm ml-1" @click="confirm(exchange)"><i class="fa fa-trash"></i></button>
+            <button class="ml-1 btn btn-danger btn-sm" @click="$emit('delete', exchange)"><i class="fa fa-trash"></i></button>
          </td>
+      </tr>
+   </tbody>
+   <tbody v-else>
+      <tr>
+         <td colspan="5" class="text-center">No Record</td>
       </tr>
    </tbody>
 </table>
 </template>
 
-<script>
-import Swal from 'sweetalert2';
+<script setup>
+import { defineProps } from 'vue';
 
-export default {
-   props: {
-      exchanges: {
-         data: Array,
-         default: null,
-      }
-   },
-   methods: {
-      confirm(exchange) {
-         Swal.fire({
-            title: `Are you sure delete this?`,
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-         }).then((result) => {
-            if (result.isConfirmed) {
-               Swal.fire({
-                  title: 'Deleted!',
-                  text: `Exchange has been deleted.`,
-                  icon: 'success',
-                  timer: 1500,
-               });
-
-               axios
-                  .delete(`/api/v1/exchanges/${exchange.id}`)
-                  .then(res => {
-                     this.$emit('delete');
-                  })
-                  .catch(err => {
-                     showToast('error', err.message);
-                  })
-            }
-         })
-      }
-   },
-}
+const props = defineProps({
+   exchanges: {
+      type: Array,
+   }
+})
 </script>
 
 <style lang="">

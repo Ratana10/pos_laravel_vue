@@ -122,10 +122,6 @@ const editUser = (value, action)=>{
    });
 }
 
-
-
-
-
 </script>
 
 <style lang=""></style>
