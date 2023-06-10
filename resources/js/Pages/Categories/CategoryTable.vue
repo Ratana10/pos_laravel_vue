@@ -15,7 +15,7 @@
          <td>{{ category.status == 1 ? 'Active' : 'Inactive' }}</td>
          <td>
             <button class="btn btn-primary btn-sm" @click="$emit('edit', category)"><i class="fa fa-edit"></i></button>
-            <button class="btn btn-danger btn-sm ml-1" @click="confirm(category)"><i class="fa fa-trash"></i></button>
+            <button class="btn btn-danger btn-sm ml-1" @click="$emit('delete', category)"><i class="fa fa-trash"></i></button>
          </td>
       </tr>
    </tbody>
@@ -27,61 +27,15 @@
 </table>
 </template>
 
-<script>
-import Swal from 'sweetalert2';
-import {
-   showToast
-} from '../../swalUtils';
+<script setup>
+import { defineProps } from 'vue';
 
-export default {
-   props: {
-      categories: {
-         data: Array,
-         default: null,
-      }
-   },
-   methods: {
-      confirm(category) {
-         Swal.fire({
-            title: `Are you sure delete \n'${category.name}' ?`,
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-         }).then((result) => {
-            if (result.isConfirmed) {
-               this.handleDelete(category.id);
-               Swal.fire({
-                  title: 'Deleted!',
-                  text: `${category.name} has been deleted.`,
-                  icon: 'success',
-                  timer: 1500,
-               });
-            }
-         })
-      },
-      handleDelete(category_id) {
-         axios
-            .delete(`/api/v1/categories/${category_id}`)
-            .then(res => {
-               if (res.data.status) { // success response
-                  this.$emit('delete');
-               } else { // fail response
-                  Swal.fire({
-                     icon: 'error',
-                     title: 'Oops...',
-                     text: `Something went wrong: ${res.data.message}!`,
-                  })
-               }
-            })
-            .catch(err => {
-               showToast('error', err.message);
-            })
-      }
-   },
-}
+const props = defineProps({
+   categories: {
+      type: Array,
+      default: null,
+   }
+})
 </script>
 
 <style lang="">

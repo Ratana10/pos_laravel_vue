@@ -50,7 +50,7 @@ class ProductController extends Controller
                 $path = public_path('uploads/products/' . $imageName);
                 File::put($path, base64_decode($image));
             }
-               
+                           
             $product = Product::create([
                 'code' => $validated['code'],
                 'name' => $validated['name'],

@@ -23,13 +23,13 @@ export default
    },
    {
       path: '/admin/categories',
-      name: 'admin.categories',
-      component:  ()=> import('./Pages/Categories/Category.vue'),
+      name: 'admin.categories.index',
+      component:  ()=> import('./Pages/Categories/CategoryIndex.vue'),
    },
    {
       path: '/admin/exchanges',
-      name: 'admin.exchanges',
-      component:  ()=> import('./Pages/Exchanges/Exchange.vue'),
+      name: 'admin.exchanges.index',
+      component:  ()=> import('./Pages/Exchanges/ExchangeIndex.vue'),
    },
    {
       path: '/admin/units',
