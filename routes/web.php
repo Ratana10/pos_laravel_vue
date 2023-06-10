@@ -46,7 +46,7 @@ Route::prefix('/api/v1')->group(function () {
         Route::get('/categories', 'index')->name('categories.index');
         Route::post('/categories', 'store')->name('categories.store');
         Route::put('/categories/{category}', 'update')->name('categories.update');
-        Route::delete('/categories/{category}', 'destory')->name('categories.destory');
+        Route::delete('/categories/{category}', 'destroy')->name('categories.destroy');
     });
 
     Route::controller(\App\Http\Controllers\Admin\ExchangeController::class)->group(function () {

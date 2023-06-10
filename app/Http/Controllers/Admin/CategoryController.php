@@ -14,30 +14,25 @@ class CategoryController extends Controller
     
     public function index()
     {
-        try {
-            if(request()->has('status')){
-                $categories = Category::select('id','name')
-                            ->where('status', 1)->get();
-            }else{
-                $categories = Category::latest()               
-                ->paginate(request('perPage'), ['*'], 'page', request('page'));
-            }
-            
-            
-            return $this->responseSuccess($categories, 'success');
-        } catch (\Exception $ex) {
-            return $this->responseError([], $ex->getMessage());
-        } 
+
+        if(request()->has('status')){
+            $categories = Category::select('id','name')
+                        ->where('status', 1)->get();
+        }else{
+            $categories = Category::latest()               
+            ->paginate(request('perPage'), ['*'], 'page', request('page'));
+        }
+        
+        
+        return $this->responseSuccess($categories, 'success');
+
     }
     
     public function store(CategoryRequest $request)
     {
         $validated = $request->validated();
         try {
-            $category = Category::create([
-                'name' => $validated['name'],
-                'status' => $validated['status'],
-            ]);
+            $category = Category::create($validated);
             
             return $this->responseSuccess($category, 'Category created successfully');
         } catch (\Exception $ex) {
@@ -49,10 +44,7 @@ class CategoryController extends Controller
     {
         $validated = $request->validated();
         try {
-            $category->update([
-                'name' => $validated['name'],
-                'status' => $validated['status'],
-            ]);
+            $category->update($validated);
             
             return $this->responseSuccess($category, 'Category updated successfully');
         } catch (\Exception $ex) {
@@ -60,7 +52,7 @@ class CategoryController extends Controller
         }
     }
 
-    public function destory(Category $category)
+    public function destroy(Category $category)
     {
         try {
             $category->delete();
