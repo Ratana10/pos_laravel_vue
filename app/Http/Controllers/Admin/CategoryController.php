@@ -17,7 +17,9 @@ class CategoryController extends Controller
 
         if(request()->has('status')){
             $categories = Category::select('id','name')
-                        ->where('status', 1)->get();
+                        ->where('status', request('status'))
+                        ->latest()
+                        ->get();
         }else{
             $categories = Category::latest()               
             ->paginate(request('perpage') ?? 10, ['*'], 'page', request('page') ?? 1);

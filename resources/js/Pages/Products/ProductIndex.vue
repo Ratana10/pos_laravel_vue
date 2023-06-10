@@ -40,16 +40,16 @@
                <div class="row">
                   <div class="col-sm-12">
                      <div>
-                        <label for="">Pages: </label>
-                        <select v-model="perPage" class="ml-2">
-                           <option v-for="page in pages" :key="page.name" :value="page.value">{{ page.name}}</option>
+                        <label for="">Showing: </label>
+                        <select v-model="perpage" class="ml-2">
+                           <option v-for="(page, index) in pages"  :key="index" :value="page.value">{{ page.label }} </option>
                         </select>
                      </div>
                   </div>
                </div>
                <div class="row">
                   <div class="col-sm-12">
-                     <product-table :products="products" @edit="handleEdit" @delete="getProducts" />
+                     <ProductTable :products="products"  @delete="deleteProduct" />
                   </div>
                </div>
                <div class="d-flex justify-content-between">
@@ -59,7 +59,7 @@
                      of {{ products.total }}
                   </div>
                   <div class="">
-                     <Bootstrap4Pagination :data="products" @pagination-change-page="getProducts" />
+                     <Bootstrap4Pagination :data="products" @pagination-change-page="onPageChange" />
                   </div>
                </div>
 
@@ -71,7 +71,34 @@
 </div>
 </template>
 
-<script>
+<script setup>
+import {Bootstrap4Pagination} from 'laravel-vue-pagination';
+import usePagination from '../../pagination';
+import ProductTable from './ProductTable.vue';
+import { onMounted, ref } from 'vue';
+import useNotifications from '../../notifications';
+import useProducts from '../../Composables/products';
+
+const { products, getProducts, destroyProduct } = useProducts();
+
+const { pages, perpage, onPageChange } = usePagination(getProducts);
+
+onMounted(()=> getProducts());
+
+const {confirmNotification} = useNotifications();
+
+const deleteProduct = async (product) =>{
+   await confirmNotification(product.name)
+   .then((result) =>{
+      if(result){
+         destroyProduct(product.id)
+         getProducts();
+      }
+   }); 
+}
+</script>
+
+<!-- <script>
 import ProductTable from './ProductTable.vue';
 import {
    useToastr
@@ -152,6 +179,7 @@ export default {
 }
 </script>
 
-<style>
+<style> -->
    
+<style>
 </style>

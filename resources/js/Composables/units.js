@@ -3,11 +3,9 @@ import {ref} from 'vue';
 export default function useUnits(){
    const units = ref({data: []});
 
-   const getUnits = async (status=null)=>{
+   const getUnits = async (perpage=10, page=1, status=null)=>{
       await axios.get('/api/v1/units',{
-         params:{
-            status: status,
-         }
+         params:{ perpage:perpage, page:page, status: status,}
       })
       .then(res =>{
          if(res.data.status == true){

@@ -38,8 +38,8 @@ export default
    },
    {
       path: '/admin/products',
-      name: 'admin.products',
-      component: ()=> import('./Pages/Products/Product.vue'),
+      name: 'admin.products.index',
+      component: ()=> import('./Pages/Products/ProductIndex.vue'),
    },
    {
       path: '/admin/products/create',

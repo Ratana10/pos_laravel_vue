@@ -2,9 +2,10 @@ import { ref } from 'vue';
 export default function useCategories(){
    const categories = ref({data: []});
 
-   const getCategories = async (perpage=10, page=1) => {
+   const getCategories = async (perpage=10, page=1, status=null) => {
+      console.log('status', status);
       await axios.get(`/api/v1/categories`,{
-         params:{page: page, perpage: perpage}
+         params:{page: page, perpage: perpage, status: status}
       })
       .then(res =>{
          if(res.data.status){

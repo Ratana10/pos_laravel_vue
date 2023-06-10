@@ -16,7 +16,7 @@
          <th style="width: 100px;">Actions</th>
       </tr>
    </thead>
-   <tbody>
+   <tbody v-if="products.data && products.data.length > 0">
       <tr v-for="(product, index) in products.data" :key="index">
          <td>{{ index+1 }}</td>
          <td>{{ product.code }}</td>
@@ -33,14 +33,28 @@
          <td>{{ product.status == 1 ? 'Active' : 'Inactive' }}</td>
          <td>
             <router-link :to="`/admin/products/${product.id}/edit`" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></router-link>
-            <button class="btn btn-danger btn-sm ml-1" @click="confirm(product)"><i class="fa fa-trash"></i></button>
+            <button class="btn btn-danger btn-sm ml-1" @click="$emit('delete', product)"><i class="fa fa-trash"></i></button>
          </td>
+      </tr>
+   </tbody>
+   <tbody v-else>
+      <tr>
+         <td colspan="12" class="text-center">No Record</td>
       </tr>
    </tbody>
 </table>
 </template>
 
-<script>
+<script setup>
+import { defineProps } from 'vue';
+
+const props = defineProps({
+   products: {
+      type: Array,
+   }
+})
+</script>
+<!-- <script>
 import Swal from 'sweetalert2';
 
 export default {
@@ -85,7 +99,7 @@ export default {
       },
    },
 }
-</script>
+</script> -->
 
 <style scoped>
 img {

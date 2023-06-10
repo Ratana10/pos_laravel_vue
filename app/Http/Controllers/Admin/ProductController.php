@@ -24,7 +24,7 @@ class ProductController extends Controller
                 $products = Product::latest()
                     ->with('category:id,name')
                     ->with('unit:id,name')
-                    ->paginate(request('perPage'), ['*'], 'page', request('page'));
+                    ->paginate(request('perpage') ?? 10, ['*'], 'page', request('page') ?? 1);
             }
 
             return $this->responseSuccess($products, 'success');
@@ -36,6 +36,7 @@ class ProductController extends Controller
     public function store(ProductRequest $request)
     {
         $validated = $request->validated();
+
         $imageName = null;
         try {
             if ($validated['image']) {
@@ -52,11 +53,12 @@ class ProductController extends Controller
             }
                            
             $product = Product::create([
-                'code' => $validated['code'],
+                'code' => Helper::IDGenderator(Product::class, 'code', 4, 'P'),
                 'name' => $validated['name'],
                 'category_id' => $validated['category_id'],
                 'unit_id' => $validated['unit_id'],
                 'price' => $validated['price'],
+                'cost' => $validated['cost'],
                 'discount' => $validated['discount'],
                 'quantity' => $validated['quantity'],
                 'alert' => $validated['alert'],
@@ -160,8 +162,7 @@ class ProductController extends Controller
         // return response()->json(['generatedCode' => $newProductCode]);
         
         $generatedCode = Helper::IDGenderator(Product::class, 'code', 4, 'P');
-        return $this->responseSuccess($generatedCode, 'success');
-        
+        return $generatedCode;        
     }
 
     public function search(SearchRequest $request)
