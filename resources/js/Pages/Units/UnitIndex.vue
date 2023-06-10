@@ -19,7 +19,7 @@
       <div class="container-fluid">
          <div class="d-flex justify-content-between">
             <div>
-               <button @click="handleAdd" type="button" class="btn btn-primary mb-2">
+               <button @click="openModal" type="button" class="btn btn-primary mb-2">
                   <i class="fa fa-plus"></i>
                   Add New Unit
                </button>
@@ -40,16 +40,16 @@
                <div class="row">
                   <div class="col-sm-12">
                      <div>
-                        <label for="">Pages: </label>
-                        <select v-model="perPage" class="ml-2">
-                           <option v-for="page in pages" :key="page.name" :value="page.value">{{ page.name}}</option>
+                        <label for="">Showing: </label>
+                        <select v-model="perpage" class="ml-2">
+                           <option v-for="page in pages" :key="page.name" :value="page.value">{{ page.label}}</option>
                         </select>
                      </div>
                   </div>
                </div>
                <div class="row">
                   <div class="col-sm-12">
-                     <unit-table :units="units" @edit="handleEdit" @delete="handleDelete" />
+                     <UnitTable :units="units" @edit="editUnit" @delete="deleteUnit" />
                   </div>
                </div>
                <div class="d-flex justify-content-between">
@@ -59,7 +59,7 @@
                         of {{ units.total }}
                      </div>
                   <div class="">
-                     <Bootstrap4Pagination :data="units" @pagination-change-page="getUnits" />
+                     <Bootstrap4Pagination :data="units" @pagination-change-page="onPageChange" />
                   </div>
                </div>
             </div>
@@ -67,18 +67,58 @@
       </div>
    </div>
 
-   <modal-add-unit :editing="editing" @submit="handleSubmit" />
+   <ModalAddUnit :editing="editing" @submit="getUnits" />
 </div>
 </template>
 
-<script>
+<script setup>
+import {Bootstrap4Pagination} from 'laravel-vue-pagination';
+import usePagination from '../../pagination';
+import UnitTable from './UnitTable.vue';
+import ModalAddUnit from './ModalAddUnit.vue';
+import { onMounted, ref } from 'vue';
+import useNotifications from '../../notifications';
+import useUnits from '../../Composables/units';
+
+const { units, getUnits, destroyUnit } = useUnits();
+
+const {pages, perpage, onPageChange} = usePagination(getUnits);
+
+onMounted(()=> getUnits());
+
+const {confirmNotification} = useNotifications();
+
+const deleteUnit = (unit) =>{
+    confirmNotification(unit.name)
+   .then((result) =>{
+      if(result){
+         destroyUnit(unit.id)
+         getUnits();
+      }
+   });  
+}
+
+const editing = ref(null);
+
+const editUnit = (unit) =>{
+   editing.value = unit;
+   $('#modal-add-unit').modal('show');
+}
+
+const openModal = ()=>{
+   editing.value = null;
+
+   $('#modal-add-unit').modal('show');
+}
+
+</script>
+
+<!-- <script>
 import UnitTable from './UnitTable.vue';
 import ModalAddUnit from './ModalAddUnit.vue';
 import { showToast } from '../../swalUtils';
 import { debounce } from 'lodash';
-import {
-   Bootstrap4Pagination
-} from 'laravel-vue-pagination';
+import { Bootstrap4Pagination } from 'laravel-vue-pagination';
 
 export default {
    components: {
@@ -165,7 +205,7 @@ export default {
    },
 
 }
-</script>
+</script> -->
 
 <style>
    

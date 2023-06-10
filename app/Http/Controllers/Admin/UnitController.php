@@ -23,7 +23,7 @@ class UnitController extends Controller
             }
             else{
                 $units = Unit::latest()
-                            ->paginate(request('perPage'), ['*'], 'page', request('page'));
+                            ->paginate(request('perpage') ?? 10, ['*'], 'page', request('page') ?? 1);
             }
            
             return $this->responseSuccess($units, 'success');

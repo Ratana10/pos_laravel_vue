@@ -26,7 +26,6 @@ export default function useExchanges(){
    const updateExchange = async (data) => {
       try {
          const res = await axios.put(`/api/v1/exchanges/${data.id}`, data)
-         console.log('test')
          return res.data.status;
       } catch (error) {
          throw error.response.data.errors;  

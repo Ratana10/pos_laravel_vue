@@ -33,8 +33,8 @@ export default
    },
    {
       path: '/admin/units',
-      name: 'admin.units',
-      component: ()=> import('./Pages/Units/Unit.vue'),
+      name: 'admin.units.index',
+      component: ()=> import('./Pages/Units/UnitIndex.vue'),
    },
    {
       path: '/admin/products',
