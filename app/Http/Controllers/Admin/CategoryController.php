@@ -20,7 +20,7 @@ class CategoryController extends Controller
                         ->where('status', 1)->get();
         }else{
             $categories = Category::latest()               
-            ->paginate(request('perPage'), ['*'], 'page', request('page'));
+            ->paginate(request('perpage') ?? 10, ['*'], 'page', request('page') ?? 1);
         }
         
         

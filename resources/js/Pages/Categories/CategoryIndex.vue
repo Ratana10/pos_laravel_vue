@@ -30,7 +30,7 @@
                <div class="row">
                   <div class="col-sm-12">
                         <label for="">Showing: </label>
-                        <select v-model="perPage" class="ml-2">
+                        <select v-model="perpage" class="ml-2">
                            <option v-for="(page, index) in pages"  :key="index" :value="page.value">{{ page.label }} </option>
                         </select>
                   </div>
